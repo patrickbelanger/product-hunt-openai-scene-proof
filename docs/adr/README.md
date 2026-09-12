@@ -7,3 +7,4 @@ changed decisions with a new record rather than silently rewriting history.
 
 1. [Foundation stack](ADR-0001-foundation-stack.md)
 2. [OpenAPI client](ADR-0002-openapi-client.md)
+3. [Bounded local media ingestion](ADR-0003-local-media-ingestion.md)

@@ -41,9 +41,24 @@ Default local topology: browser on 127.0.0.1:5173 → Vite proxy → API on
 deployment claim. Docker credentials are development defaults. `.env` is ignored;
 Compose reads it, while directly launched Java requires exported environment values.
 
+## Implemented media ingestion (PR1)
+
+MediaWorkspace uploads multipart through the typed API client, lists persisted
+shots and selects normalized frames. MediaController delegates to MediaService,
+MediaStorage/LocalMediaStorage, ImageNormalizer and FfmpegAdapter. MediaProcess
+bounds executable runtime and output. MediaRepository uses Spring JDBC against
+the existing datasource, with project-row locking for atomic shot/frame metadata
+writes. Flyway V2 owns these tables. Decoding occurs outside DB transactions.
+Final READY/FAILED states are persisted; binary files stay outside PostgreSQL.
+
+Project membership checks precede PNG delivery; client names never become paths.
+Normal failures clean media; abrupt termination may leave unreferenced files.
+Exact limits and cleanup: [Media pipeline](MEDIA-PIPELINE.md),
+[ADR-0003](adr/ADR-0003-local-media-ingestion.md).
+
 ## Boundaries reserved for later slices
 
-MediaStorage / LocalMediaStorage, FFmpeg adapter, ContinuityAnalysisPort /
+ContinuityAnalysisPort /
 AstraContinuityAnalysisAdapter, analysis jobs and progress transport are **planned,
 not implemented**. Raw media will stay outside PostgreSQL. Domain services must
 not depend on OpenAI transport types. No Spring AI starter is loaded before its

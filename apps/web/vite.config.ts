@@ -1,5 +1,8 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
+import { loadEnv } from 'vite';
+
+const apiTarget = loadEnv('development', '.', 'API_').API_PROXY_TARGET ?? 'http://127.0.0.1:8085';
 
 export default defineConfig({
   plugins: [react()],
@@ -7,9 +10,9 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     proxy: {
-      '/api': 'http://127.0.0.1:8085',
-      '/actuator': 'http://127.0.0.1:8085',
-      '/openapi.json': 'http://127.0.0.1:8085',
+      '/api': apiTarget,
+      '/actuator': apiTarget,
+      '/openapi.json': apiTarget,
     },
   },
   test: {

@@ -2,9 +2,9 @@
 
 **Keep every shot in character.** Your AI continuity supervisor for generative film.
 
-Current slice: P0 foundation — create a project with continuity rules, persist it
-in PostgreSQL and reopen its visual workspace. Media ingestion, GPT-6 Astra
-analysis and the curated demo are upcoming; there are no simulated model findings.
+Current slice: PR1 media ingestion — create a project, import bounded JPEG/PNG
+or MP4/H.264, persist ordered shots/frames and inspect them after reload.
+GPT-6 Astra analysis and the curated demo are upcoming; no simulated findings.
 
 Start a new session with [STATUS](docs/STATUS.md), then follow the recovery protocol
 in [AGENTS.md](AGENTS.md). Product requirements: [BRD](docs/BRD.md). Delivery:
@@ -33,8 +33,10 @@ in [AGENTS.md](AGENTS.md). Product requirements: [BRD](docs/BRD.md). Delivery:
 
 Spring Data, Flyway, Jackson, PostgreSQL JDBC and JUnit are managed by the pinned
 Spring Boot BOM. Spring AI 2.0.x compatibility is documented but no AI dependency
-is loaded yet. FFmpeg/FFprobe are needed beginning with media ingestion, not for
-foundation. No OpenAI key is required for the current flow.
+is loaded yet. FFmpeg/FFprobe are now required for video ingestion and backend
+tests (including libx264 for generated fixtures). No OpenAI key is required.
+Local verification uses FFmpeg N-120856-g9893d66add-20250831; CI installs Ubuntu's
+FFmpeg package. See [Media pipeline](docs/MEDIA-PIPELINE.md) for limits and arguments.
 
 ## Run locally
 
@@ -44,6 +46,7 @@ On this Windows machine, select Java 25 in each backend terminal:
 ```powershell
 $env:JAVA_HOME = 'C:\Users\patri\.jdks\temurin-25.0.2'
 $env:Path = "$env:JAVA_HOME\bin;$env:Path"
+$env:MEDIA_ROOT = Join-Path (Get-Location) '.local\media'
 docker compose up -d --wait postgres
 npm.cmd ci
 .\gradlew.bat :apps:api:bootRun
@@ -64,6 +67,13 @@ Default local database: `sceneproof`, user `sceneproof`, password `sceneproof-lo
 host port 55432. These are local development credentials. All services bind loopback.
 The Compose volume survives `docker compose down`; do not use `down -v` unless you
 intend to erase project data. Stop Java/Vite with Ctrl+C, then `docker compose down`.
+
+Keep MEDIA_ROOT absolute and identical between IDE, Gradle and packaged-jar runs;
+otherwise relative storage paths resolve against each process working directory.
+Media files survive application restart and are ignored by Git. FFmpeg/FFprobe
+must be on PATH, or set FFMPEG_PATH / FFPROBE_PATH to their executable paths.
+Imports are synchronous: one active import per API process, up to 32 frames per
+video and 100 attempts per project. Failed attempts remain visible for diagnosis.
 
 `.env.example` lists configuration. Compose automatically reads a root `.env`;
 directly launched Spring Boot does **not**. Export overrides in the backend shell
@@ -92,6 +102,12 @@ npx.cmd playwright install chromium
 npm.cmd run test:e2e
 ```
 
+If an IDE instance already occupies the defaults, run a separate API with
+`SERVER_PORT=8086`, set `API_PROXY_TARGET=http://127.0.0.1:8086` and
+`E2E_WEB_PORT=5174` in the E2E terminal. This keeps browser verification pointed at
+the freshly built API without stopping the IDE. Restart an existing IDE API after
+pulling PR1 so that its loaded classes include the new media endpoints.
+
 Playwright starts Vite automatically. Browser tests create named verification
 projects in the local database; they do not delete existing projects. Screenshots
 are under `test-results/`. The GitHub workflow verifies builds, tests and contracts
@@ -103,6 +119,8 @@ Edit `packages/api-client/openapi.json`, update Kotlin behavior/tests in the sam
 change and run `npm run api:generate`. Generated TS is checked in and CI checks drift.
 API: POST/GET `/api/v1/projects`, GET `/api/v1/projects/{id}`. Lists accept `page`
 (20 items, newest first); failures use `application/problem+json`.
+Media: POST multipart / GET `/api/v1/projects/{projectId}/shots`; GET normalized
+PNG `/api/v1/projects/{projectId}/frames/{frameId}/content`. See the OpenAPI contract.
 
 Keep exact versions and lockfile stable. The original npm 10 peer resolver fails
 when updating Vitest in this workspace; use `npx --yes npm@11.6.2 install` for

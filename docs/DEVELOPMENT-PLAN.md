@@ -30,8 +30,9 @@ Use, in order: `feat/p0-foundation`, `feat/p0-media-ingestion`,
 Create each branch when work begins, after prerequisites are integrated into main.
 Keep main runnable, no permanent develop branch. Feature documentation travels
 with implementation. Review requires tests, builds, current status and known limits.
-September 12 checkpoint: P0 foundation is complete and locally green, awaiting
-review/integration. Media ingestion is the next executable slice; no dates or
+September 12 checkpoint: PR0 foundation is merged on main (`fefb7db`). PR1 media
+ingestion is implemented and locally verified on `feat/p0-media-ingestion`, ready for review.
+No dates or
 priorities have been changed. The dates are delivery targets, not assertions of completed work; actual progress
 lives in [STATUS](STATUS.md) and [Implementation Plan](IMPLEMENTATION-PLAN.md).
 

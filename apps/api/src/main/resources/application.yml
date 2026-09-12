@@ -22,7 +22,10 @@ spring:
     enabled: true
   servlet:
     multipart:
-      enabled: false
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 101MB
+      file-size-threshold: 0
   jackson:
     deserialization:
       fail-on-unknown-properties: true
@@ -35,3 +38,9 @@ management:
   endpoint:
     health:
       show-details: never
+
+sceneproof:
+  media:
+    root: ${MEDIA_ROOT:.local/media}
+    ffmpeg: ${FFMPEG_PATH:ffmpeg}
+    ffprobe: ${FFPROBE_PATH:ffprobe}
