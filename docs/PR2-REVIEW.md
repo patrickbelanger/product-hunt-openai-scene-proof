@@ -3,8 +3,10 @@
 ## Branch and scope
 
 - Branch: `feat/p0-astra-analysis`.
-- Base, current HEAD and unchanged main: `7275f17a8c3c50b56056487b5a5fceac1a4fa8e9`.
-- Changes are uncommitted for local review. No push, merge or subsequent branch.
+- Base: `7275f17a8c3c50b56056487b5a5fceac1a4fa8e9`.
+- Reviewed, pushed implementation HEAD: `850e48071713c1dd727f0cbf8479958a26cb47df`.
+- PR2 code review passed. This documentation-only correction follows the reviewed
+  implementation commit; final merge approval remains pending. No merge or PR3 work.
 - Recovery inspected the clean worktree, exact main SHA, recent commits, PR1 code,
   authoritative documents and relevant ADRs before adding anything.
 - PR2 owns durable findings/read API by Patrick's explicit instruction. No React UI,
@@ -130,5 +132,5 @@ README describes environment loading, startup, request IDs and paid smoke comman
 Updated: README, .env.example, STATUS, ASTRA-INTEGRATION, ARCHITECTURE, DOMAIN,
 IMPLEMENTATION-PLAN, DEVELOPMENT-PLAN, DECISIONS and ADR index. Added ADR-0004 and
 this handoff. Original `docs/intial-context.md` remains unchanged.
-September 18 target and branch order remain unchanged. Next action: reviewer
-inspection; do not merge or start the findings workspace without instruction.
+September 18 target and branch order remain unchanged. Next action: final merge
+approval after this documentation correction; do not merge or start PR3 beforehand.

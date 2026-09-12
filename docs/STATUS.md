@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-12
 Current branch: `feat/p0-astra-analysis`
-Current milestone: PR2 implemented and locally verified; ready for Patrick's review.
+Current milestone: PR2 code review passed; awaiting final merge approval after this documentation correction.
 
 ## PR2 recovery and current evidence
 
@@ -31,8 +31,10 @@ PROP/HIGH finding. Run `ce4d940d-a3c0-4f26-88e2-44a108e9767c`, project
 run/finding survived API restart. Two successful paid calls total approximately
 $0.04380 at published standard rates, not a billing receipt.
 
-Working tree contains uncommitted PR2 changes; no commit, push, merge or PR3 branch.
-HEAD and main remain the base SHA above. Full review contract and risks:
+PR2 implementation was committed and pushed at reviewed HEAD
+`850e48071713c1dd727f0cbf8479958a26cb47df`, based on the SHA above.
+Code review passed; this documentation-only follow-up corrects the handoff state.
+Final merge approval remains pending. No merge or PR3 work. Full review contract and risks:
 [PR2-REVIEW](PR2-REVIEW.md). Local API 8088 (PID 125900) remains available for review;
 user IDE services were preserved. `.env` is ignored and loaded only by the backend
 launcher; never printed. Named smoke/browser projects remain in local storage.
@@ -41,7 +43,8 @@ Limits: 8 READY shots/24 frames, no chunking, synchronous bounded HTTP, local-on
 access, lazy five-minute interrupted-run recovery. PostgreSQL unavailability may
 prevent recording failure; timeout may incur charges; retry must reuse requestId.
 Findings UI, steering, Reference Bible editing and public deployment remain planned.
-Next action is Patrick/reviewer inspection of PR2, not merge or PR3 implementation.
+Next action is final merge approval after the documentation correction is pushed.
+Do not merge or start PR3 before that approval.
 
 ## Historical PR1 handoff
 
