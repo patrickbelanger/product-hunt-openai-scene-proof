@@ -1,0 +1,60 @@
+name: Verify SceneProof
+
+on:
+  push:
+    branches: [main, 'feat/**', 'fix/**', 'chore/**', 'docs/**', 'refactor/**', 'hotfix/**']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17.9-alpine
+        env:
+          POSTGRES_DB: sceneproof
+          POSTGRES_USER: sceneproof
+          POSTGRES_PASSWORD: sceneproof-local
+        ports: ['55432:5432']
+        options: >-
+          --health-cmd "pg_isready -U sceneproof -d sceneproof"
+          --health-interval 5s --health-timeout 3s --health-retries 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: gradle/actions/setup-gradle@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run api:check
+      - run: bash gradlew build
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - name: Start API
+        run: |
+          java -jar apps/api/build/libs/api-0.1.0.jar > /tmp/sceneproof-api.log 2>&1 &
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8085/actuator/health; then exit 0; fi
+            sleep 2
+          done
+          cat /tmp/sceneproof-api.log
+          exit 1
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: verification-evidence
+          path: |
+            apps/api/build/reports/tests/
+            test-results/
+            /tmp/sceneproof-api.log

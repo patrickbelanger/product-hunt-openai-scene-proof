@@ -1,0 +1,30 @@
+import { expect, test } from '@playwright/test';
+
+test('create, persist, reload and reopen a continuity project', async ({ page }) => {
+  const projectName = `Continuity review ${Date.now()}`;
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto('/');
+  await expect(page.getByRole('heading', { name: 'Your projects' })).toBeVisible();
+  await page.screenshot({ path: 'test-results/landing-desktop.png', fullPage: true });
+  await page.getByRole('link', { name: /create a project/i }).click();
+  await page.getByLabel('Project name').fill(projectName);
+  await page.getByLabel('Description').fill('Foundation browser verification');
+  await page.getByLabel('Continuity rules').fill('The black blazer remains unchanged through the metro sequence.');
+  await page.getByRole('button', { name: 'Create project' }).click();
+  await expect(page).toHaveURL(/\/projects\/[0-9a-f-]{36}$/);
+  await expect(page.getByRole('heading', { name: projectName })).toBeVisible();
+  await page.reload();
+  await expect(page.getByText('The black blazer remains unchanged through the metro sequence.')).toBeVisible();
+  await expect(page.getByText('Nothing reviewed yet.')).toBeVisible();
+  await page.screenshot({ path: 'test-results/workspace-desktop.png', fullPage: true });
+  await page.setViewportSize({ width: 820, height: 1180 });
+  await expect(page.getByText('CONTINUITY FINDINGS', { exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: 'test-results/workspace-tablet.png', fullPage: true });
+  await page.getByRole('link', { name: /all projects/i }).click();
+  await expect(page.getByRole('link', { name: projectName, exact: true })).toBeVisible();
+  await page.getByRole('link', { name: projectName, exact: true }).click();
+  await expect(page.getByRole('heading', { name: projectName })).toBeVisible();
+  expect(errors).toEqual([]);
+});
