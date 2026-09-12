@@ -37,5 +37,5 @@ playwright-report/
 .env
 .env.*
 !.env.example
-/.local/
+**/.local/
 !gradle/wrapper/gradle-wrapper.jar

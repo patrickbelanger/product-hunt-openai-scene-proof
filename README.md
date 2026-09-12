@@ -2,10 +2,11 @@
 
 **Keep every shot in character.** Your AI continuity supervisor for generative film.
 
-Current slice: PR2 Astra analysis — create a project/rules, import bounded media,
-then request real GPT-6 Astra continuity analysis through the backend API.
-Analysis runs, validated findings, evidence and usage persist in PostgreSQL.
-The findings workspace UI and curated demo remain upcoming.
+Current slice: PR3 findings workspace — open an analyzed project, select saved
+findings, compare their real evidence frames and copy the suggested correction.
+PR2 analysis runs, validated findings, evidence and usage persist in PostgreSQL.
+Analysis is still explicitly started through the backend API; viewing or refreshing
+the workspace never calls OpenAI. The curated demo remains upcoming.
 
 Start a new session with [STATUS](docs/STATUS.md), then follow the recovery protocol
 in [AGENTS.md](AGENTS.md). Product requirements: [BRD](docs/BRD.md). Delivery:
@@ -97,10 +98,16 @@ npm.cmd run build
 
 Backend integration tests use a dedicated `sceneproof_test` schema and roll back
 their writes. TEST_DATABASE_URL may override the test JDBC URL; never point tests
-at production. For browser/contract tests, keep the API running first:
+at production. For browser/contract tests, start the isolated test API in a separate terminal:
 
 ```powershell
 npx.cmd playwright install chromium
+.\gradlew.bat :apps:api:browserTestServer
+```
+
+Then, in another terminal:
+
+```powershell
 npm.cmd run test:e2e
 ```
 
@@ -110,8 +117,16 @@ If an IDE instance already occupies the defaults, run a separate API with
 the freshly built API without stopping the IDE. Restart an existing IDE API after
 pulling PR1 so that its loaded classes include the new media endpoints.
 
+The browser test server uses real controllers, persistence and media with a
+deterministic ContinuityAnalysisPort on the **test classpath only**. It uses the
+separate `sceneproof_browser` schema and repository `.local/browser-media`.
+`BROWSER_DATABASE_URL` / `BROWSER_MEDIA_ROOT` can override these test locations.
+No test provider, marker endpoint or browser profile is packaged in the production jar.
+Finding fixture creation requires a test-provider marker; never replace this server
+with a live provider for the full E2E suite. CI starts this same test server.
+
 Playwright starts Vite automatically. Browser tests create named verification
-projects in the local database; they do not delete existing projects. Screenshots
+projects in the browser-test schema; they do not delete existing projects. Screenshots
 are under `test-results/`. The GitHub workflow verifies builds, tests and contracts
 against PostgreSQL, then runs the real browser flow. Remote CI requires a push.
 
@@ -136,7 +151,7 @@ before the command so Node can use the local file. Do not print either value.
 `scripts/run-api.mjs` supplies an absolute default MEDIA_ROOT. Existing bootRun/IDE
 launches continue to use exported configuration and do not automatically read .env.
 
-No analysis UI is added in PR2. Use the typed client or HTTP:
+To start analysis, use the typed client or HTTP; PR3 adds saved-result inspection:
 
 ```powershell
 $projectId = '<existing project UUID>'
@@ -152,6 +167,15 @@ RUNNING/SUCCEEDED/FAILED run without another paid call. A different UUID authori
 a new attempt. A failed first POST returns safe Problem JSON with analysisRunId;
 GET retrieves the durable failure. Findings lists accept optional analysisId and
 page (20 per page). Requests are synchronous, up to 120 seconds for OpenAI.
+
+Open `/projects/<project UUID>` to inspect saved findings. Selection records
+`?analysisId=<run UUID>&finding=<finding UUID>` in the URL, so reload restores the
+same analysis and finding even if newer analyses are saved. All saved findings
+returns to paginated history. `?analysisId=<run UUID>` also displays that run's
+SUCCEEDED / RUNNING / FAILED state. PR2 has no latest-run/list-runs endpoint, so
+an unfiltered empty list does not prove success or reveal the latest failed run.
+Refresh findings is read-only. Copy correction reports actual clipboard success
+or failure; the full prompt remains selectable for manual copying.
 
 Limits: 8 READY shots, first/middle/last representative frames (24 total), 16 MiB
 images, one active analysis globally, 100 attempts/project, one provider request

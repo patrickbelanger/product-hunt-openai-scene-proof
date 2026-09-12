@@ -32,9 +32,11 @@ Keep main runnable, no permanent develop branch. Feature documentation travels
 with implementation. Review requires tests, builds, current status and known limits.
 September 12 checkpoint: PR0 foundation is merged on main (`fefb7db`). PR1 media
 ingestion (`95ee2f9`) is approved, locally verified and merged into local main.
-PR2 is implemented and locally verified from main `7275f17`, awaiting review;
+PR2 is merged into main as `602cf1c`, based on `7275f17`;
 real transport and imported-project persistence smoke tests passed.
 Finding persistence/API move into PR2 under Patrick's explicit scope; PR3 owns UI.
+PR3 is implemented and locally verified on `feat/p0-findings-workspace`, awaiting
+review without merge; steering awaits a separate instruction.
 No dates or
 priorities have been changed. The dates are delivery targets, not assertions of completed work; actual progress
 lives in [STATUS](STATUS.md) and [Implementation Plan](IMPLEMENTATION-PLAN.md).

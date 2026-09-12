@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: ${BROWSER_DATABASE_URL:jdbc:postgresql://localhost:55432/sceneproof?currentSchema=sceneproof_browser}
+  flyway:
+    default-schema: sceneproof_browser
+    schemas: sceneproof_browser
+  jpa:
+    properties:
+      hibernate:
+        default_schema: sceneproof_browser
+
+sceneproof:
+  astra:
+    api-key: ""
+  media:
+    root: ${BROWSER_MEDIA_ROOT:.local/browser-media}
