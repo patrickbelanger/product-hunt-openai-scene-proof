@@ -44,7 +44,7 @@ actionable errors. Empty media/findings are not fabricated. No API key required.
 No Astra, findings implementation, Reference Bible CRUD, public hosting or paid
 calls are part of PR1. Abrupt termination orphan cleanup is documented local debt.
 
-### PR2 — ready for review `feat/p0-astra-analysis`, base `7275f17`
+### PR2 — merged into main as `602cf1c`, base `7275f17`
 
 - [x] Recovery, exact main SHA, PR1 code inspection and branch creation.
 - [x] Re-verify official Astra/Responses/image/schema/SDK/error documentation.
@@ -54,7 +54,24 @@ calls are part of PR1. Abrupt termination orphan cleanup is documented local deb
 - [x] Analysis/findings endpoints, OpenAPI and generated TypeScript client.
 - [x] Complete backend (34), frontend (6), builds, Chromium (4) and contract checks.
 - [x] Real imported-project analysis with a persisted finding and usage; verify after restart.
-- [x] Final review handoff and verified status; no merge or PR3 work.
+- [x] Final review handoff and verified status; subsequently merged through PR #2.
+
+### PR3 — pushed, external review pending `feat/p0-findings-workspace`, base `602cf1c`
+
+- [x] Recover clean synchronized main at the requested SHA; reconcile PR2 merge documentation.
+- [x] Consume generated findings client with honest loading/error/empty and URL selection state.
+- [x] Findings detail, affected-shot timeline markers and navigation.
+- [x] Deterministic real evidence comparison, additional frames and missing-image handling.
+- [x] Expected/observed/explanation/confidence/severity and real clipboard feedback.
+- [x] Targeted frontend tests and critical Chromium persisted-findings flow, with no paid calls.
+- [x] Backend/frontend builds, tests, OpenAPI drift and diff checks; visual laptop/tablet QA.
+- [x] Synchronize documentation and stop for review without merge or steering.
+
+Verification: 34 backend, 21 frontend and 5 Chromium tests pass. Normal suite uses
+the test-only port plus real persistence. The original PR2 live finding was also
+inspected without any new provider call. Exact evidence and limits: PR3-REVIEW.
+Implementation commit `fa0dbc9` is pushed; the review-preparation documentation
+follow-up preserves the same scope and base. No merge or steering started.
 
 Patrick explicitly includes finding persistence/read API in PR2. This supersedes
 the older placement below; the next branch is solely the findings workspace UI.

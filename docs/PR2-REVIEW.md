@@ -1,5 +1,9 @@
 # PR2 review handoff — 2026-09-12
 
+Historical handoff. PR2 is now merged as `602cf1c2a1dac4c6dcd563d01a3e580c53caef59`.
+PR3 recovery verified the merge and supersedes the pending-approval instructions
+below. Current work and verification are recorded in STATUS and PR3-REVIEW.
+
 ## Branch and scope
 
 - Branch: `feat/p0-astra-analysis`.

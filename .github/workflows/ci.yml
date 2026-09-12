@@ -42,9 +42,9 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npx playwright install --with-deps chromium
-      - name: Start API
+      - name: Start isolated browser test API
         run: |
-          java -jar apps/api/build/libs/api-0.1.0.jar > /tmp/sceneproof-api.log 2>&1 &
+          bash gradlew :apps:api:browserTestServer > /tmp/sceneproof-api.log 2>&1 &
           for attempt in {1..30}; do
             if curl --fail --silent http://127.0.0.1:8085/actuator/health; then exit 0; fi
             sleep 2

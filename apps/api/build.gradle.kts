@@ -50,3 +50,11 @@ tasks.processResources {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+tasks.register<JavaExec>("browserTestServer") {
+    dependsOn(tasks.testClasses)
+    workingDir = rootProject.projectDir
+    classpath = sourceSets.test.get().runtimeClasspath
+    mainClass = "dev.sceneproofbrowser.FindingsBrowserApplicationKt"
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+}

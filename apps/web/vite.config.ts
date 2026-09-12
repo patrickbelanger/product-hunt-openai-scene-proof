@@ -13,6 +13,7 @@ export default defineConfig({
       '/api': apiTarget,
       '/actuator': apiTarget,
       '/openapi.json': apiTarget,
+      '/__test': apiTarget,
     },
   },
   test: {

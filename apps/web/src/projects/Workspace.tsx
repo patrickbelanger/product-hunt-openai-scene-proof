@@ -2,7 +2,7 @@ import { Alert, Anchor, Badge, Button, Group, Loader, Stack, Text, Title } from 
 import { useQuery } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router-dom';
 import { ApiError, getProject } from '@sceneproof/api-client';
-import { MediaWorkspace } from './MediaWorkspace';
+import { FindingsWorkspace } from './FindingsWorkspace';
 
 export function Workspace() {
   const { projectId = '' } = useParams();
@@ -14,8 +14,7 @@ export function Workspace() {
     <div className="workspace-toolbar"><div><Anchor component={Link} to="/" c="dimmed" size="xs">← All projects</Anchor><Title order={1} size="h3" mt={4}>{current.name}</Title></div><Badge color="teal" variant="light">Project saved</Badge></div>
     <div className="workspace-grid">
       <aside className="workspace-panel reference-panel" aria-labelledby="reference-title"><Text className="panel-label" id="reference-title">REFERENCE BIBLE</Text><Title order={2} size="h4" mt="xl">Your continuity rules</Title><Text size="sm" c="gray.4" mt="md" className="rules-text">{current.rules || 'No rules yet. This project is ready for its visual references.'}</Text>{current.description && <><Text className="panel-label" mt="xl">PROJECT NOTES</Text><Text size="sm" c="dimmed" mt="md" className="rules-text">{current.description}</Text></>}</aside>
-      <MediaWorkspace key={projectId} projectId={projectId} />
-      <aside className="workspace-panel findings-panel" aria-labelledby="findings-title"><Group justify="space-between"><Text className="panel-label" id="findings-title">CONTINUITY FINDINGS</Text><Badge color="gray" size="sm">0</Badge></Group><div className="findings-empty"><span className="proof-mark" aria-hidden="true">◎</span><Title order={2} size="h4">Nothing reviewed yet.</Title><Text size="sm" c="dimmed" mt="sm">Findings will appear here after your shots have been analyzed.</Text></div></aside>
+      <FindingsWorkspace key={projectId} projectId={projectId} />
     </div>
   </main>;
 }

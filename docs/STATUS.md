@@ -1,10 +1,56 @@
 # SceneProof Status
 
 Last updated: 2026-09-12
-Current branch: `feat/p0-astra-analysis`
-Current milestone: PR2 code review passed; awaiting final merge approval after this documentation correction.
+Current branch: `feat/p0-findings-workspace`
+Current milestone: PR3 implementation committed and pushed; external review pending, not merged.
+Current task: Review `feat/p0-findings-workspace`; no steering work authorized here.
 
-## PR2 recovery and current evidence
+## PR3 recovery
+
+PR2 is merged as `602cf1c2a1dac4c6dcd563d01a3e580c53caef59` (merge of
+`fe89f16` into `7275f17`). Fetched origin, fast-forwarded local main, verified
+clean main equals origin/main at that exact SHA, then created only the PR3 branch.
+The older PR2 pending-merge statements below are historical handoff evidence.
+PR3 consumes existing persisted findings and shot/frame types; display, selection
+and refresh use GET only. No model orchestration, steering or reference editor.
+Implemented: paginated findings, URL-scoped selection/reload, affected-shot markers
+and navigation, deterministic evidence comparison, detail and real clipboard feedback.
+Verified: **34 backend tests**, zero failed/skipped; **21 frontend tests**;
+**5 Chromium E2E tests**; Kotlin build, TypeScript/Vite build, OpenAPI drift and
+git diff --check. Final Gradle build reused the successful test outputs; it did
+not rerun unchanged tests. Earlier failed setup/test attempts are not counted as passes.
+
+Chromium uses a deterministic test-only port, real PR2 persistence/media and a
+separate sceneproof_browser schema. No new paid call. Separately verified the
+actual PR2 finding `9e9fd139-241f-4136-a931-61d5d4c0b613` through the normal jar
+with no provider key: two real images, clipboard content, reload and zero browser
+write requests. Desktop/tablet captures were inspected; mobile overflow is tested.
+
+Known limits: analysis initiation remains API-only; no latest-run/list-runs API
+exists, so FAILED/RUNNING state requires a linked analysisId. Unfiltered emptiness
+never claims successful review. Markers cover the current findings page. The first
+evidence frame stays left, alternatives replace the right; reload resets that pair.
+No reference editor, steering, demo, tour or hosting is implemented in PR3.
+
+PR3 implementation is committed and pushed at
+`fa0dbc9cb25e56612bb5d7b4891ae272f4f2179f`, based on the exact main SHA above.
+Review preparation confirmed a clean worktree and the same SHA on GitHub; this
+documentation-only follow-up corrects the previous uncommitted/unpushed handoff.
+The first follow-up push was rejected with HTTP 403 for the wrong credential
+account. Patrick requires `patrickbelanger` for GitHub operations. Git now selects
+that account explicitly, and the review follow-up `1cdfe85` was successfully pushed.
+The authentication blocker is resolved; external code review remains pending.
+Main remains unchanged. Review detail/files/screenshots: [PR3 review](PR3-REVIEW.md).
+During implementation verification: Vite 15177 → normal jar 8090 (PID 150108), no provider key.
+The old PR2 API 8088 was no longer running. Existing IDE services were preserved.
+Review preparation reran 21 frontend tests, TypeScript/Vite build and OpenAPI drift:
+all passed. Backend 34 and Chromium 5 passing results remain from the unchanged
+implementation verification; these suites were not rerun for this documentation change.
+Remote CI status could not be verified: GitHub CLI returned HTTP 401 Bad credentials.
+This is not a CI failure or a CI pass claim. Stop here for Patrick's review;
+do not merge or start feat/p0-intentional-change-steering.
+
+## Historical PR2 recovery and verification
 
 Recovered a clean main at the exact requested SHA
 `7275f17a8c3c50b56056487b5a5fceac1a4fa8e9`, inspected PR1 implementation,
@@ -34,7 +80,7 @@ $0.04380 at published standard rates, not a billing receipt.
 PR2 implementation was committed and pushed at reviewed HEAD
 `850e48071713c1dd727f0cbf8479958a26cb47df`, based on the SHA above.
 Code review passed; this documentation-only follow-up corrects the handoff state.
-Final merge approval remains pending. No merge or PR3 work. Full review contract and risks:
+At that handoff, final merge approval remained pending. PR2 is now merged. Historical review contract and risks:
 [PR2-REVIEW](PR2-REVIEW.md). Local API 8088 (PID 125900) remains available for review;
 user IDE services were preserved. `.env` is ignored and loaded only by the backend
 launcher; never printed. Named smoke/browser projects remain in local storage.
@@ -43,8 +89,7 @@ Limits: 8 READY shots/24 frames, no chunking, synchronous bounded HTTP, local-on
 access, lazy five-minute interrupted-run recovery. PostgreSQL unavailability may
 prevent recording failure; timeout may incur charges; retry must reuse requestId.
 Findings UI, steering, Reference Bible editing and public deployment remain planned.
-Next action is final merge approval after the documentation correction is pushed.
-Do not merge or start PR3 before that approval.
+That approval and merge are now confirmed by PR3 recovery above.
 
 ## Historical PR1 handoff
 

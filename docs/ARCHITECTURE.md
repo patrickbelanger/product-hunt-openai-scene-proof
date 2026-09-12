@@ -72,9 +72,26 @@ replays model calls. The API remains synchronous/local with no workers or UI cha
 Selected context stores only bounded metadata/hashes, never duplicate image bytes.
 See [Astra integration](ASTRA-INTEGRATION.md) and [ADR-0004](adr/ADR-0004-astra-responses-api-integration.md).
 
+## Implemented findings workspace (PR3)
+
+Workspace composes FindingsWorkspace beside the existing reference panel.
+FindingsWorkspace owns URL selection, paginated findings queries, optional linked
+analysis status and frame navigation. MediaWorkspace shares the existing shots
+query key through TanStack Query and preserves import/normal inspection behavior.
+EvidenceComparison joins generated Finding/Shot/Frame types by persisted IDs;
+no parallel DTOs or provider SDK enters React. All findings/status queries are GETs.
+Selecting a finding scopes its URL to its immutable analysis, making reload stable
+when newer runs exist. No latest-run endpoint or automatic model orchestration is added.
+
+The browserTestServer Gradle task uses a test-only primary ContinuityAnalysisPort,
+real PR2 services and PostgreSQL in sceneproof_browser, plus separate local media.
+Its marker prevents E2E fixture creation against a normal provider server. Test
+classes/configuration are excluded from the production jar. No runtime backend,
+API contract, migration or Astra adapter change is needed for PR3.
+
 ## Boundaries reserved for later slices
 
-Analysis jobs/progress transport, findings workspace UI, reference editing and
+Analysis jobs/progress transport, reference editing and
 intentional-change steering remain planned. Raw media stays outside PostgreSQL.
 Spring AI is not loaded: the verified Responses transport uses JDK HTTP (ADR-0004).
 

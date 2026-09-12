@@ -2,13 +2,13 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ApiError, createProject, getProject, listProjects, listShots } from '@sceneproof/api-client';
+import { ApiError, createProject, getProject, listProjects, listShots, listFindings } from '@sceneproof/api-client';
 import { App } from '../App';
 import { Providers } from '../providers';
 
 vi.mock('@sceneproof/api-client', async importOriginal => ({
   ...await importOriginal<typeof import('@sceneproof/api-client')>(),
-  createProject: vi.fn(), getProject: vi.fn(), listProjects: vi.fn(), listShots: vi.fn(),
+  createProject: vi.fn(), getProject: vi.fn(), listProjects: vi.fn(), listShots: vi.fn(), listFindings: vi.fn(),
 }));
 
 const project = {
@@ -22,6 +22,7 @@ function open(path: string) {
 }
 
 beforeEach(() => {
+  vi.mocked(listFindings).mockResolvedValue([]);
   vi.mocked(listShots).mockResolvedValue([]);
   vi.mocked(listProjects).mockResolvedValue({ items: [], page: 0, hasNext: false });
   vi.mocked(createProject).mockResolvedValue(project);
@@ -40,7 +41,7 @@ describe('project critical path', () => {
     expect(await screen.findByRole('heading', { name: project.name })).toBeInTheDocument();
     expect(createProject).toHaveBeenCalledWith(expect.objectContaining({ name: project.name, rules: project.rules }), expect.anything());
     expect(screen.getByText(project.rules)).toBeInTheDocument();
-    expect(screen.getByText('Nothing reviewed yet.')).toBeInTheDocument();
+    expect(await screen.findByText('No saved findings here.')).toBeInTheDocument();
   });
 
   it('preserves entered details after save failure and allows retry', async () => {

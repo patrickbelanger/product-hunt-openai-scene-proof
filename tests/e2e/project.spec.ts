@@ -16,7 +16,7 @@ test('create, persist, reload and reopen a continuity project', async ({ page })
   await expect(page.getByRole('heading', { name: projectName })).toBeVisible();
   await page.reload();
   await expect(page.getByText('The black blazer remains unchanged through the metro sequence.')).toBeVisible();
-  await expect(page.getByText('Nothing reviewed yet.')).toBeVisible();
+  await expect(page.getByText('No saved findings here.')).toBeVisible();
   await page.screenshot({ path: 'test-results/workspace-desktop.png', fullPage: true });
   await page.setViewportSize({ width: 820, height: 1180 });
   await expect(page.getByText('CONTINUITY FINDINGS', { exact: true })).toBeVisible();
