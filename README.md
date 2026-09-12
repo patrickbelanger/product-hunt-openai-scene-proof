@@ -2,9 +2,10 @@
 
 **Keep every shot in character.** Your AI continuity supervisor for generative film.
 
-Current slice: PR1 media ingestion — create a project, import bounded JPEG/PNG
-or MP4/H.264, persist ordered shots/frames and inspect them after reload.
-GPT-6 Astra analysis and the curated demo are upcoming; no simulated findings.
+Current slice: PR2 Astra analysis — create a project/rules, import bounded media,
+then request real GPT-6 Astra continuity analysis through the backend API.
+Analysis runs, validated findings, evidence and usage persist in PostgreSQL.
+The findings workspace UI and curated demo remain upcoming.
 
 Start a new session with [STATUS](docs/STATUS.md), then follow the recovery protocol
 in [AGENTS.md](AGENTS.md). Product requirements: [BRD](docs/BRD.md). Delivery:
@@ -34,7 +35,8 @@ in [AGENTS.md](AGENTS.md). Product requirements: [BRD](docs/BRD.md). Delivery:
 Spring Data, Flyway, Jackson, PostgreSQL JDBC and JUnit are managed by the pinned
 Spring Boot BOM. Spring AI 2.0.x compatibility is documented but no AI dependency
 is loaded yet. FFmpeg/FFprobe are now required for video ingestion and backend
-tests (including libx264 for generated fixtures). No OpenAI key is required.
+tests (including libx264 for generated fixtures). Project/media features and normal
+tests need no OpenAI key; paid analysis requires a server-side OPENAI_API_KEY.
 Local verification uses FFmpeg N-120856-g9893d66add-20250831; CI installs Ubuntu's
 FFmpeg package. See [Media pipeline](docs/MEDIA-PIPELINE.md) for limits and arguments.
 
@@ -114,6 +116,64 @@ are under `test-results/`. The GitHub workflow verifies builds, tests and contra
 against PostgreSQL, then runs the real browser flow. Remote CI requires a push.
 
 ## API and dependency maintenance
+
+### Real analysis (PR2)
+
+Configure OPENAI_API_KEY only in the backend environment. The model is pinned to
+`gpt-6-astra`; no React/VITE variable carries credentials. To load an ignored root
+`.env` automatically without displaying its contents, build the jar and use Node's
+environment-file support (existing environment variables take precedence):
+
+```powershell
+$env:JAVA_HOME = 'C:\Users\patri\.jdks\temurin-25.0.2'
+$env:Path = "$env:JAVA_HOME\bin;$env:Path"
+.\gradlew.bat :apps:api:bootJar
+node --env-file=.env scripts/run-api.mjs
+```
+
+If a stale OPENAI_API_KEY is already exported, remove that variable from this shell
+before the command so Node can use the local file. Do not print either value.
+`scripts/run-api.mjs` supplies an absolute default MEDIA_ROOT. Existing bootRun/IDE
+launches continue to use exported configuration and do not automatically read .env.
+
+No analysis UI is added in PR2. Use the typed client or HTTP:
+
+```powershell
+$projectId = '<existing project UUID>'
+$requestId = [guid]::NewGuid().ToString()
+$requestBody = @{ requestId = $requestId } | ConvertTo-Json
+$run = Invoke-RestMethod "http://127.0.0.1:8085/api/v1/projects/$projectId/analyses" -Method Post -ContentType 'application/json' -Body $requestBody
+Invoke-RestMethod "http://127.0.0.1:8085/api/v1/projects/$projectId/analyses/$($run.id)"
+Invoke-RestMethod "http://127.0.0.1:8085/api/v1/projects/$projectId/findings?analysisId=$($run.id)"
+```
+
+Reuse the **same requestId** after a connection failure; the API returns its existing
+RUNNING/SUCCEEDED/FAILED run without another paid call. A different UUID authorizes
+a new attempt. A failed first POST returns safe Problem JSON with analysisRunId;
+GET retrieves the durable failure. Findings lists accept optional analysisId and
+page (20 per page). Requests are synchronous, up to 120 seconds for OpenAI.
+
+Limits: 8 READY shots, first/middle/last representative frames (24 total), 16 MiB
+images, one active analysis globally, 100 attempts/project, one provider request
+and zero retries. Larger sequences are explicitly rejected. No reference editing
+or intentional-change steering yet. See [Astra integration](docs/ASTRA-INTEGRATION.md)
+for exact request/response bounds, failure recovery and cost limitations.
+
+One separately executable **paid** smoke path uses generated original PNG fixtures:
+
+```powershell
+node --env-file=.env scripts/astra-smoke.mjs --transport
+$env:SCENEPROOF_API_URL = 'http://127.0.0.1:8085'
+node scripts/astra-smoke.mjs --application
+```
+
+Transport performs one tiny direct request. Application mode needs the running API:
+it imports two original frames, performs one real analysis, checks persisted findings
+and replays the same requestId to verify deduplication. Each new invocation spends
+credits and leaves a named local project/media for review. No private fixture/key
+is committed. Normal tests never call paid OpenAI endpoints.
+
+### Contract maintenance
 
 Edit `packages/api-client/openapi.json`, update Kotlin behavior/tests in the same
 change and run `npm run api:generate`. Generated TS is checked in and CI checks drift.

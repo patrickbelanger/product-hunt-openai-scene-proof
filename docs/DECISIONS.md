@@ -6,6 +6,8 @@
 | [ADR-0001](adr/ADR-0001-foundation-stack.md) | Accepted | Implement mandated monorepo, relational persistence and pinned build baseline. |
 | [ADR-0002](adr/ADR-0002-openapi-client.md) | Accepted | OpenAPI contract generates TypeScript types used by typed fetch client. |
 | [ADR-0003](adr/ADR-0003-local-media-ingestion.md) | Accepted, authorized PR1 scope | Local storage, bounded synchronous FFmpeg ingestion, short metadata transactions and persisted failure history. |
+| [ADR-0004](adr/ADR-0004-astra-responses-api-integration.md) | Accepted within Patrick's explicit PR2 authorization | JDK HTTP Responses behind the analysis port; strict schema, bounded whole-sequence sampling and durable request deduplication. |
+| D-002 / Sep 12 | Accepted by Patrick's PR2 instruction | Finding persistence and read API belong to PR2; findings workspace UI remains PR3. No steering or reference editor. |
 
 Ordinary implementation choices: npm workspaces with a committed lockfile;
 loopback-only local services; backend port 8085 (8080 already occupied locally), web 5173, database host port 55432;
@@ -18,9 +20,8 @@ registry security advisories before the baseline is frozen. npm 11.6.2 resolves
 updates; npm 10.9.8 clean installs from the resulting lockfile were verified.
 
 Pending future material decisions: public hosting/persistent media, anonymous
-project isolation and concrete live-demo budget; Astra transport selection after
-verifying Spring AI against required Responses features. No public deployment or
-paid model call is part of the foundation slice.
+project isolation and concrete live-demo budget. Astra transport is resolved by
+ADR-0004; local paid smoke calls are explicitly authorized for PR2.
 
 ## DECISION REQUIRED format
 

@@ -4,6 +4,57 @@
  */
 
 export interface paths {
+    "/api/v1/projects/{projectId}/analyses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Synchronous, at most one paid call. Reuse requestId after any network retry; an existing RUNNING or final run is returned without another model call. Failed attempts return Problem with analysisRunId. A new requestId explicitly authorizes a new attempt. */
+        post: operations["createAnalysis"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{projectId}/analyses/{analysisId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getAnalysis"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{projectId}/findings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["listFindings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{projectId}/shots": {
         parameters: {
             query?: never;
@@ -74,6 +125,67 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        CreateAnalysis: {
+            /** Format: uuid */
+            requestId: string;
+        };
+        AnalysisUsage: {
+            inputTokens: number | null;
+            outputTokens: number | null;
+            totalTokens: number | null;
+            cachedInputTokens: number | null;
+            reasoningTokens: number | null;
+            cacheWriteTokens: number | null;
+        };
+        AnalysisRun: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            projectId: string;
+            /** Format: uuid */
+            requestId: string;
+            /** @enum {string} */
+            status: "RUNNING" | "SUCCEEDED" | "FAILED";
+            /** @enum {string} */
+            provider: "OPENAI";
+            /** @enum {string} */
+            model: "gpt-6-astra";
+            /** Format: date-time */
+            startedAt: string;
+            /** Format: date-time */
+            completedAt: string | null;
+            failureCode: string | null;
+            failureMessage: string | null;
+            shotCount: number;
+            frameCount: number;
+            projectSummary: string | null;
+            warnings: string[];
+            usage: components["schemas"]["AnalysisUsage"] | null;
+            providerResponseId: string | null;
+            providerRequestId: string | null;
+        };
+        Finding: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            analysisRunId: string;
+            /** @enum {string} */
+            category: "CHARACTER_IDENTITY" | "CHARACTER_APPEARANCE" | "HAIR" | "WARDROBE" | "PROP" | "OBJECT_STATE" | "ENVIRONMENT" | "SPATIAL_CONTINUITY" | "SCREEN_DIRECTION" | "LIGHTING" | "TIME_OF_DAY" | "HAND_OBJECT_INTERACTION" | "DEVICE_UI" | "TEXT_CONTINUITY" | "OTHER";
+            /** @enum {string} */
+            severity: "LOW" | "MEDIUM" | "HIGH";
+            confidence: number;
+            title: string;
+            summary: string;
+            expectedState: string;
+            observedState: string;
+            explanation: string;
+            affectedShotIds: string[];
+            relevantFrameIds: string[];
+            relevantReferenceIds: string[];
+            suggestedCorrectionPrompt: string;
+            /** @enum {string} */
+            status: "OPEN";
+        };
         Frame: {
             /** Format: uuid */
             id: string;
@@ -130,6 +242,11 @@ export interface components {
             status: number;
             detail?: string;
             instance?: string;
+            /**
+             * Format: uuid
+             * @description Durable run identifier when an admitted analysis fails.
+             */
+            analysisRunId?: string;
         };
     };
     responses: {
@@ -150,6 +267,83 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    createAnalysis: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateAnalysis"];
+            };
+        };
+        responses: {
+            /** @description Current durable run; Location identifies its GET endpoint */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnalysisRun"];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    getAnalysis: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                analysisId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Durable analysis state; stale interrupted runs become FAILED after five minutes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnalysisRun"];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    listFindings: {
+        parameters: {
+            query?: {
+                analysisId?: string;
+                page?: number;
+            };
+            header?: never;
+            path: {
+                projectId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Validated findings, newest analysis first, at most 20 per page */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Finding"][];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
     listShots: {
         parameters: {
             query?: never;

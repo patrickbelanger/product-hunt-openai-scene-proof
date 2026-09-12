@@ -56,13 +56,27 @@ Normal failures clean media; abrupt termination may leave unreferenced files.
 Exact limits and cleanup: [Media pipeline](MEDIA-PIPELINE.md),
 [ADR-0003](adr/ADR-0003-local-media-ingestion.md).
 
+## Implemented Astra analysis (PR2)
+
+AnalysisController → AnalysisService → ContinuityAnalysisPort →
+AstraContinuityAnalysisAdapter → JDK HTTP Responses endpoint. The domain-facing
+port returns typed results and usage; application validation rechecks evidence scope.
+No OpenAI SDK/Spring AI transport types enter controllers or the domain. Context
+assembly reuses ProjectService, MediaRepository and MediaStorage from PR1.
+Flyway V3 adds analysis_runs, findings, finding_shots and finding_frames. JDBC
+transactions commit RUNNING before provider work, then atomically persist all
+validated findings with SUCCEEDED. Failures use separate short transactions.
+Request UUID uniqueness prevents replayed client calls; one RUNNING DB index and
+an in-process semaphore bound work. Five-minute lazy stale-run recovery never
+replays model calls. The API remains synchronous/local with no workers or UI changes.
+Selected context stores only bounded metadata/hashes, never duplicate image bytes.
+See [Astra integration](ASTRA-INTEGRATION.md) and [ADR-0004](adr/ADR-0004-astra-responses-api-integration.md).
+
 ## Boundaries reserved for later slices
 
-ContinuityAnalysisPort /
-AstraContinuityAnalysisAdapter, analysis jobs and progress transport are **planned,
-not implemented**. Raw media will stay outside PostgreSQL. Domain services must
-not depend on OpenAI transport types. No Spring AI starter is loaded before its
-capabilities are verified for the analysis slice.
+Analysis jobs/progress transport, findings workspace UI, reference editing and
+intentional-change steering remain planned. Raw media stays outside PostgreSQL.
+Spring AI is not loaded: the verified Responses transport uses JDK HTTP (ADR-0004).
 
 Public hosting, durable media mounts, anonymous project isolation and live-analysis
 limits need a separate deployment decision. This baseline is local development.
