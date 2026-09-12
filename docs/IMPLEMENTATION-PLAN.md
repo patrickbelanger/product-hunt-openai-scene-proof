@@ -1,6 +1,6 @@
 # Implementation Plan
 
-## P0 foundation — complete, ready for review on `feat/p0-foundation`
+## P0 foundation — merged into main as `fefb7db` (PR0)
 
 - [x] Recover actual repository state; preserve existing work.
 - [x] Establish BRD, delivery plan, technical plan and decision records.
@@ -16,13 +16,33 @@
 Verification: 4 backend + 4 frontend + 2 live API/browser tests pass; builds and
 OpenAPI drift check pass; clean npm install and zero-vulnerability audit. Found and
 fixed PostgreSQL timestamp precision drift and corrected the RFC 9457 default type
-contract during real HTTP checks. Foundation is not yet integrated into main.
+contract during real HTTP checks. PR0 integration was verified during PR1 recovery.
 
 Foundation acceptance: create a project with rules in React, store in PostgreSQL,
 open its workspace, reload and retrieve the same project. Invalid names produce
 actionable errors. Empty media/findings are not fabricated. No API key required.
 
 ## First complete continuity vertical slice
+
+### PR1 — merged into local main from `feat/p0-media-ingestion` (`95ee2f9`)
+
+- [x] Verify clean worktree, fetch origin, fast-forward main to PR0 merge and branch.
+- [x] MediaStorage/local adapter, generated keys, bounded streaming upload.
+- [x] JPEG/PNG signature, dimension and decode validation; normalized frame content.
+- [x] Controlled FFprobe/FFmpeg, H.264 metadata bounds, scene/fallback extraction.
+- [x] Shot/frame migration, atomic metadata writes, ordering and timestamp invariants.
+- [x] Safe persisted failed attempts and normal failure cleanup.
+- [x] Typed multipart API, upload UI, actual frame selection and reload.
+- [x] PostgreSQL/media integration tests and frontend upload/retry tests.
+- [x] Backend build (13 tests after compatibility correction), frontend build and OpenAPI drift check.
+- [x] Final Chromium flow and desktop/tablet visual verification (3 E2E tests).
+- [x] Synchronized handoff and ADR-0003.
+- [x] Patrick approved PR1; integrate `95ee2f9` into local main after final green checks.
+- [x] Verify targeted MP4 major-brand compatibility correction: real iso6 MP4 accepted,
+  corrupt ftyp-only input rejected, existing codec/duration tests retained.
+
+No Astra, findings implementation, Reference Bible CRUD, public hosting or paid
+calls are part of PR1. Abrupt termination orphan cleanup is documented local debt.
 
 1. `feat/p0-media-ingestion`: MediaStorage and local adapter; image validation,
    bounded upload; controlled FFprobe/FFmpeg adapter; representative sampling,

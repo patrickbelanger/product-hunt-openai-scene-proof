@@ -5,6 +5,7 @@
 | D-001 / Sep 12 | Accepted by Patrick | Initial `Spring Boot 4.11` means **4.1.1**. Java 25 and Kotlin 2.3+ remain mandatory. |
 | [ADR-0001](adr/ADR-0001-foundation-stack.md) | Accepted | Implement mandated monorepo, relational persistence and pinned build baseline. |
 | [ADR-0002](adr/ADR-0002-openapi-client.md) | Accepted | OpenAPI contract generates TypeScript types used by typed fetch client. |
+| [ADR-0003](adr/ADR-0003-local-media-ingestion.md) | Accepted, authorized PR1 scope | Local storage, bounded synchronous FFmpeg ingestion, short metadata transactions and persisted failure history. |
 
 Ordinary implementation choices: npm workspaces with a committed lockfile;
 loopback-only local services; backend port 8085 (8080 already occupied locally), web 5173, database host port 55432;

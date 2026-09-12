@@ -14,6 +14,11 @@ import java.net.URI
 class ApiErrors : ResponseEntityExceptionHandler() {
     private val log = LoggerFactory.getLogger(ApiErrors::class.java)
 
+    @ExceptionHandler(dev.sceneproof.media.MediaFailure::class)
+    fun mediaFailure(failure: dev.sceneproof.media.MediaFailure): ProblemDetail = ProblemDetail.forStatusAndDetail(
+        HttpStatus.valueOf(failure.httpStatus), failure.detail,
+    ).apply { type = URI.create("urn:sceneproof:problem:${failure.code.lowercase().replace('_', '-')}") }
+
     @ExceptionHandler(ProjectNotFound::class)
     fun projectNotFound(): ProblemDetail = ProblemDetail.forStatusAndDetail(
         HttpStatus.NOT_FOUND, "This project does not exist.",

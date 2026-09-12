@@ -10,9 +10,12 @@ Creation asks for name, description and textual rules. Blank-name validation is
 immediate; submit shows pending state and prevents duplicate submission. Failure
 retains entered fields for retry. Success opens the persisted project workspace.
 
-Workspace: Reference Bible/rules on the left, frame inspector centrally, findings
-on the right, timeline below. Empty states explain what exists and what comes next;
-there are no disabled Analyze/Upload/Demo controls implying functioning features.
+Workspace: Reference Bible/rules on the left, import and frame inspector centrally,
+findings on the right, scrolling timeline below the inspector. Import takes one
+still or short video and shows real pending work. Errors retain the selected file
+for retry; completed failures remain visible after reload. Timeline buttons select
+actual PNG frames, showing video elapsed seconds or "Still image". Empty states
+remain truthful; no Analyze/Demo controls imply unimplemented behavior.
 Project names and rules wrap, including long unbroken content.
 
 Loading is announced through status roles; errors offer retry/navigation. Forms have

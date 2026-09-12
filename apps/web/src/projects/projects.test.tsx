@@ -2,13 +2,13 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ApiError, createProject, getProject, listProjects } from '@sceneproof/api-client';
+import { ApiError, createProject, getProject, listProjects, listShots } from '@sceneproof/api-client';
 import { App } from '../App';
 import { Providers } from '../providers';
 
 vi.mock('@sceneproof/api-client', async importOriginal => ({
   ...await importOriginal<typeof import('@sceneproof/api-client')>(),
-  createProject: vi.fn(), getProject: vi.fn(), listProjects: vi.fn(),
+  createProject: vi.fn(), getProject: vi.fn(), listProjects: vi.fn(), listShots: vi.fn(),
 }));
 
 const project = {
@@ -22,6 +22,7 @@ function open(path: string) {
 }
 
 beforeEach(() => {
+  vi.mocked(listShots).mockResolvedValue([]);
   vi.mocked(listProjects).mockResolvedValue({ items: [], page: 0, hasNext: false });
   vi.mocked(createProject).mockResolvedValue(project);
   vi.mocked(getProject).mockResolvedValue(project);
