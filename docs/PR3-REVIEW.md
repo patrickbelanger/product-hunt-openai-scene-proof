@@ -7,10 +7,10 @@
 - Committed and pushed implementation: `fa0dbc9cb25e56612bb5d7b4891ae272f4f2179f`.
   Review preparation verified this SHA on GitHub and a clean worktree. This
   documentation-only follow-up corrects the former uncommitted/unpushed state.
-- Follow-up push blocked: GitHub returned HTTP 403 for Git credential account
-  `lauriebeaulieu981`. This documentation follow-up is committed locally; the last
-  verified remote HEAD remains `fa0dbc9cb25e56612bb5d7b4891ae272f4f2179f`.
-  Configure a credential with repository write access, then push only this branch.
+- Follow-up push authentication resolved: the initial wrong-account HTTP 403 was
+  corrected by selecting `patrickbelanger`, Patrick's required GitHub account.
+  Review follow-up `1cdfe85` was successfully pushed to this branch; this final
+  documentation correction records the resolution. No force push or merge.
 - Branch: https://github.com/patrickbelanger/product-hunt-openai-scene-proof/tree/feat/p0-findings-workspace
 - External code review pending. No merge or steering branch/implementation.
 - Initial worktree was clean on PR2 `fe89f16`; local main was stale at `7275f17`.

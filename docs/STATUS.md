@@ -36,10 +36,10 @@ PR3 implementation is committed and pushed at
 `fa0dbc9cb25e56612bb5d7b4891ae272f4f2179f`, based on the exact main SHA above.
 Review preparation confirmed a clean worktree and the same SHA on GitHub; this
 documentation-only follow-up corrects the previous uncommitted/unpushed handoff.
-The follow-up push was rejected with HTTP 403: the Git credential account
-`lauriebeaulieu981` lacks repository write permission. The documentation follow-up
-is committed locally; GitHub remains at implementation commit `fa0dbc9` until an
-authorized Git credential is configured and this branch is pushed again.
+The first follow-up push was rejected with HTTP 403 for the wrong credential
+account. Patrick requires `patrickbelanger` for GitHub operations. Git now selects
+that account explicitly, and the review follow-up `1cdfe85` was successfully pushed.
+The authentication blocker is resolved; external code review remains pending.
 Main remains unchanged. Review detail/files/screenshots: [PR3 review](PR3-REVIEW.md).
 During implementation verification: Vite 15177 → normal jar 8090 (PID 150108), no provider key.
 The old PR2 API 8088 was no longer running. Existing IDE services were preserved.
