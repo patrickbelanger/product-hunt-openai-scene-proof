@@ -1,0 +1,198 @@
+{
+  "type": "object",
+  "properties": {
+    "projectSummary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": [
+              "CHARACTER_IDENTITY",
+              "CHARACTER_APPEARANCE",
+              "HAIR",
+              "WARDROBE",
+              "PROP",
+              "OBJECT_STATE",
+              "ENVIRONMENT",
+              "SPATIAL_CONTINUITY",
+              "SCREEN_DIRECTION",
+              "LIGHTING",
+              "TIME_OF_DAY",
+              "HAND_OBJECT_INTERACTION",
+              "DEVICE_UI",
+              "TEXT_CONTINUITY",
+              "OTHER"
+            ]
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "expectedState": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "observedState": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "explanation": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 3000
+          },
+          "affectedShotIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "minItems": 1,
+            "maxItems": 8
+          },
+          "relevantFrameIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "minItems": 1,
+            "maxItems": 24
+          },
+          "relevantReferenceIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "minItems": 0,
+            "maxItems": 0
+          },
+          "suggestedCorrectionPrompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 3000
+          }
+        },
+        "required": [
+          "category",
+          "severity",
+          "confidence",
+          "title",
+          "summary",
+          "expectedState",
+          "observedState",
+          "explanation",
+          "affectedShotIds",
+          "relevantFrameIds",
+          "relevantReferenceIds",
+          "suggestedCorrectionPrompt"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0,
+      "maxItems": 20
+    },
+    "inspectedShots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "shotId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "frameIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "minItems": 1,
+            "maxItems": 3
+          }
+        },
+        "required": [
+          "shotId",
+          "frameIds"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "maxItems": 8
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "minItems": 0,
+      "maxItems": 20
+    },
+    "analysisMetadata": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "schemaVersion": {
+          "type": "string",
+          "enum": [
+            "1"
+          ]
+        },
+        "scope": {
+          "type": "string",
+          "enum": [
+            "SAMPLED_SEQUENCE"
+          ]
+        }
+      },
+      "required": [
+        "projectId",
+        "schemaVersion",
+        "scope"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "projectSummary",
+    "findings",
+    "inspectedShots",
+    "warnings",
+    "analysisMetadata"
+  ],
+  "additionalProperties": false
+}

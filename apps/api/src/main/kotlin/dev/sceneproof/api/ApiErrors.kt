@@ -14,6 +14,14 @@ import java.net.URI
 class ApiErrors : ResponseEntityExceptionHandler() {
     private val log = LoggerFactory.getLogger(ApiErrors::class.java)
 
+    @ExceptionHandler(dev.sceneproof.analysis.AnalysisFailure::class)
+    fun analysisFailure(failure: dev.sceneproof.analysis.AnalysisFailure): ProblemDetail = ProblemDetail.forStatusAndDetail(
+        HttpStatus.valueOf(failure.httpStatus), failure.detail,
+    ).apply {
+        type = URI.create("urn:sceneproof:problem:${failure.code.lowercase().replace('_', '-')}")
+        failure.analysisRunId?.let { setProperty("analysisRunId", it) }
+    }
+
     @ExceptionHandler(dev.sceneproof.media.MediaFailure::class)
     fun mediaFailure(failure: dev.sceneproof.media.MediaFailure): ProblemDetail = ProblemDetail.forStatusAndDetail(
         HttpStatus.valueOf(failure.httpStatus), failure.detail,

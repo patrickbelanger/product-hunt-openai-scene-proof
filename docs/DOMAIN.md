@@ -26,20 +26,36 @@ with strictly increasing elapsed source presentation timestamps in milliseconds.
 Content retrieval checks project membership. V2 enforces foreign keys, position
 and timestamp uniqueness, and metadata bounds.
 
+## Implemented continuity analysis (PR2)
+
+AnalysisRun has UUID/project/request UUID, RUNNING → SUCCEEDED or FAILED, start/end
+timestamps, fixed OPENAI/gpt-6-astra metadata, safe failure code/message, selected
+shot/frame counts, optional provider IDs/token usage, summary/warnings and a bounded
+context snapshot. No PENDING stage is needed for synchronous work. A repeated
+project/request UUID returns the same run; an explicit new request creates a new
+auditable attempt. Requests older than five minutes still RUNNING are lazily failed
+on read/start. Failed runs never contain committed findings.
+
+Finding has server UUID/run UUID, category, LOW/MEDIUM/HIGH severity, finite 0–1
+confidence, title/summary, expected/observed state, explanation, correction prompt,
+affected shot IDs, evidence frame IDs and OPEN status. PR2 uses the 16 requested
+continuity categories including OTHER. References are empty; no reference table is
+invented. The model's inspected manifest must exactly cover the selected inputs.
+V3 composite foreign keys prevent cross-project shot links and enforce evidence
+frame ownership by an affected shot. Every affected shot needs submitted evidence.
+All findings and SUCCEEDED are atomic. Historical analyses coexist; no supersession
+or resolving/dismissing actions are implemented. Findings reads are paginated (20),
+optionally filtered by analysis ID, with newest analysis first.
+
 ## Planned for successive slices — no corresponding tables yet
 
-Project → References/rules, AnalysisRuns → Findings,
-IntentionalChanges and resolution history. A frame has source shot, timestamp and
-storage key. Evidence links valid project frame/reference IDs, never arbitrary URLs.
-An analysis snapshot records the inputs/context version used.
+Project → References, IntentionalChanges and resolution history. Rules currently
+remain bounded project text. Later reference evidence will link valid project
+reference IDs, never arbitrary URLs.
 
-Candidate AnalysisRun lifecycle: queued → running → succeeded/failed. Retries create
-auditable attempts; final mapping to real progress stages is defined with media/AI.
+Future queued/progress stages require explicit worker/recovery design.
 Candidate finding statuses: OPEN, RESOLVED, INTENTIONAL, DISMISSED, with prior results
 preserved during supersession. Creator context does not erase prior analysis.
 
-Findings will include category, severity, bounded confidence, expected/observed state,
-explanation, affected shots, relevant references, evidence and correction prompt.
-Categories in the original context remain the target vocabulary; implement only
-semantics that support the actual analysis. Validate identifiers and scope before
-persisting model output. A recognized difference is not automatically a finding.
+A recognized difference is not automatically a finding; the analysis prompt uses
+rules and sequence context and asks for evidence-backed continuity problems.

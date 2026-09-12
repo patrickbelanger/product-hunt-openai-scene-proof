@@ -40,6 +40,8 @@ management:
       show-details: never
 
 sceneproof:
+  astra:
+    api-key: ${OPENAI_API_KEY:}
   media:
     root: ${MEDIA_ROOT:.local/media}
     ffmpeg: ${FFMPEG_PATH:ffmpeg}

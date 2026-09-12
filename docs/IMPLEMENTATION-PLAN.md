@@ -44,6 +44,21 @@ actionable errors. Empty media/findings are not fabricated. No API key required.
 No Astra, findings implementation, Reference Bible CRUD, public hosting or paid
 calls are part of PR1. Abrupt termination orphan cleanup is documented local debt.
 
+### PR2 — ready for review `feat/p0-astra-analysis`, base `7275f17`
+
+- [x] Recovery, exact main SHA, PR1 code inspection and branch creation.
+- [x] Re-verify official Astra/Responses/image/schema/SDK/error documentation.
+- [x] Real original-image transport spike, authentication, parsing and usage.
+- [x] Port/JDK HTTP adapter, bounded context, strict schema and scope validation.
+- [x] V3 AnalysisRun/Finding/evidence persistence, deduplication and failure states.
+- [x] Analysis/findings endpoints, OpenAPI and generated TypeScript client.
+- [x] Complete backend (34), frontend (6), builds, Chromium (4) and contract checks.
+- [x] Real imported-project analysis with a persisted finding and usage; verify after restart.
+- [x] Final review handoff and verified status; no merge or PR3 work.
+
+Patrick explicitly includes finding persistence/read API in PR2. This supersedes
+the older placement below; the next branch is solely the findings workspace UI.
+
 1. `feat/p0-media-ingestion`: MediaStorage and local adapter; image validation,
    bounded upload; controlled FFprobe/FFmpeg adapter; representative sampling,
    shots/frames migration, order and timestamp invariants; hostile input tests.
@@ -51,7 +66,7 @@ calls are part of PR1. Abrupt termination orphan cleanup is documented local deb
    verify current API/transport; bounded reference+neighbor request; JSON Schema;
    validate IDs, evidence and confidence; AnalysisRun lifecycle; real call and
    persisted usage/failures; refusal/incomplete/malformed response tests.
-3. `feat/p0-findings-workspace`: finding persistence/API/client; timeline markers,
+3. `feat/p0-findings-workspace`: consume PR2 findings API/client; timeline markers,
    findings panel, affected-shot selection, two-frame comparison, expected versus
    observed, explanation and copy correction; critical browser test.
 

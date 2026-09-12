@@ -1,0 +1,32 @@
+import { randomUUID } from 'node:crypto';
+import { expect, test } from '@playwright/test';
+import Ajv2020 from 'ajv/dist/2020.js';
+import addFormats from 'ajv-formats';
+import spec from '../../packages/api-client/openapi.json';
+
+test('analysis failures are durable scoped and contract valid without paid work', async ({ request }) => {
+  const validator = new Ajv2020({ strict: false, allErrors: true });
+  addFormats(validator);
+  validator.addSchema(spec, 'sceneproof');
+  const checkRun = validator.compile({ $ref: 'sceneproof#/components/schemas/AnalysisRun' });
+  const projectResponse = await request.post('/api/v1/projects', { data: { name: `Analysis contract verification ${Date.now()}` } });
+  const project = await projectResponse.json();
+  const requestId = randomUUID();
+  const failed = await request.post(`/api/v1/projects/${project.id}/analyses`, { data: { requestId } });
+  expect(failed.status()).toBe(422);
+  const problem = await failed.json();
+  expect(problem.type).toBe('urn:sceneproof:problem:no-usable-shots');
+  const get = await request.get(`/api/v1/projects/${project.id}/analyses/${problem.analysisRunId}`);
+  const run = await get.json();
+  expect(get.status()).toBe(200);
+  expect(checkRun(run), JSON.stringify(checkRun.errors)).toBe(true);
+  expect(run.status).toBe('FAILED');
+  expect(run.usage).toBeNull();
+  const replay = await request.post(`/api/v1/projects/${project.id}/analyses`, { data: { requestId } });
+  expect(replay.status()).toBe(200);
+  expect(await replay.json()).toEqual(run);
+  const findings = await request.get(`/api/v1/projects/${project.id}/findings`);
+  expect(await findings.json()).toEqual([]);
+  const foreign = await request.get(`/api/v1/projects/${randomUUID()}/analyses/${run.id}`);
+  expect(foreign.status()).toBe(404);
+});
