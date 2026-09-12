@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-12
 Current branch: `feat/p0-findings-workspace`
-Current milestone: PR3 implemented and locally verified; ready for review, not merged.
+Current milestone: PR3 implementation committed and pushed; external review pending, not merged.
 Current task: Review `feat/p0-findings-workspace`; no steering work authorized here.
 
 ## PR3 recovery
@@ -32,11 +32,22 @@ never claims successful review. Markers cover the current findings page. The fir
 evidence frame stays left, alternatives replace the right; reload resets that pair.
 No reference editor, steering, demo, tour or hosting is implemented in PR3.
 
-Branch is uncommitted and unpushed, based on exact main SHA above. Main remains
-unchanged. Review detail/files/screenshots: [PR3 review](PR3-REVIEW.md).
-Local review: Vite 15177 → normal jar 8090 (PID 150108), no provider key.
+PR3 implementation is committed and pushed at
+`fa0dbc9cb25e56612bb5d7b4891ae272f4f2179f`, based on the exact main SHA above.
+Review preparation confirmed a clean worktree and the same SHA on GitHub; this
+documentation-only follow-up corrects the previous uncommitted/unpushed handoff.
+The follow-up push was rejected with HTTP 403: the Git credential account
+`lauriebeaulieu981` lacks repository write permission. The documentation follow-up
+is committed locally; GitHub remains at implementation commit `fa0dbc9` until an
+authorized Git credential is configured and this branch is pushed again.
+Main remains unchanged. Review detail/files/screenshots: [PR3 review](PR3-REVIEW.md).
+During implementation verification: Vite 15177 → normal jar 8090 (PID 150108), no provider key.
 The old PR2 API 8088 was no longer running. Existing IDE services were preserved.
-Remote CI has not run for these unpushed changes. Stop here for Patrick's review;
+Review preparation reran 21 frontend tests, TypeScript/Vite build and OpenAPI drift:
+all passed. Backend 34 and Chromium 5 passing results remain from the unchanged
+implementation verification; these suites were not rerun for this documentation change.
+Remote CI status could not be verified: GitHub CLI returned HTTP 401 Bad credentials.
+This is not a CI failure or a CI pass claim. Stop here for Patrick's review;
 do not merge or start feat/p0-intentional-change-steering.
 
 ## Historical PR2 recovery and verification

@@ -56,7 +56,7 @@ calls are part of PR1. Abrupt termination orphan cleanup is documented local deb
 - [x] Real imported-project analysis with a persisted finding and usage; verify after restart.
 - [x] Final review handoff and verified status; subsequently merged through PR #2.
 
-### PR3 — ready for review `feat/p0-findings-workspace`, base `602cf1c`
+### PR3 — pushed, external review pending `feat/p0-findings-workspace`, base `602cf1c`
 
 - [x] Recover clean synchronized main at the requested SHA; reconcile PR2 merge documentation.
 - [x] Consume generated findings client with honest loading/error/empty and URL selection state.
@@ -70,6 +70,8 @@ calls are part of PR1. Abrupt termination orphan cleanup is documented local deb
 Verification: 34 backend, 21 frontend and 5 Chromium tests pass. Normal suite uses
 the test-only port plus real persistence. The original PR2 live finding was also
 inspected without any new provider call. Exact evidence and limits: PR3-REVIEW.
+Implementation commit `fa0dbc9` is pushed; the review-preparation documentation
+follow-up preserves the same scope and base. No merge or steering started.
 
 Patrick explicitly includes finding persistence/read API in PR2. This supersedes
 the older placement below; the next branch is solely the findings workspace UI.

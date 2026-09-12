@@ -3,8 +3,16 @@
 ## Branch and recovery
 
 - Branch: `feat/p0-findings-workspace`.
-- Base / current uncommitted HEAD: `602cf1c2a1dac4c6dcd563d01a3e580c53caef59`.
-- No PR3 commit, push or merge. No steering branch or implementation.
+- Base: `602cf1c2a1dac4c6dcd563d01a3e580c53caef59`.
+- Committed and pushed implementation: `fa0dbc9cb25e56612bb5d7b4891ae272f4f2179f`.
+  Review preparation verified this SHA on GitHub and a clean worktree. This
+  documentation-only follow-up corrects the former uncommitted/unpushed state.
+- Follow-up push blocked: GitHub returned HTTP 403 for Git credential account
+  `lauriebeaulieu981`. This documentation follow-up is committed locally; the last
+  verified remote HEAD remains `fa0dbc9cb25e56612bb5d7b4891ae272f4f2179f`.
+  Configure a credential with repository write access, then push only this branch.
+- Branch: https://github.com/patrickbelanger/product-hunt-openai-scene-proof/tree/feat/p0-findings-workspace
+- External code review pending. No merge or steering branch/implementation.
 - Initial worktree was clean on PR2 `fe89f16`; local main was stale at `7275f17`.
   Fetch confirmed PR #2 merge `602cf1c`. Main was fast-forwarded and verified clean,
   identical to origin/main, before creating only the requested PR3 branch.
@@ -65,9 +73,12 @@ reload use saved data only. No Astra adapter, migration or API contract changed.
 | TypeScript / Vite production build | PASS |
 | OpenAPI generated-type drift | PASS, contract and generated DTOs unchanged |
 | git diff --check | PASS |
-| Remote CI | Not run; changes unpushed |
+| Remote CI | Status unverified: GitHub CLI returned HTTP 401 Bad credentials |
 
 The final Gradle invocation reused the already successful unchanged test outputs.
+Review preparation reran all 21 frontend tests, TypeScript/Vite build and OpenAPI
+drift successfully. Backend and Chromium passing results above belong to the
+unchanged implementation; they were not rerun for the documentation-only follow-up.
 The earlier first TypeScript pass, initial overly-specific accessible-name assertion,
 duplicate test-marker registration, sandbox browser launch and old empty-state E2E
 assertion failed before correction. Those attempts are not counted as passing checks.
@@ -116,7 +127,7 @@ supersession, steering or resolution work added. Markers cover only the current 
 Alternate comparison frames are temporary; reload returns to the deterministic pair.
 No Reference Bible editor, guided tour, curated demo, hosting or P1/P2 polish.
 
-Local normal review server: Vite `http://127.0.0.1:15177` → API 8090 (PID 150108),
+During implementation verification: Vite `http://127.0.0.1:15177` → API 8090 (PID 150108),
 no provider key. The previous 8088 server was not running. Existing IDE processes
 were preserved. Tests use a separate schema; named verification projects remain.
 
