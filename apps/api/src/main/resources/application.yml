@@ -1,0 +1,37 @@
+server:
+  address: ${SERVER_ADDRESS:127.0.0.1}
+  port: ${SERVER_PORT:8085}
+  error:
+    include-message: never
+    include-stacktrace: never
+
+spring:
+  application:
+    name: sceneproof
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:55432/sceneproof}
+    username: ${DATABASE_USERNAME:sceneproof}
+    password: ${DATABASE_PASSWORD:sceneproof-local}
+    hikari:
+      maximum-pool-size: 5
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+  servlet:
+    multipart:
+      enabled: false
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never

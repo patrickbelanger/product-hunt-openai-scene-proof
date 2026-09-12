@@ -1,0 +1,21 @@
+name: sceneproof
+
+services:
+  postgres:
+    image: postgres:17.9-alpine
+    environment:
+      POSTGRES_DB: sceneproof
+      POSTGRES_USER: sceneproof
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-sceneproof-local}
+    ports:
+      - "127.0.0.1:55432:5432"
+    volumes:
+      - sceneproof-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sceneproof -d sceneproof"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+volumes:
+  sceneproof-postgres:

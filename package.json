@@ -1,0 +1,22 @@
+{
+  "name": "sceneproof",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": ["apps/web", "packages/api-client"],
+  "engines": { "node": ">=22.12.0 <23 || >=24 <25" },
+  "scripts": {
+    "dev": "npm run dev --workspace @sceneproof/web",
+    "build": "npm run build --workspace @sceneproof/web",
+    "test": "npm run test --workspace @sceneproof/web",
+    "typecheck": "npm run typecheck --workspace @sceneproof/web",
+    "api:generate": "npm run generate --workspace @sceneproof/api-client",
+    "api:check": "npm run check --workspace @sceneproof/api-client",
+    "test:e2e": "playwright test"
+  },
+  "packageManager": "npm@11.6.2",
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1"
+  }
+}

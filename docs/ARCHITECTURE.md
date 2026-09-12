@@ -1,0 +1,56 @@
+# Architecture
+
+## Implemented foundation
+
+One monorepo: `apps/api` Kotlin/Spring Boot; `apps/web` React/TypeScript;
+`packages/api-client` OpenAPI document, generated types and typed fetch functions.
+Root Gradle configuration builds the API; npm workspaces build the web/client.
+`docker-compose.yml` runs only PostgreSQL with a dedicated named persistent volume.
+
+```mermaid
+flowchart LR
+  Browser[React + Mantine workspace] -->|same-origin /api proxy| API[Spring MVC project API]
+  API --> Service[ProjectService]
+  Service --> JPA[Spring Data JPA]
+  JPA --> DB[(PostgreSQL)]
+  Flyway[Flyway migrations] --> DB
+  Contract[OpenAPI JSON] --> Types[Generated TypeScript]
+  Types --> Browser
+```
+
+Project packages contain HTTP DTOs/controller, transactional service, entity and
+repository. API error advice uses RFC 9457 ProblemDetail and does not expose internal
+exception messages. Bean validation bounds strings and page numbers. Unknown JSON
+fields and malformed requests fail. `GET /actuator/health` includes database health
+without details; the packaged OpenAPI document is served at `/openapi.json`.
+Problem `type` can be omitted by Spring for generic HTTP errors, meaning `about:blank`
+under [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457#section-3.1.1);
+specific missing-project errors have a stable SceneProof URN.
+
+## Persistence and runtime
+
+`projects` stores UUID, name, description, textual project rules and timestamps.
+Flyway V1 owns schema creation; Hibernate uses `validate` and open-in-view is off.
+Project reads use transactions and DTOs. Newest-first listing is paginated, with ID
+as a deterministic secondary sort. Integration tests use separate `sceneproof_test`
+schema and roll back; no H2 substitute. Rules remain bounded text until reference
+and intentional-change semantics need normalized scope/history.
+
+Default local topology: browser on 127.0.0.1:5173 → Vite proxy → API on
+127.0.0.1:8085 → PostgreSQL host port 55432. No wildcard CORS, no anonymous public
+deployment claim. Docker credentials are development defaults. `.env` is ignored;
+Compose reads it, while directly launched Java requires exported environment values.
+
+## Boundaries reserved for later slices
+
+MediaStorage / LocalMediaStorage, FFmpeg adapter, ContinuityAnalysisPort /
+AstraContinuityAnalysisAdapter, analysis jobs and progress transport are **planned,
+not implemented**. Raw media will stay outside PostgreSQL. Domain services must
+not depend on OpenAI transport types. No Spring AI starter is loaded before its
+capabilities are verified for the analysis slice.
+
+Public hosting, durable media mounts, anonymous project isolation and live-analysis
+limits need a separate deployment decision. This baseline is local development.
+
+Concrete versions and run commands: [README](../README.md). Decisions:
+[ADR-0001](adr/ADR-0001-foundation-stack.md), [ADR-0002](adr/ADR-0002-openapi-client.md).
