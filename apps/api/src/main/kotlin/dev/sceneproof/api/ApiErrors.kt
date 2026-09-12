@@ -21,7 +21,11 @@ class ApiErrors : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(Exception::class)
     fun unexpected(exception: Exception): ResponseEntity<ProblemDetail> {
-        log.error("Unexpected request failure: {}", exception.javaClass.simpleName)
+        log.error(
+            "Unexpected request failure: {}",
+            exception.message ?: exception.javaClass.simpleName,
+            exception,
+        )
         val problem = ProblemDetail.forStatusAndDetail(
             HttpStatus.INTERNAL_SERVER_ERROR, "SceneProof could not complete this request. Please try again.",
         )
