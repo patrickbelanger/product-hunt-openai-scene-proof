@@ -125,6 +125,42 @@ class MediaApiTest @Autowired constructor(private val mvc: MockMvc, private val 
     }
 
     @Test
+    fun `h264 mp4 with iso6 major brand is confirmed by ffprobe and imported`() {
+        val fixture = directory.resolve("iso6.mp4")
+        val process = MediaProcess()
+        process.run(listOf("ffmpeg", "-nostdin", "-v", "error", "-f", "lavfi", "-i", "color=red:s=160x90:r=12:d=1", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-brand", "iso6", fixture.toString()))
+        val bytes = Files.readAllBytes(fixture)
+        assertThat(String(bytes, 4, 4, Charsets.US_ASCII)).isEqualTo("ftyp")
+        assertThat(String(bytes, 8, 4, Charsets.US_ASCII)).isEqualTo("iso6")
+        val metadata = mapper.readTree(process.run(listOf("ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=codec_name:format=format_name", "-of", "json", fixture.toString())))
+        assertThat(metadata["streams"][0]["codec_name"].asString()).isEqualTo("h264")
+        assertThat(metadata["format"]["format_name"].asString().split(',')).contains("mp4")
+        mvc.multipart("/api/v1/projects/${project()}/shots") {
+            file(MockMultipartFile("file", "iso6.mp4", "video/mp4", bytes))
+        }.andExpect {
+            status { isCreated() }
+            jsonPath("$.status") { value("READY") }
+            jsonPath("$.kind") { value("VIDEO") }
+            jsonPath("$.durationMs") { value(1000) }
+            jsonPath("$.frames[0].timestampMs") { value(0) }
+        }
+    }
+
+    @Test
+    fun `ftyp signature alone does not admit corrupt video`() {
+        val project = project()
+        val bytes = byteArrayOf(0, 0, 0, 12) + "ftypiso6".toByteArray(Charsets.US_ASCII)
+        mvc.multipart("/api/v1/projects/$project/shots") {
+            file(MockMultipartFile("file", "corrupt.mp4", "video/mp4", bytes))
+        }.andExpect { status { isEqualTo(422) } }
+        mvc.get("/api/v1/projects/$project/shots").andExpect {
+            jsonPath("$[0].status") { value("FAILED") }
+            jsonPath("$[0].frames.length()") { value(0) }
+        }
+        Files.list(directory.resolve("media").resolve(project)).use { assertThat(it.count()).isZero() }
+    }
+
+    @Test
     fun `unsupported codec and excessive duration fail inspection and clean files`() {
         val project = project()
         listOf("mpeg4" to "1", "libx264" to "121").forEachIndexed { index, (codec, duration) ->

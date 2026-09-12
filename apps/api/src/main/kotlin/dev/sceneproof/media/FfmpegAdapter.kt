@@ -23,6 +23,10 @@ class FfmpegAdapter(
         ), 15)
         val root = try { mapper.readTree(metadata) } catch (_: Exception) { throw MediaFailure("INVALID_VIDEO", "The video metadata is invalid.") }
         val stream = root.path("streams").firstOrNull() ?: throw MediaFailure("INVALID_VIDEO", "The file has no video stream.")
+        val formats = root.path("format").path("format_name").asString().split(',')
+        if (formats.none { it == "mov" || it == "mp4" }) {
+            throw MediaFailure("INVALID_VIDEO", "Use a video in an MP4/QuickTime-compatible container.")
+        }
         val duration = root.path("format").path("duration").asString().toDoubleOrNull() ?: Double.NaN
         val rate = stream.path("avg_frame_rate").asString().split('/').map { it.toDoubleOrNull() ?: Double.NaN }
         val fps = if (rate.size == 2) rate[0] / rate[1] else Double.NaN

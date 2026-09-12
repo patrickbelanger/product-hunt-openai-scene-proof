@@ -34,10 +34,12 @@ actionable errors. Empty media/findings are not fabricated. No API key required.
 - [x] Safe persisted failed attempts and normal failure cleanup.
 - [x] Typed multipart API, upload UI, actual frame selection and reload.
 - [x] PostgreSQL/media integration tests and frontend upload/retry tests.
-- [x] Backend build (11 tests), frontend build and OpenAPI drift check.
+- [x] Backend build (13 tests after compatibility correction), frontend build and OpenAPI drift check.
 - [x] Final Chromium flow and desktop/tablet visual verification (3 E2E tests).
 - [x] Synchronized handoff and ADR-0003.
-- [ ] Human review and integration; no commit, push or merge performed in PR1.
+- [ ] Human review and integration; PR1 baseline is now committed at `b373b20`.
+- [x] Verify targeted MP4 major-brand compatibility correction: real iso6 MP4 accepted,
+  corrupt ftyp-only input rejected, existing codec/duration tests retained.
 
 No Astra, findings implementation, Reference Bible CRUD, public hosting or paid
 calls are part of PR1. Abrupt termination orphan cleanup is documented local debt.

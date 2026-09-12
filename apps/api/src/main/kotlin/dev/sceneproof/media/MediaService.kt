@@ -41,7 +41,7 @@ class MediaService(private val repository: MediaRepository, private val storage:
                     if (Files.size(input) > 10L * 1024 * 1024) throw MediaFailure("IMAGE_TOO_LARGE", "Images must be at most 10 MiB.", 413)
                     PreparedMedia("IMAGE", null, listOf(images.normalize(input, storage.file(projectId, shotId, "00.png"))))
                 }
-                signature.size == 12 && String(signature, 4, 4, Charsets.US_ASCII) == "ftyp" && String(signature, 8, 4, Charsets.US_ASCII) in setOf("isom", "iso2", "mp41", "mp42", "avc1", "M4V ") -> video.extract(input)
+                signature.size == 12 && String(signature, 4, 4, Charsets.US_ASCII) == "ftyp" -> video.extract(input)
                 else -> throw MediaFailure("UNSUPPORTED_MEDIA", "Use a valid JPEG, PNG or MP4/H.264 file.", 415)
             }
             return repository.save(projectId, shotId, name, media, null)

@@ -6,8 +6,12 @@ PR1 implements synchronous local ingestion, with no model calls.
 
 One multipart file per POST /api/v1/projects/{projectId}/shots. JPEG/PNG: 10 MiB,
 16 million pixels, at most 8192 pixels per side. MP4/H.264 first video stream:
-100 MiB, 120 seconds, 3840 by 2160, up to 60 average fps. Accepted MP4 major brands:
-isom, iso2, mp41, mp42, avc1, M4V. Audio is ignored. Signatures and decoder results
+100 MiB, 120 seconds, 3840 by 2160, up to 60 average fps. The initial ISO-BMFF
+signature check requires `ftyp` at byte offset 4, with no major-brand allowlist.
+FFprobe must report an MP4/QuickTime-compatible format (`mp4` or `mov` among its
+format names), a first video stream with H.264 and valid duration/dimensions/fps
+within those same limits. A signature alone is insufficient. Audio is ignored.
+Signatures and decoder results
 determine support; client MIME and extensions do not. EXIF rotation, animated
 images, HDR/color management and additional codecs are outside PR1.
 
@@ -85,6 +89,8 @@ isolation, durable storage, disk quota and process sandbox decision.
 Tests use PostgreSQL, ImageIO and real FFmpeg-generated original color fixtures:
 PNG/JPEG pixels, ordering/timestamps, project scoping, corrupt/oversize images,
 unsupported codecs, duration, traversal keys, timeout, missing tools and output cap.
+Regression fixtures also cover an `iso6` major brand confirmed by real FFprobe
+and a corrupt file containing only an `ftyp` signature.
 Browser checks cover multipart, contract, decoded image load, reload, failed history
 and tablet overflow. Current executed results are in STATUS.
 

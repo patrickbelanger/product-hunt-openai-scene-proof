@@ -4,11 +4,18 @@ Last updated: 2026-09-12
 Current branch: `feat/p0-media-ingestion`
 Current milestone: PR1 implemented and locally verified; ready for review.
 
+Targeted pre-merge correction verified: remove the major-brand allowlist while
+retaining the `ftyp` signature gate and requiring FFprobe MP4/QuickTime format,
+H.264 and all existing video limits. Real `iso6` H.264 MP4 imports successfully;
+a corrupt `ftyp`-only file still fails. Architecture and PR1 scope are unchanged.
+
 ## Recovery and working state
 
 PR0 merge verified at `fefb7db` on origin/main after fetch. The initial worktree
 was clean on feat/p0-foundation. Local main was fast-forwarded and PR1 branched
 from that merge. Existing components and historical context were preserved.
+Correction recovery found a clean worktree at `b373b20`, tracking
+`origin/feat/p0-media-ingestion`; the PR1 baseline is now committed.
 
 Project creation/rules/reload remain working. PR1 adds JPEG/PNG and bounded
 MP4/H.264 upload, local MediaStorage, controlled FFprobe/FFmpeg scene/fallback
@@ -18,14 +25,15 @@ frame selection and reload. No Astra calls, findings or demo are implemented.
 
 ## Verification
 
-- Gradle build: passed, 11 backend tests (4 foundation + 7 media), zero failed/skipped,
+- Gradle build: passed, 13 backend tests (4 foundation + 9 media), zero failed/skipped,
   real PostgreSQL 17.9 and FFmpeg/ImageIO. V2 applied successfully to test and local DB.
 - Frontend: 6 Vitest/RTL tests passed; TypeScript and Vite production build passed.
 - OpenAPI generation drift check: passed.
-- Chromium: 3 E2E tests passed against the fresh packaged API, including actual PNG
+- Chromium (previous PR1 verification, not rerun for this backend correction):
+  3 E2E tests passed against the fresh packaged API, including actual PNG
   load, multipart contract, project scoping, reload and persistent failure history.
 - Desktop/tablet screenshots inspected; no horizontal overflow.
-- git diff --check: passed. Remote CI has not been run for unpushed PR1.
+- git diff --check: passed. Remote CI status has not been checked in this session.
 
 An early test failure came from unflushed JPA fixtures in enclosing test transactions;
 fixtures now flush before JDBC reads. Browser execution required access outside the
@@ -56,7 +64,8 @@ See ADR-0003 and MEDIA-PIPELINE for precise boundaries.
 
 ## Next
 
-Review PR1 changes on this branch; no PR1 commit, push or merge was performed.
+Review the targeted correction on this branch; this correction is not committed,
+pushed or merged by the agent.
 After integration, create `feat/p0-astra-analysis`: establish real model access
 with a small original fixture, verify transport/schema, persist real usage/failures.
 September 18 target and planned branch order remain unchanged.
