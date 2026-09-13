@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -45,6 +46,8 @@ data class ProjectView(
 
 data class ProjectPage(val items: List<ProjectView>, val page: Int, val hasNext: Boolean)
 
+data class UpdateRulesRequest(@field:Size(max = 8000) val rules: String)
+
 @RestController
 @RequestMapping("/api/v1/projects")
 class ProjectController(private val service: ProjectService) {
@@ -53,6 +56,9 @@ class ProjectController(private val service: ProjectService) {
 
     @GetMapping("/{id}")
     fun get(@PathVariable id: UUID): ProjectView = service.get(id)
+
+    @PutMapping("/{id}/rules")
+    fun updateRules(@PathVariable id: UUID, @Valid @RequestBody request: UpdateRulesRequest): ProjectView = service.updateRules(id, request)
 
     @PostMapping
     fun create(@Valid @RequestBody request: CreateProjectRequest): ResponseEntity<ProjectView> {

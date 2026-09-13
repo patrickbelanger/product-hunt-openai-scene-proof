@@ -23,6 +23,14 @@ class ProjectService(private val repository: ProjectRepository) {
     )
 
     @Transactional
+    fun updateRules(id: UUID, request: UpdateRulesRequest): ProjectView {
+        val project = repository.findById(id).orElseThrow { ProjectNotFound() }
+        project.rules = request.rules.trim()
+        project.updatedAt = java.time.Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS)
+        return ProjectView.from(repository.save(project))
+    }
+
+    @Transactional
     fun create(request: CreateProjectRequest): ProjectView = ProjectView.from(
         repository.save(
             Project(

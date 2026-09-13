@@ -4,6 +4,126 @@
  */
 
 export interface paths {
+    "/api/v1/projects/{id}/rules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Replace trimmed continuity rules, up to 8000 characters. Empty is allowed. No inference; prior analysis snapshots remain unchanged. */
+        put: operations["updateProjectRules"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{projectId}/references": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+            };
+            cookie?: never;
+        };
+        /** @description All active visual references, creation time then UUID ascending, at most eight. Archived references remain retrievable by ID and through historical finding evidence. */
+        get: operations["listReferences"];
+        put?: never;
+        /** @description JPEG/PNG only, actual signature and decode, max 10 MiB, 16 MP, 8192 per side. Normalizes PNG to 1600 per side. Image identity is immutable. Max eight active and 100 lifetime references per project. No inference. */
+        post: operations["uploadReference"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{projectId}/references/{referenceId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                referenceId: string;
+            };
+            cookie?: never;
+        };
+        /** @description Read current metadata, including archived references, within the owning project. */
+        get: operations["getReference"];
+        /** @description Edit active reference title/guidance. Image cannot change; archived metadata cannot change. Historical analyses retain their submitted metadata. No inference. */
+        put: operations["updateReference"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{projectId}/references/{referenceId}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                referenceId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Idempotent irreversible archive from current Bible. Retains original image and historical usage. Replace an image by archiving then uploading a new reference. No inference. */
+        post: operations["archiveReference"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{projectId}/references/{referenceId}/content": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                referenceId: string;
+            };
+            cookie?: never;
+        };
+        /** @description Project-scoped immutable normalized PNG, hash verified, bounded reads; includes archived images. Missing/corrupt content fails safely. */
+        get: operations["getReferenceContent"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{projectId}/findings/{findingId}/references": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                findingId: string;
+            };
+            cookie?: never;
+        };
+        /** @description Only cited references with original submitted title/guidance/dimensions/hash, in submission order. archivedAt reflects current archive state. Zero-reference findings return an empty array. No inference. */
+        get: operations["listFindingReferences"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{projectId}/findings/{findingId}/actions": {
         parameters: {
             query?: never;
@@ -166,6 +286,29 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        UpdateRules: {
+            rules: string;
+        };
+        ReferenceMetadata: {
+            title: string;
+            guidance: string;
+        };
+        Reference: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            projectId: string;
+            title: string;
+            guidance: string;
+            width: number;
+            height: number;
+            sha256: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            archivedAt: string | null;
+            url: string;
+        };
         CreateFindingAction: {
             /** Format: uuid */
             requestId: string;
@@ -364,6 +507,212 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    updateProjectRules: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateRules"];
+            };
+        };
+        responses: {
+            /** @description Saved project */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Project"];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    listReferences: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Active Bible */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Reference"][];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    uploadReference: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                    title: string;
+                    guidance: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Persisted normalized reference */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Reference"];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    getReference: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                referenceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Reference */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Reference"];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    updateReference: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                referenceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReferenceMetadata"];
+            };
+        };
+        responses: {
+            /** @description Saved reference */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Reference"];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    archiveReference: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                referenceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Archived reference */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Reference"];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    getReferenceContent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                referenceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Normalized PNG */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/png": string;
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    listFindingReferences: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                findingId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Historical reference evidence */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Reference"][];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
     listFindingActions: {
         parameters: {
             query?: never;

@@ -20,9 +20,21 @@ original history. Astra may accept the explanation, maintain the issue, or repor
 insufficient evidence. Resolve records a creator correction; dismiss records a
 creator decision not to treat the finding. Neither claims model agreement.
 
+PR5 makes the Reference Bible explicit: editable rules and optional visual images
+with title and creator guidance. A reference is declared truth; shots and frames
+are observed evidence. Astra independently judges context and cites zero or more
+references. Angle, lighting, occlusion, narrative change and intent still matter.
+Difference alone is not continuity error.
+
+Add/inspect/edit/archive from the workspace. Eight active images maximum, all used
+in the next explicitly started sequence analysis. Images never change in place:
+replace by archive plus new upload. Text edits affect future analysis; historical
+findings retain original submitted metadata/image, including archives. Rules only,
+references only, both and neither are supported. Editing never initiates inference.
+
 ## MVP and future
 
-P1 adds visual reference editing, curated demo, optional tour, progress and polished
+Later P1 slices add curated demo, optional tour, progress and polished
 failure states. The final first-run page will expose both Try the demo film and
 Create a project; the demo action is deliberately absent until it works.
 Future collaboration, export and generation integrations are not built this sprint.

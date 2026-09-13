@@ -20,8 +20,9 @@ class FindingActionService(private val actions: FindingActionRepository, private
             val sequence = assembler.assemble(projectId, original)
             require(sequence.shots.flatMap { it.frames.map { frame -> frame.id } }.containsAll(original.relevantFrameIds))
             val previous = action.supersedesActionId?.let { actions.get(projectId, findingId, it).result }
-            val context = TargetedContext(sequence, original.copy(status = "OPEN"), action.explanation, action.scope, action.affectedShotIds, previous)
-            analyses.recordContext(runId, sequence, "original-evidence-neighbors-v1")
+            val originalRules = analyses.originalRules(projectId, original.analysisRunId)
+            val context = TargetedContext(sequence, original.copy(status = "OPEN"), action.explanation, action.scope, action.affectedShotIds, previous, originalRules)
+            analyses.recordContext(runId, sequence, "original-evidence-neighbors-v1", originalRules)
             completion = port.reanalyze(context)
             validator.validate(completion.result, context)
             require(completion.model == ANALYSIS_MODEL)

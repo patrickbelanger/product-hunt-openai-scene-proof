@@ -32,6 +32,9 @@ class ContinuityResultValidator(private val mapper: ObjectMapper) {
             require(result.analysisMetadata.projectId == context.projectId)
             val shots = context.shots.associateBy { it.id }
             val frames = context.shots.flatMap { shot -> shot.frames.map { it.id to shot.id } }.toMap()
+            require(context.references.size <= 8 && context.references.all { it.projectId == context.projectId })
+            val references = context.references.map { it.id }.toSet()
+            require(references.size == context.references.size)
             require(result.inspectedShots.map { it.shotId }.toSet() == shots.keys)
             require(result.inspectedShots.size == shots.size)
             result.inspectedShots.forEach { inspected ->
@@ -45,7 +48,8 @@ class ContinuityResultValidator(private val mapper: ObjectMapper) {
                 require(finding.affectedShotIds.all { it in shots })
                 require(finding.relevantFrameIds.all { frames[it] in finding.affectedShotIds })
                 require(finding.affectedShotIds.all { shotId -> finding.relevantFrameIds.any { frames[it] == shotId } })
-                require(finding.relevantReferenceIds.isEmpty())
+                require(finding.relevantReferenceIds.distinct().size == finding.relevantReferenceIds.size)
+                require(finding.relevantReferenceIds.all { it in references })
             }
         } catch (_: Exception) {
             throw invalid()

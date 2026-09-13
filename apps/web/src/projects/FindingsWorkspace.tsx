@@ -5,6 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 import { getAnalysis, listFindings, listShots, type Finding } from '@sceneproof/api-client';
 import { MediaWorkspace } from './MediaWorkspace';
 import { FindingActions } from './FindingActions';
+import { FindingReferences } from './FindingReferences';
 
 export function findingLabel(value: string) {
   return value.toLowerCase().replaceAll('_', ' ').replace(/^./, letter => letter.toUpperCase());
@@ -83,6 +84,7 @@ export function FindingsWorkspace({ projectId }: { projectId: string }) {
           <dl className="finding-states"><dt>Expected state</dt><dd>{selected.expectedState}</dd><dt>Observed state</dt><dd>{selected.observedState}</dd></dl>
           <div><Title order={3} size="h5">Why it matters</Title><Text size="sm" mt="sm" className="rules-text">{selected.explanation}</Text></div>
           <Correction key={selected.id} prompt={selected.suggestedCorrectionPrompt} />
+          <FindingReferences key={`references-${selected.id}`} projectId={projectId} finding={selected} />
         </Stack></section>}
       </Stack>
     </aside>

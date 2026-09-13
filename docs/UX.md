@@ -86,7 +86,30 @@ A compact View immutable history disclosure shows original analysis identity,
 creator explanations/scopes, timestamps, action UUIDs, actual failures and the
 preceding judgement link. New model judgement replaces only the effective assessment,
 never the historical record. Terminal creator actions explain their distinct meaning.
-Refresh history is GET-only. No reference editor, demo, tour or public hosting is added.
+Refresh history is GET-only. PR4 added no reference editor, demo, tour or hosting.
+
+## Reference Bible and cited visual truth (PR5)
+
+The left panel has a rules textarea and explicit Save rules, with real saving/saved/
+error states. Failure preserves the draft. Rules load with the project and may be
+empty. Project-load errors retain the existing retry/navigation flow.
+
+Visual references show normalized thumbnails, title and guidance. Add opens a compact
+modal with JPEG/PNG selection, title, optional guidance and Save/Cancel. No fake
+progress. Upload/validation disables duplicate actions and premature dismissal;
+failure retains file/text. Success displays the actual normalized backend image.
+Eight active images disable addition; list failure has its own retry and leaves
+rules/findings usable. No reference edit initiates inference.
+
+Inspect opens the preserved image and editable metadata, plus archive confirmation.
+Archive permanently removes it from the active Bible and retains historical evidence.
+Replace an image by archive then new upload. Keyboard activation, trapped/restored
+modal focus and responsive stacking remain available.
+
+Cited findings display a separate Reference evidence block; shot A/B remains intact.
+Original title/guidance/image are shown, with archived status explaining absence from
+the current Bible. Zero citations produce no block. Incomplete historical data and
+image failure are explicit and never substituted with current references.
 
 ## Planned later slices
 

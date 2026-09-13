@@ -1,11 +1,63 @@
 # SceneProof Status
 
 Last updated: 2026-09-13
-Current branch: `feat/p0-intentional-change-steering`
-Current milestone: PR4 committed, pushed and locally verified; code review passed, not merged.
-Current task: Await final merge approval; no merge or next slice authorized.
+Current branch: `feat/p1-reference-bible`
+Current milestone: PR4 merged; PR5 Reference Bible implemented and verified.
+Current task: Review pushed PR5 and its documentation-only handoff correction. Not merged; do not start PR6.
 
-## PR4 recovery
+## PR5 recovery
+
+Documentation recovery verified committed/pushed PR5 implementation at
+`72c84821cca402f642a041aef596944c511acf88`: clean worktree, matching origin branch,
+two commits ahead of main and zero behind after fetch. This follow-up corrects the
+original uncommitted/unpushed handoff statements. Main remains at the base SHA below.
+Historical tests/builds/smoke evidence is preserved and was not rerun for this
+documentation-only correction; only documentation/diff and Git-state checks apply.
+
+Fetched origin, verified PR #4 merge (parents a821d89 and a711d4a), fast-forwarded
+clean main to exactly `0901f4b7e4aa183c5f4fe5d1f2b85c07edee0737`, confirmed
+main equals origin/main, and created only feat/p1-reference-bible. The worktree was
+clean. Recovery protocol, required docs, ADRs and existing implementation inspected.
+PR4 pending-merge statements below preserve the historical handoff; PR4 is merged.
+
+Implemented: durable workspace rules editing; optional JPEG/PNG references with
+title/guidance; immutable images and permanent archive; original metadata snapshots;
+bounded Astra reference context and validated citations; finding reference evidence;
+PR4 targeted use of original cited references and separately identified original rules.
+Eight active/100 lifetime persisted references; existing frame/image byte budgets
+remain shared. Editing never calls the provider. ADR-0006 records the delegated model.
+
+Verified: **71 backend tests**, zero failed/skipped; **44 frontend tests**;
+**10 Chromium tests**; Gradle build, TypeScript/Vite build, OpenAPI drift and diff
+checks. Final focus fix was rechecked in 13 reference frontend tests and the complete
+10-test Chromium suite; unchanged 31 existing frontend tests retain their full-suite
+pass. Normal tests use only deterministic ports. Desktop/tablet captures inspected.
+
+One successful real Astra call: project `8c0481a2-4391-4e3c-88d1-b52264e5b310`,
+run `e7902a2e-40ad-4654-a41e-ca8f304f4272`, finding
+`f0658e4c-31eb-46a6-87e8-aed4dc2dd955`, citing reference
+`0a19a096-4a27-4168-9a8a-25b50bd69de7`. Original synthetic red reference, two blue
+observations, empty rules. Usage 1360 input / 653 output / 2013 total, 1357 cache-write;
+12.878s; estimated USD $0.04964, not a billing receipt. Same-request replay made no
+second inference. Database snapshot confirms the original hash. Restarted normal jar
+without an OpenAI key: GET verification restored the same finding/citation/image.
+
+Review runtime: normal jar 8095 (PID 27504), no key; Vite 15183 proxies it.
+Deterministic API 8094 was stopped; existing user IDE services were preserved.
+`.local/pr5-smoke-request.json` retains the paid request UUID; never delete it to reroll.
+Known limits: local/no auth, no archive browser/restore, two-step archive/new upload,
+100 lifetime persisted records, last-save-wins metadata, no orphan collector. Missing
+required content fails closed. No public hosting, video-limit change, discovery or
+next PR work. Remote CI was not run at the original unpushed handoff and was not
+checked in this documentation-only follow-up.
+Full contract, checks, failures, smoke and reviewer risks: [PR5 review](PR5-REVIEW.md).
+
+Final real-result Chromium inspection after restart decoded both shot images and
+the cited reference, survived reload, and showed zero attempted API writes/browser
+errors. Desktop/tablet screenshots inspected. New-file whitespace checks pass;
+the production jar contains no test-only browser provider or test profiles.
+
+## Historical PR4 recovery
 
 Fetched origin and fast-forwarded clean main to exactly
 `a821d89c4f7aa0396cf447ec9951f189d42617f2`, the GitHub PR3 merge of `3312550`

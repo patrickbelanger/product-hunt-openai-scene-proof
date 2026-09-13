@@ -4,40 +4,23 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.nio.file.Files
-import java.nio.file.StandardOpenOption.CREATE_NEW
 import java.util.UUID
-import java.util.concurrent.Semaphore
 
 @Service
-class MediaService(private val repository: MediaRepository, private val storage: MediaStorage, private val images: ImageNormalizer, private val video: FfmpegAdapter) {
-    private val permits = Semaphore(1)
+class MediaService(private val repository: MediaRepository, private val storage: MediaStorage, private val images: ImageNormalizer, private val video: FfmpegAdapter, private val gate: MediaIngestionGate) {
     private val log = LoggerFactory.getLogger(MediaService::class.java)
 
     fun ingest(projectId: UUID, upload: MultipartFile): ShotView {
         repository.checkCapacity(projectId)
-        if (!permits.tryAcquire()) throw MediaFailure("INGESTION_BUSY", "Another import is processing. Please retry shortly.", 429)
+        gate.acquire()
         val shotId = UUID.randomUUID()
         val name = upload.originalFilename.orEmpty().substringAfterLast('/').substringAfterLast('\\').filter { !it.isISOControl() }.take(160).ifBlank { "Untitled shot" }
         try {
             val input = storage.file(projectId, shotId, "original.bin")
-            upload.inputStream.use { source ->
-                Files.newOutputStream(input, CREATE_NEW).use { destination ->
-                    val buffer = ByteArray(8192)
-                    var total = 0L
-                    while (true) {
-                        val count = source.read(buffer)
-                        if (count < 0) break
-                        total += count
-                        if (total > 100L * 1024 * 1024) throw MediaFailure("UPLOAD_TOO_LARGE", "Files must be at most 100 MiB.", 413)
-                        destination.write(buffer, 0, count)
-                    }
-                }
-            }
+            ImageContent.copy(upload, input, 100L * 1024 * 1024)
             val signature = Files.newInputStream(input).use { it.readNBytes(12) }
-            val png = signature.take(8) == listOf(137, 80, 78, 71, 13, 10, 26, 10).map { it.toByte() }
-            val jpeg = signature.size >= 3 && signature[0] == 0xff.toByte() && signature[1] == 0xd8.toByte() && signature[2] == 0xff.toByte()
             val media = when {
-                png || jpeg -> {
+                ImageContent.hasImageSignature(signature) -> {
                     if (Files.size(input) > 10L * 1024 * 1024) throw MediaFailure("IMAGE_TOO_LARGE", "Images must be at most 10 MiB.", 413)
                     PreparedMedia("IMAGE", null, listOf(images.normalize(input, storage.file(projectId, shotId, "00.png"))))
                 }
@@ -50,6 +33,6 @@ class MediaService(private val repository: MediaRepository, private val storage:
             try { storage.delete(projectId, shotId) } catch (_: Exception) { log.warn("Media cleanup failed for shot {}", shotId) }
             try { repository.save(projectId, shotId, name, null, failure.code) } catch (_: Exception) { log.warn("Failed import could not be recorded for shot {}", shotId) }
             throw failure
-        } finally { permits.release() }
+        } finally { gate.release() }
     }
 }

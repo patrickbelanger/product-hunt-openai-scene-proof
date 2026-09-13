@@ -1,5 +1,44 @@
 # Astra integration
 
+## PR5 declared visual references
+
+The [Astra model card](https://developers.openai.com/api/docs/models/gpt-6-astra),
+[image guide](https://developers.openai.com/api/docs/guides/images-vision) and
+[Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs)
+were checked for PR5. Existing Responses image items and strict JSON Schema support
+the extension; no model/SDK/dependency change. Sequence stays LOW, targeted HIGH.
+
+AnalysisContext includes typed AnalysisReference values: project/reference UUID,
+title, guidance, normalized dimensions, SHA-256 and in-memory PNG. Sequence assembly
+includes all active references in creation/UUID order, at most eight. No selection
+engine, remote URLs or mandatory references. The 8 shots/3 frames per shot/24 frames
+limits remain. References share 8 MiB/image, 16 MiB combined binary, 24 MiB serialized
+request, 256 KiB response, 6000 output tokens, 120 seconds and zero automatic retries.
+There is no second implicit image budget.
+
+Each REFERENCE metadata block precedes its image, followed by marked sequence shots
+and frame/image pairs. Reference titles/guidance and image text are untrusted scene
+data. The prompt distinguishes declared truth from observed evidence and independent
+judgement. Angle, lighting, occlusion, narrative changes and intent can explain
+differences. No tools/navigation. Cite only supplied relevant reference UUIDs.
+
+Continuity schema version 1 now admits zero-to-eight relevantReferenceIds. Citations
+must be distinct and submitted in this context/project; zero is valid even with
+references. Shot/frame invariants and server-generated finding IDs remain intact.
+The run context and analysis_references preserve metadata/hash, no base64, bytes,
+paths or raw provider request. Composite links retain exact submitted finding evidence.
+
+Targeted PR4 uses original cited reference snapshots, including archives, with
+original title/guidance/hash. No substitution with current/replacement references.
+Original rules are separately identified from current rules, alongside original
+finding/frames, creator scope, previous judgement and neighbors. Its output schema
+is unchanged. Required missing/corrupt reference content fails closed before provider
+work. Edits/archive after context assembly cannot alter its frozen inputs.
+
+Normal tests use deterministic ports. The separate smoke writes its request UUID
+before the sole authorized inference; replay reuses it and restart verification uses
+GET only. Outcome, usage and cost: [PR5 review](PR5-REVIEW.md). Citations are not forced.
+
 ## PR4 targeted re-evaluation
 
 The official model card and Structured Outputs guide were rechecked for PR4.
@@ -53,7 +92,7 @@ manifest records the request before POST and makes reruns replay the same UUID.
 asserted: any valid independent outcome proves transport/durability. Normal tests
 use fake ports and never execute this smoke. Final evidence belongs in PR4-REVIEW.
 
-## PR2 current implementation — 2026-09-12
+## PR2 implementation baseline — 2026-09-12 (PR5 extension above)
 
 The first real transport spike succeeded before adapter integration: gpt-6-astra
 identified the red square in an original programmatically generated PNG, returned
@@ -114,7 +153,8 @@ rejects duplicate JSON keys and trailing JSON, and checks exact inspected covera
 Every finding's frame must belong to a supplied affected shot; every affected shot
 must have evidence. Unknown project/shot/frame IDs, non-finite confidence, blank or
 oversized content and invented references fail before any finding commit. Finding
-UUIDs and OPEN status are server-assigned. Reference IDs are empty in PR2.
+UUIDs and OPEN status are server-assigned. Reference IDs were empty in PR2;
+PR5 extends that constraint as described above.
 Transport failures/refusals/incomplete output never become an empty successful result.
 
 ### Durable lifecycle, limits and errors

@@ -2568,6 +2568,7 @@ Includes only optional final refinements such as:
 - demo presentation refinements;
 - launch screenshots support;
 - final Product Hunt-specific details.
+- must respect Law 25 (Québec), GDPR
 
 This branch must never delay a shippable release.
 

@@ -24,6 +24,10 @@ Pending future material decisions: public hosting/persistent media, anonymous
 project isolation and concrete live-demo budget. Astra transport is resolved by
 ADR-0004; PR4 explicitly authorizes a minimal targeted paid smoke after deterministic checks.
 
+PR5: [ADR-0006](adr/ADR-0006-reference-bible-history.md) records the explicitly
+delegated model choice: immutable reference images, editable current text, submitted
+metadata/hash snapshots and archive; eight active references share analysis budgets.
+
 ## DECISION REQUIRED format
 
 Current technology/choice; problem; proposed alternative; alternatives considered;

@@ -94,7 +94,8 @@ API contract, migration or Astra adapter change was needed for PR3.
 FindingActionController → FindingActionService → ContinuityAnalysisPort.reanalyze →
 the existing Astra adapter and JDK Responses transport. A typed TargetedContext and
 TargetedCompletion keep provider HTTP types out of the application boundary. The
-original analyze operation retains its PR2 prompt/schema and sampling strategy.
+original analyze operation retains PR2 sampling; PR5 extends its prompt/schema
+with optional typed references and validated citations.
 
 V4 adds finding_actions, finding_action_shots, targeted_results, immutable-history
 triggers, and finding_current_state. AnalysisRun.kind identifies SEQUENCE/TARGETED.
@@ -113,9 +114,33 @@ stub the port. PR4 persistence tests use a dedicated sceneproof_steering_test sc
 and explicitly truncate only that test schema's fixture tables between tests.
 See [ADR-0005](adr/ADR-0005-immutable-finding-steering.md).
 
+## Implemented Reference Bible (PR5)
+
+ReferenceController → ReferenceService/ReferenceRepository reuses PR1 MediaStorage,
+ImageNormalizer and extracted ImageContent bounded copy/signature/normalized reads.
+MediaIngestionGate shares decoder admission with shots. Reference UUID directories
+never require Shot/Frame rows. Short project-lock transactions admit eight active
+and 100 lifetime references; decoding remains outside transactions. V5 adds
+visual_references, analysis_references and finding_references. Immutable image
+identity and append-only submitted snapshots preserve auditability across archive.
+
+AnalysisContextAssembler selects all active references once in deterministic order,
+or original cited snapshots for targeted review. It checks PNG decode, dimensions
+and reference hash before provider work; images share the frame aggregate budget.
+AnalysisRepository writes context/submitted-reference rows before inference, then
+findings/associations/success atomically. Composite foreign keys require citations
+to belong to that project's submitted run. The adapter separates reference images
+from sequence evidence and preserves deadlines, retries and reasoning settings.
+
+React ReferenceBible uses the generated client. FindingReferences reads historical
+submitted metadata independently of current Bible queries. Cache updates follow
+successful responses; load/upload/save/archive/image failures remain explicit.
+No edit hook initiates Astra. Tests use reference-test and browser-test schemas.
+See [ADR-0006](adr/ADR-0006-reference-bible-history.md).
+
 ## Boundaries reserved for later slices
 
-Analysis jobs/progress transport and reference editing remain planned.
+Analysis jobs/progress transport remain planned.
 Raw media stays outside PostgreSQL.
 Spring AI is not loaded: the verified Responses transport uses JDK HTTP (ADR-0004).
 

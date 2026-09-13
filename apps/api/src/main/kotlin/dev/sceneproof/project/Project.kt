@@ -18,9 +18,9 @@ class Project(
     @Column(nullable = false, length = 2000)
     val description: String = "",
     @Column(nullable = false, length = 8000)
-    val rules: String = "",
+    var rules: String = "",
     @Column(nullable = false)
     val createdAt: Instant = Instant.now().truncatedTo(ChronoUnit.MICROS),
     @Column(nullable = false)
-    val updatedAt: Instant = createdAt,
+    var updatedAt: Instant = createdAt,
 )
