@@ -62,7 +62,7 @@ export function FindingsWorkspace({ projectId }: { projectId: string }) {
   }
   return <>
     <MediaWorkspace projectId={projectId} finding={selected} findings={(findings.data ?? []).filter(finding => finding.status === 'OPEN')} frameId={frameId} onSelectFrame={setFrameId} />
-    <aside className="workspace-panel findings-panel" aria-labelledby="findings-title">
+    <aside data-tour="findings" className="workspace-panel findings-panel" aria-labelledby="findings-title">
       <Stack gap="md">
         <Group justify="space-between"><Text className="panel-label" id="findings-title">CONTINUITY FINDINGS</Text><Button size="compact-xs" variant="subtle" loading={findings.isFetching || analysis.isFetching} onClick={() => { void findings.refetch(); if (analysisId) void analysis.refetch(); }}>Refresh findings</Button></Group>
         <Text size="xs" c="dimmed">{analysisId ? 'Results for the linked analysis.' : 'Saved findings, newest analysis first. Earlier analyses remain in history.'} Refresh only reads saved results.</Text>

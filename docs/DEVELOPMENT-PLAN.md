@@ -39,7 +39,10 @@ PR3 is merged through PR #3 as `a821d89`, including the review handoff `3312550`
 Patrick authorized PR4 on `feat/p0-intentional-change-steering`: immutable creator
 context, independent targeted judgement and durable resolve/dismiss. PR4 is merged
 through PR #4 as `0901f4b`; Patrick authorizes PR5 Reference Bible from that base.
-PR5 must stop for review before any further P1 slice.
+PR5 is merged through PR #5 as `3184af6`; PR6 recovery verified the exact main SHA
+`3184af6cf0119be1fa2949ca1fb60a2584483a56`. Patrick authorizes only
+`feat/p1-guided-tour`: optional four-step onboarding, no model/backend changes.
+PR6 must be verified, committed and pushed, then stop for review before PR7.
 No dates or
 priorities have been changed. The dates are delivery targets, not assertions of completed work; actual progress
 lives in [STATUS](STATUS.md) and [Implementation Plan](IMPLEMENTATION-PLAN.md).

@@ -114,7 +114,7 @@ failure-safe UI refresh. Test state transitions and preservation of prior eviden
 
 ## P1 / P2
 
-### PR5 — Reference Bible, base `0901f4b`, ready for review
+### PR5 — Reference Bible, base `0901f4b`, merged as `3184af6`
 
 - [x] Recover exact main, reconcile PR4 merge, create only PR5 branch.
 - [x] V5 references, immutable visual evidence, metadata snapshots and archive lifecycle.
@@ -126,9 +126,21 @@ failure-safe UI refresh. Test state transitions and preservation of prior eviden
 - [x] Synchronize docs, ADR-0006 and PR5-REVIEW; stop for review without merge.
 
 - [x] Reference Bible editor, rules and reference-image association (PR5).
-- [ ] Optional four-step tour with Skip and Restart.
+- [x] Optional four-step tour with Skip and Restart (PR6; verified below).
 - [ ] Original demo media, five expected issues, intentional differences and reset.
 - [ ] Bounded live demo, hosting/isolation decision and rate/cost protection.
 - [ ] Real progress transport, retries and failure visibility.
 - [ ] Responsive/accessibility polish and launch rehearsal.
 - [ ] Optional micro-interactions and Product Hunt presentation refinements.
+
+### PR6 — Guided tour, exact base `3184af6cf0119be1fa2949ca1fb60a2584483a56`
+
+- [x] Recover clean main/origin at the PR5 merge; reconcile historical PR5 review state.
+- [x] Create only `feat/p1-guided-tour` from the exact verified base.
+- [x] Optional invitation, four concise steps, Skip/Done and persistent Quick tour restart.
+- [x] Versioned localStorage preference with safe failure behavior; no backend state.
+- [x] Stable semantic panel anchors, empty findings and truthful hidden-target fallback.
+- [x] Mantine dialog focus, keyboard/Escape, reduced motion and viewport-bounded card.
+- [x] Deterministic RTL coverage: 15 tour tests; complete frontend suite 59 passing.
+- [x] Final Chromium desktop/tablet/mobile and existing regression checks: 59 frontend / 15 browser / 71 backend; builds, OpenAPI drift and diff pass.
+- [x] Synchronize final verification/review docs for the PR6 commit and push; stop without merge or PR7.

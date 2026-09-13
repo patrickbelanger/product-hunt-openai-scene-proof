@@ -105,3 +105,15 @@ button, a, input, textarea { -webkit-tap-highlight-color: transparent; }
 .reference-evidence { margin: 0; border: 1px solid var(--scene-border); overflow-wrap: anywhere; }
 .reference-evidence figcaption { padding: 10px; }
 .reference-panel .mantine-Button-label { white-space: normal; }
+.workspace-toolbar { flex-wrap: wrap; }
+.workspace-toolbar > div { min-width: 0; }
+.tour-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.tour-invitation { background: #151d1a; }
+.workspace:has([data-tour-open]) { padding-bottom: 55dvh; }
+[data-tour] { scroll-margin-top: 24px; }
+[data-tour-active] { outline: 2px solid #72dbc2; outline-offset: -3px; }
+[data-tour-active]::before { content: 'Tour · ' attr(data-tour-active) ' of 4'; display: block; color: #a3e0cb; font-size: 12px; margin-bottom: 12px; }
+.tour-modal-inner { align-items: flex-end; justify-content: flex-end; padding: 16px; }
+.tour-modal-content { flex: 0 1 400px; max-width: 100%; max-height: calc(100dvh - 32px); overflow-wrap: anywhere; }
+.tour-modal-content .mantine-Modal-title { font-size: 18px; }
+@media (max-width: 700px) { .tour-modal-inner { padding: 8px; } .tour-modal-content { flex-basis: 100%; max-height: calc(100dvh - 16px); } }

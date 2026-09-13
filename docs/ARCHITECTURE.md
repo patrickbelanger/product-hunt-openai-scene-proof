@@ -138,6 +138,15 @@ successful responses; load/upload/save/archive/image failures remain explicit.
 No edit hook initiates Astra. Tests use reference-test and browser-test schemas.
 See [ADR-0006](adr/ADR-0006-reference-bible-history.md).
 
+## Implemented guided tour (PR6)
+
+PR6 `GuidedTour` is composed in the existing workspace toolbar. Its four fixed
+steps use explicit `data-tour` markers on ReferenceBible, MediaWorkspace and the
+FindingsWorkspace panel. Mantine owns modal semantics/focus trapping; local React
+state owns navigation. A versioned localStorage string records only skipped/completed
+onboarding, independent of Project and the generated API client. No backend, DB,
+OpenAPI, provider or dependency changes are introduced. See UX for focus/fallbacks.
+
 ## Boundaries reserved for later slices
 
 Analysis jobs/progress transport remain planned.

@@ -73,7 +73,7 @@ export function ReferenceBible({ project }: { project: Project }) {
     setEditor(undefined);
     requestAnimationFrame(() => (opener.current?.isConnected ? opener.current : addButton.current)?.focus());
   }
-  return <aside className="workspace-panel reference-panel" aria-labelledby="reference-title"><Stack gap="lg">
+  return <aside data-tour="reference-bible" className="workspace-panel reference-panel" aria-labelledby="reference-title"><Stack gap="lg">
     <Text className="panel-label" id="reference-title">REFERENCE BIBLE</Text>
     <Text size="xs" c="dimmed">Your declared visual and textual truth. Context for independent judgement.</Text>
     <RulesEditor project={project} />

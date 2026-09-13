@@ -34,7 +34,14 @@ references only, both and neither are supported. Editing never initiates inferen
 
 ## MVP and future
 
-Later P1 slices add curated demo, optional tour, progress and polished
+PR6 adds an optional quick tour of the existing workspace: Reference Bible → media
+and timeline → findings and evidence → resolve and steer. The first workspace visit
+offers Start tour or Skip; it never automatically opens a modal. Completion or Skip
+is remembered in this browser, and Quick tour always restarts it. Empty projects are
+supported without invented findings or actions. The tour never edits or analyzes.
+Creator intent adds context; it does not force Astra to agree.
+
+Later P1 slices add curated demo, progress and polished
 failure states. The final first-run page will expose both Try the demo film and
 Create a project; the demo action is deliberately absent until it works.
 Future collaboration, export and generation integrations are not built this sprint.

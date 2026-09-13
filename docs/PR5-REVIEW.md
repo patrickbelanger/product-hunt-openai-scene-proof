@@ -1,5 +1,11 @@
 # PR5 review handoff — 2026-09-13
 
+Subsequent state: PR #5 merged into main as
+`3184af6cf0119be1fa2949ca1fb60a2584483a56` (parents `0901f4b` / `5071eb4`).
+PR6 recovery verified this after fetch on September 13. The branch/base, pending
+review statements and verification below preserve the historical PR5 handoff;
+they are not current merge restrictions. Patrick subsequently authorized PR6 only.
+
 ## Branch and scope
 
 - Branch: `feat/p1-reference-bible`.
