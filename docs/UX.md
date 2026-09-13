@@ -113,9 +113,42 @@ image failure are explicit and never substituted with current references.
 
 ## Planned later slices
 
-Demo entry opens a populated film without upload. Tour: Reference Bible → timeline
-→ findings → resolve/steer, always skippable and restartable.
+Demo entry opens a populated film without upload.
 Progress stages must originate in backend work; no fake percentages.
 
 Before launch verify normal laptop/tablet, keyboard-only flow, empty/loading/error
 states, readable evidence images, contrast and an under-one-minute demo journey.
+
+## Optional guided tour (PR6)
+
+The first successfully opened workspace offers a compact “Take the quick tour”
+invitation with Start tour / Skip. There is no automatic modal or focus movement.
+Quick tour stays in the workspace toolbar, including after completion or Skip.
+The four concise steps cover Reference Bible, media/timeline, findings/evidence,
+and resolve/steer. Findings steps use the stable panel even when empty, describe
+actions as appearing on an open finding, and never manufacture findings or controls.
+Editing the Bible does not start analysis; creator intent does not force agreement.
+
+Mantine supplies modal semantics, labelled heading/body, focus trapping and Escape.
+Every step focuses its heading (“Step N of 4” plus title), then Tab reaches Skip,
+Back when applicable, and Next/Done. Closing restores the initiating Quick tour
+button; if the invitation's Start control disappeared, Quick tour is the fallback.
+Escape is equivalent to Skip. Clicking the backdrop does not dismiss accidentally.
+The focus outline and textual step labels avoid reliance on color. Background
+controls cannot receive tour keyboard navigation or pointer actions.
+
+The card sits at the bottom right on desktop/tablet and spans the available width
+on mobile, with bounded height and internal scrolling. Explicit `data-tour` targets
+mark stable Reference Bible, media and Findings containers. Active panels have an
+outline and textual step marker. A step may scroll its panel into view once; it
+never selects a frame or finding, and resize/ordinary scrolling does not trigger
+another scroll. Temporary bottom space lets even a short last panel clear the card;
+it disappears when the tour closes. Hidden/missing targets use location text and a
+truthful unavailable-area message. There are no transitions or smooth-scroll motion.
+
+Only `sceneproof.guided-tour.v1` in localStorage is added, storing `completed` or
+`skipped`, scoped to browser/origin rather than project. Closing suppresses the
+invitation in the mounted workspace even if writes fail. If reading storage fails,
+only manual Quick tour is offered; if saving fails, dismissal cannot survive reload.
+Restart ignores the preference. Clearing storage offers onboarding again. Tour
+navigation has no API dependency, backend writes, request UUIDs or provider calls.

@@ -291,6 +291,15 @@ The ignored `.local/pr5-smoke-request.json` is written before inference. Reruns
 reuse that UUID; `--verify` performs GET only. Keep the manifest. No loop seeks
 a desired citation or judgement. Evidence and limits: [PR5 review](docs/PR5-REVIEW.md).
 
+### Quick tour (PR6)
+
+Open any project and choose **Start tour** in the optional first-visit invitation,
+or **Quick tour** in the workspace toolbar at any time. Four short steps introduce
+the Reference Bible, media/timeline, findings/evidence and resolve/steer workflow.
+Use Skip or Escape to leave, Back/Next to navigate and Done to finish. The browser
+remembers completion/Skip in `sceneproof.guided-tour.v1`; no project data is changed
+and no analysis is started. If browser storage is unavailable, manual restart works.
+
 ### Contract maintenance
 
 Edit `packages/api-client/openapi.json`, update Kotlin behavior/tests in the same

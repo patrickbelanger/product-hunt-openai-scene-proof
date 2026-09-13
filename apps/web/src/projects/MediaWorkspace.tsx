@@ -35,7 +35,7 @@ export function MediaWorkspace({ projectId, finding, findings = [], frameId, onS
   const pair = finding ? comparisonPair(finding, shots.data ?? [], frameId) : undefined;
   const comparedIds = [pair?.first?.frame.id, pair?.second?.frame.id];
   function selectFrame(id: string | undefined) { if (id) { setSelection(id); onSelectFrame?.(id); } }
-  return <section className="viewer-panel media-workspace" aria-label="Media workspace">
+  return <section data-tour="media" className="viewer-panel media-workspace" aria-label="Media workspace">
     <Stack p="md">
       <details className="import-panel" open={!finding}><summary>Import a shot</summary><Stack mt="md">
       <Text size="xs" c="dimmed">JPEG/PNG up to 10 MiB and 16 MP, or MP4/H.264 up to 100 MiB, 120 seconds, 3840 × 2160 and 60 fps. One file per import.</Text>

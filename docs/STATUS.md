@@ -1,11 +1,44 @@
 # SceneProof Status
 
 Last updated: 2026-09-13
-Current branch: `feat/p1-reference-bible`
-Current milestone: PR4 merged; PR5 Reference Bible implemented and verified.
-Current task: Review pushed PR5 and its documentation-only handoff correction. Not merged; do not start PR6.
+Current branch: `feat/p1-guided-tour`
+Current milestone: PR5 merged; PR6 optional guided tour implemented and verified.
+Current task: Review PR6 on `feat/p1-guided-tour`. Do not merge or start PR7.
 
-## PR5 recovery
+## PR6 recovery and current behavior
+
+Fetched origin and verified PR #5 merge `3184af6cf0119be1fa2949ca1fb60a2584483a56`
+(parents `0901f4b` / `5071eb4`). Clean local main fast-forwarded to that exact SHA,
+matching origin/main, before creating only `feat/p1-guided-tour`. Inspected recovery
+protocol, product/technical docs, ADRs, actual workspace components and test setup.
+PR5 awaiting-review statements below are historical handoff facts; PR5 is merged.
+
+PR6 adds an optional first-workspace invitation and persistent Quick tour control.
+Exactly four steps: Reference Bible → media/timeline → findings/evidence → resolve/
+steer. Uses real stable panels, including empty findings; no fabricated content.
+Only new persistence is localStorage `sceneproof.guided-tour.v1` with `skipped` or
+`completed`. Storage failure leaves manual restart usable. No project/API/model work
+is triggered. Existing drafts, finding selection and evidence remain intact.
+
+Mantine modal supplies dialog semantics, focus trap and Escape; heading receives
+focus at every step, closing restores the opener or persistent Quick tour button.
+Bottom card, explicit panel outline/step label, bounded viewport layout and temporary
+tour-only scroll space keep targets visible. No animation or repeated scroll loop.
+No backend, DB, OpenAPI, provider configuration or dependency change. No paid calls.
+
+Verified: **59 frontend**, **15 Chromium**, **71 backend** tests pass, no backend
+failures/errors/skips. Production frontend build, Gradle build, OpenAPI drift and
+diff checks pass. Backend tests were freshly rerun; build reused unchanged outputs.
+Desktop/tablet/mobile screenshots inspected. **Zero real provider calls; zero tour
+API writes.** Earlier failed attempts are recorded in PR6-REVIEW, not counted as passes.
+PR6 implementation and handoff are committed together; final handoff reports HEAD.
+Remote CI was not checked. Deterministic verification API: 8096, no provider key.
+Run/setup remains in README. Detailed current handoff: [PR6 review](PR6-REVIEW.md).
+Known limits: local browser/origin preference; clearing storage resets onboarding;
+when storage cannot save, dismissal cannot survive a fresh page. No demo/progress/
+hosting or later video/discovery work. Review and merge approval remain required.
+
+## Historical PR5 recovery
 
 Documentation recovery verified committed/pushed PR5 implementation at
 `72c84821cca402f642a041aef596944c511acf88`: clean worktree, matching origin branch,
