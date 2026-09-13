@@ -87,6 +87,22 @@ class ContinuityResultValidatorTest {
     }
 
     @Test
+    fun `submitted references accept zero through eight citations but reject duplicates and foreign contexts`() {
+        val references = List(8) { AnalysisReference(UUID.randomUUID(), context.projectId, "Declared prop", "Keep it red", 128, 128, "a".repeat(64), byteArrayOf()) }
+        val supplied = context.copy(references = references)
+        val result = valid()
+        for (count in 0..8) {
+            val cited = result.copy(findings = listOf(result.findings.single().copy(relevantReferenceIds = references.take(count).map { it.id })))
+            validator.validate(validator.parse(mapper.writeValueAsString(cited)), supplied)
+        }
+        val duplicate = result.copy(findings = listOf(result.findings.single().copy(relevantReferenceIds = listOf(references.first().id, references.first().id))))
+        assertThatThrownBy { validator.validate(duplicate, supplied) }.isInstanceOf(AnalysisFailure::class.java)
+        val tooMany = result.copy(findings = listOf(result.findings.single().copy(relevantReferenceIds = references.map { it.id } + UUID.randomUUID())))
+        assertThatThrownBy { validator.parse(mapper.writeValueAsString(tooMany)) }.isInstanceOf(AnalysisFailure::class.java)
+        assertThatThrownBy { validator.validate(result, supplied.copy(references = listOf(references.first().copy(projectId = UUID.randomUUID())))) }.isInstanceOf(AnalysisFailure::class.java)
+    }
+
+    @Test
     fun `frame selection preserves first middle last and hard bounds`() {
         assertThat(AnalysisContextAssembler.selectedPositions(1)).containsExactly(0)
         assertThat(AnalysisContextAssembler.selectedPositions(2)).containsExactly(0, 1)

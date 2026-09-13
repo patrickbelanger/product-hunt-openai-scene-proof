@@ -6,6 +6,51 @@
     "description": "Local development foundation. No authentication; do not expose publicly."
   },
   "paths": {
+    "/api/v1/projects/{id}/rules": {
+      "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+      "put": {
+        "operationId": "updateProjectRules",
+        "description": "Replace trimmed continuity rules, up to 8000 characters. Empty is allowed. No inference; prior analysis snapshots remain unchanged.",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UpdateRules" } } } },
+        "responses": { "200": { "description": "Saved project", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Project" } } } }, "default": { "$ref": "#/components/responses/Problem" } }
+      }
+    },
+    "/api/v1/projects/{projectId}/references": {
+      "parameters": [{ "name": "projectId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+      "get": {
+        "operationId": "listReferences",
+        "description": "All active visual references, creation time then UUID ascending, at most eight. Archived references remain retrievable by ID and through historical finding evidence.",
+        "responses": { "200": { "description": "Active Bible", "content": { "application/json": { "schema": { "type": "array", "maxItems": 8, "items": { "$ref": "#/components/schemas/Reference" } } } } }, "default": { "$ref": "#/components/responses/Problem" } }
+      },
+      "post": {
+        "operationId": "uploadReference",
+        "description": "JPEG/PNG only, actual signature and decode, max 10 MiB, 16 MP, 8192 per side. Normalizes PNG to 1600 per side. Image identity is immutable. Max eight active and 100 lifetime references per project. No inference.",
+        "requestBody": { "required": true, "content": { "multipart/form-data": { "schema": { "type": "object", "additionalProperties": false, "required": ["file", "title", "guidance"], "properties": { "file": { "type": "string", "format": "binary" }, "title": { "type": "string", "minLength": 1, "maxLength": 120 }, "guidance": { "type": "string", "maxLength": 2000 } } } } } },
+        "responses": { "201": { "description": "Persisted normalized reference", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Reference" } } } }, "default": { "$ref": "#/components/responses/Problem" } }
+      }
+    },
+    "/api/v1/projects/{projectId}/references/{referenceId}": {
+      "parameters": [{ "name": "projectId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "referenceId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+      "get": { "operationId": "getReference", "description": "Read current metadata, including archived references, within the owning project.", "responses": { "200": { "description": "Reference", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Reference" } } } }, "default": { "$ref": "#/components/responses/Problem" } } },
+      "put": {
+        "operationId": "updateReference",
+        "description": "Edit active reference title/guidance. Image cannot change; archived metadata cannot change. Historical analyses retain their submitted metadata. No inference.",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ReferenceMetadata" } } } },
+        "responses": { "200": { "description": "Saved reference", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Reference" } } } }, "default": { "$ref": "#/components/responses/Problem" } }
+      }
+    },
+    "/api/v1/projects/{projectId}/references/{referenceId}/archive": {
+      "parameters": [{ "name": "projectId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "referenceId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+      "post": { "operationId": "archiveReference", "description": "Idempotent irreversible archive from current Bible. Retains original image and historical usage. Replace an image by archiving then uploading a new reference. No inference.", "responses": { "200": { "description": "Archived reference", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Reference" } } } }, "default": { "$ref": "#/components/responses/Problem" } } }
+    },
+    "/api/v1/projects/{projectId}/references/{referenceId}/content": {
+      "parameters": [{ "name": "projectId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "referenceId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+      "get": { "operationId": "getReferenceContent", "description": "Project-scoped immutable normalized PNG, hash verified, bounded reads; includes archived images. Missing/corrupt content fails safely.", "responses": { "200": { "description": "Normalized PNG", "content": { "image/png": { "schema": { "type": "string", "format": "binary" } } } }, "default": { "$ref": "#/components/responses/Problem" } } }
+    },
+    "/api/v1/projects/{projectId}/findings/{findingId}/references": {
+      "parameters": [{ "name": "projectId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "findingId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+      "get": { "operationId": "listFindingReferences", "description": "Only cited references with original submitted title/guidance/dimensions/hash, in submission order. archivedAt reflects current archive state. Zero-reference findings return an empty array. No inference.", "responses": { "200": { "description": "Historical reference evidence", "content": { "application/json": { "schema": { "type": "array", "maxItems": 8, "items": { "$ref": "#/components/schemas/Reference" } } } } }, "default": { "$ref": "#/components/responses/Problem" } } }
+    },
     "/api/v1/projects/{projectId}/findings/{findingId}/actions": {
       "parameters": [
         {
@@ -243,6 +288,20 @@
   },
   "components": {
     "schemas": {
+      "UpdateRules": { "type": "object", "additionalProperties": false, "required": ["rules"], "properties": { "rules": { "type": "string", "maxLength": 8000 } } },
+      "ReferenceMetadata": { "type": "object", "additionalProperties": false, "required": ["title", "guidance"], "properties": { "title": { "type": "string", "minLength": 1, "maxLength": 120 }, "guidance": { "type": "string", "maxLength": 2000 } } },
+      "Reference": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "projectId", "title", "guidance", "width", "height", "sha256", "createdAt", "archivedAt", "url"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" }, "projectId": { "type": "string", "format": "uuid" },
+          "title": { "type": "string", "minLength": 1, "maxLength": 120 }, "guidance": { "type": "string", "maxLength": 2000 },
+          "width": { "type": "integer", "minimum": 1, "maximum": 1600 }, "height": { "type": "integer", "minimum": 1, "maximum": 1600 },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "createdAt": { "type": "string", "format": "date-time" }, "archivedAt": { "type": ["string", "null"], "format": "date-time" },
+          "url": { "type": "string" }
+        }
+      },
       "CreateFindingAction": {
         "type": "object",
         "additionalProperties": false,
@@ -731,7 +790,8 @@
               "format": "uuid"
             },
             "minItems": 0,
-            "maxItems": 0
+            "maxItems": 8,
+            "uniqueItems": true
           },
           "suggestedCorrectionPrompt": {
             "type": "string",

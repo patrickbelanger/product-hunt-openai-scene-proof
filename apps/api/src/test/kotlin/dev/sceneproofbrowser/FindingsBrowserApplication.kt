@@ -35,7 +35,7 @@ class FindingsBrowserConfiguration {
                     "The square stays red.", "The square is blue in the later shot.",
                     "The project rule requires a red square throughout this sequence.",
                     context.shots.map { it.id }, context.shots.flatMap { shot -> shot.frames.map { it.id } },
-                    emptyList(), "Keep the square red in every shot; preserve its shape and position.",
+                    context.references.map { it.id }, "Keep the square red in every shot; preserve its shape and position.",
                 )),
                 context.shots.map { shot -> InspectedShot(shot.id, shot.frames.map { it.id }) },
                 emptyList(), AnalysisMetadata(context.projectId, "1", "SAMPLED_SEQUENCE"),

@@ -13,6 +13,7 @@ data class TargetedContext(
     val scope: String,
     val affectedShotIds: List<UUID>,
     val previousJudgement: TargetedResult?,
+    val originalRules: String? = null,
 )
 
 data class TargetedResult(

@@ -2,10 +2,10 @@
 
 **Keep every shot in character.** Your AI continuity supervisor for generative film.
 
-Current slice: PR4 intentional-change steering — explain a visual change and let
-Astra independently re-evaluate the original finding. Intent may explain the
-difference, the issue may remain, or evidence may be insufficient. Creator context,
-judgements, resolve/dismiss actions and original evidence persist in PostgreSQL.
+Current slice: PR5 Reference Bible — edit continuity rules and add explicit visual
+truth. JPEG/PNG references inform Astra's independent judgement and can be cited
+alongside shot/frame evidence. Images are immutable; metadata edits and archive
+preserve historical evidence. PR4 steering and resolve/dismiss remain available.
 Initial sequence analysis is explicitly started through the backend API; viewing or refreshing
 the workspace never calls OpenAI. The curated demo remains upcoming.
 
@@ -100,6 +100,7 @@ npm.cmd run build
 Backend integration tests use a dedicated `sceneproof_test` schema and roll back
 or clean their writes. PR4 uses `sceneproof_steering_test` and truncates its own
 fixture tables between tests, preserving immutable-history rules in normal paths.
+PR5 uses `sceneproof_reference_test` with the same isolated cleanup discipline.
 STEERING_TEST_DATABASE_URL may override its JDBC URL, but must select that dedicated
 schema. TEST_DATABASE_URL may override the other test JDBC URL; never point tests
 at production. For browser/contract tests, start the isolated test API in a separate terminal:
@@ -184,7 +185,8 @@ or failure; the full prompt remains selectable for manual copying.
 Limits: 8 READY shots, first/middle/last representative frames (24 total), 16 MiB
 images, one active analysis globally, 100 attempts/project, one provider request
 and zero retries. Larger whole-sequence requests are explicitly rejected. Targeted
-steering uses the bounded affected scope and immediate neighbors. No reference editor.
+steering uses the bounded affected scope and immediate neighbors. Up to eight active
+references share the image budget; targeted review retains original cited references.
 See [Astra integration](docs/ASTRA-INTEGRATION.md)
 for exact request/response bounds, failure recovery and cost limitations.
 
@@ -252,6 +254,42 @@ synthetic fixture IDs on another machine. The first invocation writes an ignored
 `.local/pr4-smoke-request.json` manifest before POST; further invocations reuse it.
 `--verify` makes GETs only. Any valid independent outcome is accepted by the smoke;
 it never loops to obtain approval. Exact recorded result/cost: PR4-REVIEW.
+
+### Reference Bible (PR5)
+
+Edit **Continuity rules** in the project workspace, then **Save rules**. Empty is
+valid. **Add visual reference** accepts JPEG/PNG with required title and optional
+creator guidance. The Bible displays the actual normalized backend image. Inspect
+a thumbnail to edit text or archive it. Replace an image by archiving and uploading
+a new reference. Archive is permanent; original cited evidence stays inspectable.
+Rules only, references only, both or neither remain valid. Editing never calls OpenAI.
+
+Eight active images and 100 successfully persisted references per project lifetime;
+archives count toward the latter. All active references are selected in creation/UUID
+order at context assembly. Input: 10 MiB, 16 MP, 8192 per side; normalized PNG at
+most 1600 per side. References and frames share 8 MiB/image, 16 MiB aggregate and
+24 MiB serialized request limits. Sequence analysis remains explicitly API-started.
+
+Endpoints under `/api/v1/projects/{projectId}`:
+- PUT `/rules` with `{ "rules": "..." }` (OpenAPI names the path variable `id`).
+- GET/POST `/references`; multipart `file`, `title`, `guidance` (empty allowed).
+- GET/PUT `/references/{referenceId}`; PUT edits title/guidance only.
+- POST `/references/{referenceId}/archive`, idempotent and without inference.
+- GET `/references/{referenceId}/content`, normalized PNG including archives.
+- GET `/findings/{findingId}/references`, original submitted metadata/image identity.
+
+One separate paid PR5 smoke uses original synthetic PNGs and a normal local API
+with server-side configuration. Only run after deterministic checks:
+
+```powershell
+$env:SCENEPROOF_API_URL = 'http://127.0.0.1:8095'
+node scripts/astra-reference-smoke.mjs
+node scripts/astra-reference-smoke.mjs --verify
+```
+
+The ignored `.local/pr5-smoke-request.json` is written before inference. Reruns
+reuse that UUID; `--verify` performs GET only. Keep the manifest. No loop seeks
+a desired citation or judgement. Evidence and limits: [PR5 review](docs/PR5-REVIEW.md).
 
 ### Contract maintenance
 

@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router-dom';
 import { ApiError, getProject } from '@sceneproof/api-client';
 import { FindingsWorkspace } from './FindingsWorkspace';
+import { ReferenceBible } from './ReferenceBible';
 
 export function Workspace() {
   const { projectId = '' } = useParams();
@@ -13,7 +14,7 @@ export function Workspace() {
   return <main id="main" className="workspace">
     <div className="workspace-toolbar"><div><Anchor component={Link} to="/" c="dimmed" size="xs">← All projects</Anchor><Title order={1} size="h3" mt={4}>{current.name}</Title></div><Badge color="teal" variant="light">Project saved</Badge></div>
     <div className="workspace-grid">
-      <aside className="workspace-panel reference-panel" aria-labelledby="reference-title"><Text className="panel-label" id="reference-title">REFERENCE BIBLE</Text><Title order={2} size="h4" mt="xl">Your continuity rules</Title><Text size="sm" c="gray.4" mt="md" className="rules-text">{current.rules || 'No rules yet. This project is ready for its visual references.'}</Text>{current.description && <><Text className="panel-label" mt="xl">PROJECT NOTES</Text><Text size="sm" c="dimmed" mt="md" className="rules-text">{current.description}</Text></>}</aside>
+      <ReferenceBible key={`bible-${projectId}`} project={current} />
       <FindingsWorkspace key={projectId} projectId={projectId} />
     </div>
   </main>;

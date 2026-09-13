@@ -1,5 +1,9 @@
 # PR4 review handoff — 2026-09-12
 
+PR5 recovery update (2026-09-13): PR #4 is merged into main at
+`0901f4b7e4aa183c5f4fe5d1f2b85c07edee0737`. Pending-merge statements below
+preserve the historical review handoff. PR5 is now explicitly authorized.
+
 ## Branch and recovery
 
 - Branch: `feat/p0-intentional-change-steering`.

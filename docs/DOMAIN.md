@@ -6,8 +6,9 @@
 UUID is server-generated. Required name is trimmed and limited to 120
 characters; optional description to 2,000 and rules to 8,000. Empty optional fields
 persist as empty strings. Creation and update instants start equal and use microsecond
-precision to round-trip through PostgreSQL unchanged; no update/delete
-API is yet exposed. HTTP validation rejects blank names before persistence, and
+precision to round-trip through PostgreSQL unchanged. PR5 exposes rules update only,
+preserving trim/bounds and updating updatedAt; no general project edit or deletion.
+HTTP validation rejects blank names before persistence, and
 PostgreSQL reinforces non-empty names. Projects are independently retrievable by ID.
 
 Project creation/read has no lifecycle state machine. The API returns immutable
@@ -39,8 +40,9 @@ on read/start. Failed runs never contain committed findings.
 Finding has server UUID/run UUID, category, LOW/MEDIUM/HIGH severity, finite 0–1
 confidence, title/summary, expected/observed state, explanation, correction prompt,
 affected shot IDs, evidence frame IDs and OPEN status. PR2 uses the 16 requested
-continuity categories including OTHER. References are empty; no reference table is
-invented. The model's inspected manifest must exactly cover the selected inputs.
+continuity categories including OTHER. PR2 originally required empty references;
+PR5 admits zero to eight submitted reference UUIDs. The inspected-shot manifest
+must exactly cover the selected sequence inputs.
 V3 composite foreign keys prevent cross-project shot links and enforce evidence
 frame ownership by an affected shot. Every affected shot needs submitted evidence.
 All findings and SUCCEEDED are atomic. Historical analyses coexist. Findings reads are paginated (20),
@@ -87,11 +89,30 @@ The result and targeted run success commit together. The previous effective judg
 remains visible if final persistence rolls back. AnalysisRun.kind distinguishes
 SEQUENCE from TARGETED. Targeted runs contain no new independent findings.
 
-## Planned for successive slices — no corresponding tables yet
+## Implemented Reference Bible (PR5)
 
-Project → References. Rules currently
-remain bounded project text. Later reference evidence will link valid project
-reference IDs, never arbitrary URLs.
+VisualReference belongs to one Project: server UUID, required trimmed title (120),
+optional trimmed guidance (2000), immutable normalized dimensions/SHA-256, createdAt
+and optional archivedAt. No categories. Binary originals/PNG stay outside PostgreSQL.
+V5 forbids changes to image identity, project, dimensions/hash and creation time.
+Active metadata is editable; irreversible archive freezes it too. No deletion API.
+Eight active and 100 persisted lifetime references are admitted under a project row
+lock. Active order is createdAt then UUID; archives remain inspectable by ID.
+
+AnalysisReference is typed submitted context with metadata/in-memory PNG. The run
+snapshot and append-only analysis_references rows retain IDs, title/guidance,
+dimensions and hash, never bytes or paths. finding_references uses composite foreign
+keys to link the exact finding/run/project to a submitted reference. Invalid or
+duplicate citations fail; unsubmitted/cross-project DB links fail. Legacy histories
+and zero-reference findings remain valid.
+
+Historical finding reads use submitted metadata and current archivedAt only as an
+annotation. Targeted PR4 uses original cited reference snapshots/image hashes,
+never current replacements. Original rules and current rules are separately identified.
+Edits/archive after context assembly do not alter its selected inputs.
+See [ADR-0006](adr/ADR-0006-reference-bible-history.md).
+
+## Planned for successive slices
 
 Future queued/progress stages require explicit worker/recovery design.
 Creator context does not erase prior analysis.

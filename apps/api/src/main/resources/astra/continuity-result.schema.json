@@ -94,7 +94,7 @@
               "format": "uuid"
             },
             "minItems": 0,
-            "maxItems": 0
+            "maxItems": 8
           },
           "suggestedCorrectionPrompt": {
             "type": "string",

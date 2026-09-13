@@ -2,6 +2,8 @@
 
 PR1 implements synchronous local ingestion, with no model calls.
 
+PR5 shares those image primitives for visual references. Video bounds are unchanged.
+
 ## Formats and bounds
 
 One multipart file per POST /api/v1/projects/{projectId}/shots. JPEG/PNG: 10 MiB,
@@ -83,6 +85,26 @@ compensated; abrupt termination can leave an unreferenced directory. No backgrou
 orphan collector exists. Before manual cleanup, stop the API and compare directory
 shot IDs against the database. Public upload hosting still needs the pending
 isolation, durable storage, disk quota and process sandbox decision.
+
+## Reference images (PR5)
+
+POST project `/references` accepts JPEG/PNG only, with the same 10 MiB/16 MP/8192
+input and 1600 normalized bounds. Shared ImageContent supplies signature checks,
+bounded copy and normalized reads; ImageNormalizer remains the single decoder.
+MediaIngestionGate bounds combined shot/reference imports to one active per process.
+MIME/filename claims never establish validity.
+
+Layout: `<root>/<project UUID>/<reference UUID>/original.bin` and `00.png`.
+Generated reference UUIDs are asset keys, never Shot rows. Only normalized PNG is
+served, project-scoped, with bounded read/decode/dimension/hash checks and nosniff.
+Archived images remain available; no arbitrary URL or client storage key is accepted.
+
+Normal failures remove the generated directory and create no reference row; failed
+reference attempts have no history table. Abrupt termination can leave an orphan as
+in PR1. Eight active and 100 successfully persisted references bound the local Bible,
+not global/public disk usage. No historical file deletion. Analysis references and
+frames share 8 MiB/image and 16 MiB aggregate; selected missing/corrupt content fails
+the entire request before provider submission.
 
 ## Verification
 

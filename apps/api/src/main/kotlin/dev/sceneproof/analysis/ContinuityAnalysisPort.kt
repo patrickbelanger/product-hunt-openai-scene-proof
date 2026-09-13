@@ -56,7 +56,8 @@ data class AnalysisCompletion(
 
 data class AnalysisFrame(val id: UUID, val position: Int, val timestampMs: Long?, val width: Int, val height: Int, val png: ByteArray)
 data class AnalysisShot(val id: UUID, val position: Int, val name: String, val kind: String, val durationMs: Long?, val availableFrameCount: Int, val frames: List<AnalysisFrame>)
-data class AnalysisContext(val projectId: UUID, val name: String, val description: String, val rules: String, val shots: List<AnalysisShot>, val warnings: List<String>)
+data class AnalysisReference(val id: UUID, val projectId: UUID, val title: String, val guidance: String, val width: Int, val height: Int, val sha256: String, val png: ByteArray)
+data class AnalysisContext(val projectId: UUID, val name: String, val description: String, val rules: String, val shots: List<AnalysisShot>, val warnings: List<String>, val references: List<AnalysisReference> = emptyList())
 
 interface ContinuityAnalysisPort {
     fun analyze(context: AnalysisContext): AnalysisCompletion

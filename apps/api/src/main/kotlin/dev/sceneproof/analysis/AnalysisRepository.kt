@@ -57,10 +57,15 @@ class AnalysisRepository(private val jdbc: JdbcTemplate, private val mapper: Obj
     }
 
     @Transactional
-    fun recordContext(id: UUID, context: AnalysisContext, strategy: String = "first-middle-last-v1") {
+    fun recordContext(id: UUID, context: AnalysisContext, strategy: String = "first-middle-last-v1", originalRules: String? = null) {
         val snapshot = mapOf(
             "schemaVersion" to "1", "strategy" to strategy, "projectId" to context.projectId,
             "name" to context.name, "description" to context.description, "rules" to context.rules,
+            "originalRules" to originalRules,
+            "references" to context.references.map { reference -> mapOf(
+                "id" to reference.id, "projectId" to reference.projectId, "title" to reference.title, "guidance" to reference.guidance,
+                "width" to reference.width, "height" to reference.height, "sha256" to reference.sha256,
+            ) },
             "shots" to context.shots.map { shot -> mapOf(
                 "id" to shot.id, "position" to shot.position, "name" to shot.name, "kind" to shot.kind, "durationMs" to shot.durationMs,
                 "availableFrameCount" to shot.availableFrameCount, "frames" to shot.frames.map { frame -> mapOf(
@@ -71,6 +76,11 @@ class AnalysisRepository(private val jdbc: JdbcTemplate, private val mapper: Obj
         )
         requireRunning(jdbc.update("UPDATE analysis_runs SET context = ?::jsonb, shot_count = ?, frame_count = ?, warnings = ?::jsonb WHERE id = ? AND status = 'RUNNING'",
             mapper.writeValueAsString(snapshot), context.shots.size, context.shots.sumOf { it.frames.size }, mapper.writeValueAsString(context.warnings), id))
+        context.references.forEachIndexed { position, reference ->
+            require(reference.projectId == context.projectId)
+            jdbc.update("INSERT INTO analysis_references (analysis_run_id, reference_id, project_id, title, guidance, width, height, sha256, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                id, reference.id, context.projectId, reference.title, reference.guidance, reference.width, reference.height, reference.sha256, position)
+        }
     }
 
     @Transactional
@@ -83,8 +93,13 @@ class AnalysisRepository(private val jdbc: JdbcTemplate, private val mapper: Obj
                 findingId, id, context.projectId, finding.category.name, finding.severity.name, finding.confidence, finding.title, finding.summary, finding.expectedState, finding.observedState, finding.explanation, finding.suggestedCorrectionPrompt, position)
             finding.affectedShotIds.forEach { jdbc.update("INSERT INTO finding_shots (finding_id, shot_id, project_id) VALUES (?, ?, ?)", findingId, it, context.projectId) }
             finding.relevantFrameIds.forEach { jdbc.update("INSERT INTO finding_frames (finding_id, frame_id, shot_id) VALUES (?, ?, ?)", findingId, it, frameOwners.getValue(it)) }
+            finding.relevantReferenceIds.forEach { jdbc.update("INSERT INTO finding_references (finding_id, analysis_run_id, reference_id, project_id) VALUES (?, ?, ?, ?)", findingId, id, it, context.projectId) }
         }
     }
+
+    fun originalRules(projectId: UUID, runId: UUID): String? = jdbc.queryForObject(
+        "SELECT context->>'rules' FROM analysis_runs WHERE project_id = ? AND id = ?", String::class.java, projectId, runId,
+    )
 
     @Transactional
     fun succeedTargeted(id: UUID, context: AnalysisContext, completion: TargetedCompletion) {
@@ -121,7 +136,7 @@ class AnalysisRepository(private val jdbc: JdbcTemplate, private val mapper: Obj
             return FindingView(id, row.getObject("analysis_run_id", UUID::class.java), FindingCategory.valueOf(row.getString("category")), FindingSeverity.valueOf(row.getString("severity")), row.getDouble("confidence"), row.getString("title"), row.getString("summary"), row.getString("expected_state"), row.getString("observed_state"), row.getString("explanation"),
                 jdbc.query("SELECT shot_id FROM finding_shots JOIN shots ON shots.id = finding_shots.shot_id WHERE finding_id = ? ORDER BY shots.position", { shot, _ -> shot.getObject("shot_id", UUID::class.java) }, id),
                 jdbc.query("SELECT frame_id FROM finding_frames JOIN frames ON frames.id = finding_frames.frame_id JOIN shots ON shots.id = frames.shot_id WHERE finding_id = ? ORDER BY shots.position, frames.position", { frame, _ -> frame.getObject("frame_id", UUID::class.java) }, id),
-                emptyList(), row.getString("suggested_correction_prompt"), row.getString("effective_status"))
+                jdbc.query("SELECT reference_id FROM finding_references JOIN analysis_references USING (analysis_run_id, reference_id, project_id) WHERE finding_id = ? ORDER BY position", { reference, _ -> reference.getObject("reference_id", UUID::class.java) }, id), row.getString("suggested_correction_prompt"), row.getString("effective_status"))
     }
 
     private fun expireInterrupted() {

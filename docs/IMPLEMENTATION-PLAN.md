@@ -97,7 +97,7 @@ docs, plans and STATUS in the same pass. Complete the real flow before visual po
 context history, targeted re-analysis, finding supersession, resolve/dismiss actions,
 failure-safe UI refresh. Test state transitions and preservation of prior evidence.
 
-### PR4 — implementation on base `a821d89`, review pending
+### PR4 — merged as `0901f4b`, implementation on base `a821d89`
 
 - [x] Complete recovery, reconcile PR3 merge and create only the authorized branch.
 - [x] V4 immutable actions/scope/results with strong original-finding/run ownership.
@@ -114,7 +114,18 @@ failure-safe UI refresh. Test state transitions and preservation of prior eviden
 
 ## P1 / P2
 
-- [ ] Reference Bible editor, rules and reference-image association.
+### PR5 — Reference Bible, base `0901f4b`, ready for review
+
+- [x] Recover exact main, reconcile PR4 merge, create only PR5 branch.
+- [x] V5 references, immutable visual evidence, metadata snapshots and archive lifecycle.
+- [x] Rules update and secure JPEG/PNG reference APIs, generated OpenAPI client.
+- [x] Bounded sequence references, citations, persistence and historical targeted context.
+- [x] Reference Bible editor and historical finding reference evidence.
+- [x] Deterministic backend/frontend/Chromium tests, builds and contract checks: 71 / 44 / 10.
+- [x] One paid original-fixture smoke after deterministic checks; real citation, replay and no-key restart verified.
+- [x] Synchronize docs, ADR-0006 and PR5-REVIEW; stop for review without merge.
+
+- [x] Reference Bible editor, rules and reference-image association (PR5).
 - [ ] Optional four-step tour with Skip and Restart.
 - [ ] Original demo media, five expected issues, intentional differences and reset.
 - [ ] Bounded live demo, hosting/isolation decision and rate/cost protection.
