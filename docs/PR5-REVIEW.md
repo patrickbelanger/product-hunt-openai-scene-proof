@@ -6,7 +6,13 @@
 - Base/main: `0901f4b7e4aa183c5f4fe5d1f2b85c07edee0737`.
 - PR #4 merge verified after fetch, parents a821d89/a711d4a; clean main fast-forwarded
   to the exact requested SHA before creating only PR5. Prior handoffs remain historical.
-- Implementation is in the worktree, not committed or pushed. HEAD remains the base.
+- Committed and pushed implementation: `72c84821cca402f642a041aef596944c511acf88`.
+  Documentation recovery verified a clean worktree and matching origin branch at
+  that SHA, two commits ahead of main and zero behind, after fetching origin.
+- This documentation-only follow-up corrects the original uncommitted/unpushed
+  handoff state. Historical verification below is preserved; tests, builds and the
+  paid Astra smoke were not rerun. Only documentation/diff and Git-state checks apply
+  to this follow-up. Main remains unchanged; PR5 is not merged.
 - Review required. Do not merge, start PR6, or add discovery, NLE, larger-video upload,
   demo/tour, hosting, auth, workers, progress or general Product Hunt polish.
 
@@ -108,7 +114,7 @@ never replaced by current Bible content. URL selection and reload preserve assoc
 | TypeScript/Vite build | PASS after final focus correction |
 | OpenAPI generated drift | PASS |
 | Git diff whitespace | PASS |
-| Remote CI | Not run; branch not pushed |
+| Remote CI | Not checked in this follow-up; not run at the original unpushed handoff |
 
 Backend adds 16 reference API/persistence tests, one schema citation test and two
 adapter/budget tests. They cover PNG/JPEG/corruption/spoofing, bounds, storage naming,

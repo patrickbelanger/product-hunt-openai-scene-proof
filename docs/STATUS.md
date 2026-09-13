@@ -3,9 +3,16 @@
 Last updated: 2026-09-13
 Current branch: `feat/p1-reference-bible`
 Current milestone: PR4 merged; PR5 Reference Bible implemented and verified.
-Current task: Review PR5 worktree. Not committed/pushed/merged; do not start PR6.
+Current task: Review pushed PR5 and its documentation-only handoff correction. Not merged; do not start PR6.
 
 ## PR5 recovery
+
+Documentation recovery verified committed/pushed PR5 implementation at
+`72c84821cca402f642a041aef596944c511acf88`: clean worktree, matching origin branch,
+two commits ahead of main and zero behind after fetch. This follow-up corrects the
+original uncommitted/unpushed handoff statements. Main remains at the base SHA below.
+Historical tests/builds/smoke evidence is preserved and was not rerun for this
+documentation-only correction; only documentation/diff and Git-state checks apply.
 
 Fetched origin, verified PR #4 merge (parents a821d89 and a711d4a), fast-forwarded
 clean main to exactly `0901f4b7e4aa183c5f4fe5d1f2b85c07edee0737`, confirmed
@@ -41,7 +48,8 @@ Deterministic API 8094 was stopped; existing user IDE services were preserved.
 Known limits: local/no auth, no archive browser/restore, two-step archive/new upload,
 100 lifetime persisted records, last-save-wins metadata, no orphan collector. Missing
 required content fails closed. No public hosting, video-limit change, discovery or
-next PR work. Remote CI not run because this worktree is unpushed.
+next PR work. Remote CI was not run at the original unpushed handoff and was not
+checked in this documentation-only follow-up.
 Full contract, checks, failures, smoke and reviewer risks: [PR5 review](PR5-REVIEW.md).
 
 Final real-result Chromium inspection after restart decoded both shot images and
