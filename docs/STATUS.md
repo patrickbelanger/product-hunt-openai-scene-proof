@@ -1,9 +1,9 @@
 # SceneProof Status
 
-Last updated: 2026-09-12
+Last updated: 2026-09-13
 Current branch: `feat/p0-intentional-change-steering`
-Current milestone: PR4 implemented and locally verified; uncommitted review patch, not merged.
-Current task: Review PR4; no merge or next slice authorized in this handoff.
+Current milestone: PR4 committed, pushed and locally verified; code review passed, not merged.
+Current task: Await final merge approval; no merge or next slice authorized.
 
 ## PR4 recovery
 
@@ -45,11 +45,14 @@ loaded both original PNGs, restored the real judgement/history on reload and obs
 zero writes. Desktop/tablet captures were inspected. No further paid call was made.
 
 ADR-0005 records the authorized immutable-history/projection choice. Full review
-contract, IDs, verification, cost and limits: [PR4 review](PR4-REVIEW.md). The patch
-is uncommitted/unpushed; HEAD/main/origin/main remain the exact base SHA above.
-Remote CI was not run. Scope stays local/synchronous; no terminal reopen, global
+contract, IDs, verification, cost and limits: [PR4 review](PR4-REVIEW.md).
+Committed and pushed implementation: `7446a40728fdf8579924bea8a880ce5a659e6116`;
+main remains at the base SHA above. Code review passed with no implementation blocker.
+This follow-up corrects documentation only; implementation tests and the Astra smoke
+were not rerun. Remote CI was not checked in this follow-up.
+Scope stays local/synchronous; no terminal reopen, global
 cross-analysis reconciliation, Reference Bible editor, demo, tour or hosting.
-Stop for review. Do not merge or start P1.
+Await final merge approval. Do not merge or start P1.
 
 ## Historical PR3 recovery and handoff
 

@@ -4,8 +4,10 @@
 
 - Branch: `feat/p0-intentional-change-steering`.
 - Base: `a821d89c4f7aa0396cf447ec9951f189d42617f2`.
-- HEAD remains the base: implementation is a local, uncommitted review patch.
-  No commit, push, merge or P1 branch was created by this session.
+- Committed and pushed implementation: `7446a40728fdf8579924bea8a880ce5a659e6116`.
+- Review update (2026-09-13): code review passed; no implementation blocker found.
+  PR4 awaits final merge approval. This follow-up changes documentation only;
+  no implementation change, additional Astra smoke, merge or P1 work.
 - Fetched origin, inspected worktree/branches/commits, fast-forwarded clean main
   and verified exact equality with origin/main before creating the PR4 branch.
   PR3 merge has parents `602cf1c` and `3312550`. Prior pending-review/merge documents
@@ -123,7 +125,10 @@ remain available. History/selection/refresh use GET only.
 | OpenAPI generated drift | PASS |
 | git diff --check | PASS |
 | Real Astra / restart | PASS, one successful targeted inference; details below |
-| Remote CI | Not run: no commit/push in this session |
+| Remote CI | Not checked in this documentation-only follow-up |
+
+Implementation verification results above are preserved from the original handoff;
+tests and the Astra smoke were not rerun for this documentation-only correction.
 
 The 18 new backend tests cover immutable creation/scope, all three outcomes,
 supersession, evidence preservation, targeted neighbor bounds, strict parsing,
@@ -211,4 +216,4 @@ Authentication failure returned no usage; one successful paid inference in PR4.
 Docs synchronized: README, STATUS, DOMAIN, PRODUCT, UX, ARCHITECTURE,
 ASTRA-INTEGRATION, IMPLEMENTATION-PLAN, DEVELOPMENT-PLAN, DECISIONS, historical
 PR3-REVIEW and ADR index. ADR-0005 records the authorized persistence/port decision.
-September 18 target unchanged. Stop for review; do not merge or start P1.
+September 18 target unchanged. Await final merge approval; do not merge or start P1.
