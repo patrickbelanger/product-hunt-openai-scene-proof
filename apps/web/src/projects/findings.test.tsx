@@ -2,20 +2,21 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, useLocation } from 'react-router-dom';
 import { beforeEach, expect, it, vi } from 'vitest';
-import { ApiError, createAnalysis, getAnalysis, listFindings, listShots, type AnalysisRun, type Finding, type Shot } from '@sceneproof/api-client';
+import { ApiError, createAnalysis, getAnalysis, listFindingActions, listFindings, listShots, type AnalysisRun, type Finding, type Shot } from '@sceneproof/api-client';
 import { Providers } from '../providers';
 import { FindingsWorkspace } from './FindingsWorkspace';
 import { mapEvidence } from './EvidenceComparison';
 
-vi.mock('@sceneproof/api-client', async importOriginal => ({ ...await importOriginal<typeof import('@sceneproof/api-client')>(), listShots: vi.fn(), listFindings: vi.fn(), getAnalysis: vi.fn(), createAnalysis: vi.fn() }));
+vi.mock('@sceneproof/api-client', async importOriginal => ({ ...await importOriginal<typeof import('@sceneproof/api-client')>(), listShots: vi.fn(), listFindings: vi.fn(), listFindingActions: vi.fn(), getAnalysis: vi.fn(), createAnalysis: vi.fn() }));
 
 const shots: Shot[] = [0, 1, 2].map(position => ({ id: `shot-${position}`, position, name: `shot-${position}.png`, kind: 'IMAGE', status: 'READY', failureCode: null, durationMs: null, frames: [{ id: `frame-${position}`, position: 0, timestampMs: null, width: 160, height: 90, url: `/frame-${position}.png` }] }));
 const finding: Finding = { id: 'finding-1', analysisRunId: 'run-1', category: 'PROP', severity: 'HIGH', confidence: 0.9, title: 'Color drift', summary: 'The square changes color.', expectedState: 'Red square', observedState: 'Blue square', explanation: 'The rule requires a red square.', affectedShotIds: ['shot-0', 'shot-1'], relevantFrameIds: ['frame-1', 'frame-0'], relevantReferenceIds: [], suggestedCorrectionPrompt: 'Keep the square red.', status: 'OPEN' };
-const run: AnalysisRun = { id: 'run-1', projectId: 'project', requestId: 'request', status: 'SUCCEEDED', provider: 'OPENAI', model: 'gpt-6-astra', startedAt: '2026-09-12T16:00:00Z', completedAt: '2026-09-12T16:00:01Z', failureCode: null, failureMessage: null, shotCount: 2, frameCount: 2, projectSummary: 'Reviewed', warnings: [], usage: null, providerResponseId: null, providerRequestId: null };
+const run: AnalysisRun = { id: 'run-1', kind: 'SEQUENCE', projectId: 'project', requestId: 'request', status: 'SUCCEEDED', provider: 'OPENAI', model: 'gpt-6-astra', startedAt: '2026-09-12T16:00:00Z', completedAt: '2026-09-12T16:00:01Z', failureCode: null, failureMessage: null, shotCount: 2, frameCount: 2, projectSummary: 'Reviewed', warnings: [], usage: null, providerResponseId: null, providerRequestId: null };
 
 function Location() { return <output aria-label="Current URL">{useLocation().search}</output>; }
 function open(query = '') { return render(<Providers><MemoryRouter initialEntries={[`/projects/project${query}`]}><FindingsWorkspace projectId="project" /><Location /></MemoryRouter></Providers>); }
 beforeEach(() => {
+  vi.mocked(listFindingActions).mockResolvedValue([]);
   vi.mocked(listShots).mockResolvedValue(shots);
   vi.mocked(listFindings).mockResolvedValue([finding]);
   vi.mocked(getAnalysis).mockResolvedValue(run);

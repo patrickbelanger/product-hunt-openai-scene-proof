@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: ${STEERING_TEST_DATABASE_URL:jdbc:postgresql://localhost:55432/sceneproof?currentSchema=sceneproof_steering_test}
+  flyway:
+    default-schema: sceneproof_steering_test
+    schemas: sceneproof_steering_test
+  jpa:
+    properties:
+      hibernate:
+        default_schema: sceneproof_steering_test

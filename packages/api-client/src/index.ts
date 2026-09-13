@@ -9,6 +9,24 @@ export type Shot = components['schemas']['Shot'];
 export type Frame = components['schemas']['Frame'];
 export type AnalysisRun = components['schemas']['AnalysisRun'];
 export type Finding = components['schemas']['Finding'];
+export type FindingAction = components['schemas']['FindingAction'];
+export type CreateFindingAction = components['schemas']['CreateFindingAction'];
+
+export async function createFindingAction(projectId: string, findingId: string, body: CreateFindingAction): Promise<FindingAction> {
+  const { data, error, response } = await api.POST('/api/v1/projects/{projectId}/findings/{findingId}/actions', {
+    params: { path: { projectId, findingId } }, body,
+  });
+  if (!data) throw new ApiError(response.status, error);
+  return data;
+}
+
+export async function listFindingActions(projectId: string, findingId: string, signal?: AbortSignal): Promise<FindingAction[]> {
+  const { data, error, response } = await api.GET('/api/v1/projects/{projectId}/findings/{findingId}/actions', {
+    params: { path: { projectId, findingId } }, signal,
+  });
+  if (!data) throw new ApiError(response.status, error);
+  return data;
+}
 
 export async function createAnalysis(projectId: string, requestId: string): Promise<AnalysisRun> {
   const { data, error, response } = await api.POST('/api/v1/projects/{projectId}/analyses', {

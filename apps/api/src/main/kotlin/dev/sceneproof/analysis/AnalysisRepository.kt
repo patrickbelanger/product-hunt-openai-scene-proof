@@ -15,6 +15,7 @@ data class AnalysisRunView(
     val startedAt: Instant, val completedAt: Instant?, val failureCode: String?, val failureMessage: String?,
     val shotCount: Int, val frameCount: Int, val projectSummary: String?, val warnings: List<String>,
     val usage: AnalysisUsage?, val providerResponseId: String?, val providerRequestId: String?,
+    val kind: String = "SEQUENCE",
 )
 
 data class FindingView(
@@ -56,9 +57,9 @@ class AnalysisRepository(private val jdbc: JdbcTemplate, private val mapper: Obj
     }
 
     @Transactional
-    fun recordContext(id: UUID, context: AnalysisContext) {
+    fun recordContext(id: UUID, context: AnalysisContext, strategy: String = "first-middle-last-v1") {
         val snapshot = mapOf(
-            "schemaVersion" to "1", "strategy" to "first-middle-last-v1", "projectId" to context.projectId,
+            "schemaVersion" to "1", "strategy" to strategy, "projectId" to context.projectId,
             "name" to context.name, "description" to context.description, "rules" to context.rules,
             "shots" to context.shots.map { shot -> mapOf(
                 "id" to shot.id, "position" to shot.position, "name" to shot.name, "kind" to shot.kind, "durationMs" to shot.durationMs,
@@ -74,8 +75,7 @@ class AnalysisRepository(private val jdbc: JdbcTemplate, private val mapper: Obj
 
     @Transactional
     fun succeed(id: UUID, context: AnalysisContext, completion: AnalysisCompletion) {
-        requireRunning(jdbc.update("UPDATE analysis_runs SET status = 'SUCCEEDED', completed_at = CURRENT_TIMESTAMP, project_summary = ?, warnings = ?::jsonb, usage = ?::jsonb, provider_response_id = ?, provider_request_id = ? WHERE id = ? AND status = 'RUNNING'",
-            completion.result.projectSummary, mapper.writeValueAsString((context.warnings + completion.result.warnings).distinct()), completion.usage?.let(mapper::writeValueAsString), completion.providerResponseId, completion.providerRequestId, id))
+        completeRun(id, completion.result.projectSummary, (context.warnings + completion.result.warnings).distinct(), completion.usage, completion.providerResponseId, completion.providerRequestId)
         val frameOwners = context.shots.flatMap { shot -> shot.frames.map { it.id to shot.id } }.toMap()
         completion.result.findings.forEachIndexed { position, finding ->
             val findingId = UUID.randomUUID()
@@ -84,6 +84,16 @@ class AnalysisRepository(private val jdbc: JdbcTemplate, private val mapper: Obj
             finding.affectedShotIds.forEach { jdbc.update("INSERT INTO finding_shots (finding_id, shot_id, project_id) VALUES (?, ?, ?)", findingId, it, context.projectId) }
             finding.relevantFrameIds.forEach { jdbc.update("INSERT INTO finding_frames (finding_id, frame_id, shot_id) VALUES (?, ?, ?)", findingId, it, frameOwners.getValue(it)) }
         }
+    }
+
+    @Transactional
+    fun succeedTargeted(id: UUID, context: AnalysisContext, completion: TargetedCompletion) {
+        completeRun(id, completion.result.summary, context.warnings, completion.usage, completion.providerResponseId, completion.providerRequestId)
+    }
+
+    private fun completeRun(id: UUID, summary: String, warnings: List<String>, usage: AnalysisUsage?, responseId: String?, requestId: String?) {
+        requireRunning(jdbc.update("UPDATE analysis_runs SET status = 'SUCCEEDED', completed_at = CURRENT_TIMESTAMP, project_summary = ?, warnings = ?::jsonb, usage = ?::jsonb, provider_response_id = ?, provider_request_id = ? WHERE id = ? AND status = 'RUNNING'",
+            summary, mapper.writeValueAsString(warnings), usage?.let(mapper::writeValueAsString), responseId, requestId, id))
     }
 
     @Transactional
@@ -96,13 +106,22 @@ class AnalysisRepository(private val jdbc: JdbcTemplate, private val mapper: Obj
     fun findings(projectId: UUID, analysisId: UUID?, page: Int): List<FindingView> {
         media.checkProject(projectId)
         if (analysisId != null && jdbc.queryForObject("SELECT count(*) FROM analysis_runs WHERE project_id = ? AND id = ?", Long::class.java, projectId, analysisId) != 1L) throw AnalysisFailure("ANALYSIS_NOT_FOUND", "This analysis does not exist in this project.", 404)
-        return jdbc.query("SELECT findings.* FROM findings JOIN analysis_runs ON analysis_runs.id = findings.analysis_run_id WHERE findings.project_id = ? AND analysis_runs.status = 'SUCCEEDED' AND (?::uuid IS NULL OR analysis_run_id = ?) ORDER BY analysis_runs.started_at DESC, analysis_runs.id, findings.position LIMIT 20 OFFSET ?", { row, _ ->
+        return jdbc.query("SELECT findings.*, state.effective_status FROM findings JOIN finding_current_state state ON state.id = findings.id JOIN analysis_runs ON analysis_runs.id = findings.analysis_run_id WHERE findings.project_id = ? AND analysis_runs.status = 'SUCCEEDED' AND (?::uuid IS NULL OR analysis_run_id = ?) ORDER BY analysis_runs.started_at DESC, analysis_runs.id, findings.position LIMIT 20 OFFSET ?", { row, _ -> findingView(row) }, projectId, analysisId, analysisId, page * 20)
+    }
+
+    @Transactional(readOnly = true)
+    fun finding(projectId: UUID, findingId: UUID): FindingView {
+        media.checkProject(projectId)
+        return jdbc.query("SELECT findings.*, state.effective_status FROM findings JOIN finding_current_state state ON state.id = findings.id WHERE findings.project_id = ? AND findings.id = ?", { row, _ -> findingView(row) }, projectId, findingId)
+            .firstOrNull() ?: throw AnalysisFailure("FINDING_NOT_FOUND", "This finding does not exist in this project.", 404)
+    }
+
+    private fun findingView(row: ResultSet): FindingView {
             val id = row.getObject("id", UUID::class.java)
-            FindingView(id, row.getObject("analysis_run_id", UUID::class.java), FindingCategory.valueOf(row.getString("category")), FindingSeverity.valueOf(row.getString("severity")), row.getDouble("confidence"), row.getString("title"), row.getString("summary"), row.getString("expected_state"), row.getString("observed_state"), row.getString("explanation"),
+            return FindingView(id, row.getObject("analysis_run_id", UUID::class.java), FindingCategory.valueOf(row.getString("category")), FindingSeverity.valueOf(row.getString("severity")), row.getDouble("confidence"), row.getString("title"), row.getString("summary"), row.getString("expected_state"), row.getString("observed_state"), row.getString("explanation"),
                 jdbc.query("SELECT shot_id FROM finding_shots JOIN shots ON shots.id = finding_shots.shot_id WHERE finding_id = ? ORDER BY shots.position", { shot, _ -> shot.getObject("shot_id", UUID::class.java) }, id),
                 jdbc.query("SELECT frame_id FROM finding_frames JOIN frames ON frames.id = finding_frames.frame_id JOIN shots ON shots.id = frames.shot_id WHERE finding_id = ? ORDER BY shots.position, frames.position", { frame, _ -> frame.getObject("frame_id", UUID::class.java) }, id),
-                emptyList(), row.getString("suggested_correction_prompt"), row.getString("status"))
-        }, projectId, analysisId, analysisId, page * 20)
+                emptyList(), row.getString("suggested_correction_prompt"), row.getString("effective_status"))
     }
 
     private fun expireInterrupted() {
@@ -115,5 +134,6 @@ class AnalysisRepository(private val jdbc: JdbcTemplate, private val mapper: Obj
 
     private fun runView(row: ResultSet) = AnalysisRunView(
         row.getObject("id", UUID::class.java), row.getObject("project_id", UUID::class.java), row.getObject("request_id", UUID::class.java), row.getString("status"), row.getString("provider"), row.getString("model"), row.getTimestamp("started_at").toInstant(), row.getTimestamp("completed_at")?.toInstant(), row.getString("failure_code"), row.getString("failure_message"), row.getInt("shot_count"), row.getInt("frame_count"), row.getString("project_summary"), mapper.readTree(row.getString("warnings")).asSequence().map { it.asString() }.toList(), row.getString("usage")?.let { mapper.readValue(it, AnalysisUsage::class.java) }, row.getString("provider_response_id"), row.getString("provider_request_id"),
+        kind = row.getString("kind"),
     )
 }

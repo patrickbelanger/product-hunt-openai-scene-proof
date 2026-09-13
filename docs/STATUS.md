@@ -1,11 +1,60 @@
 # SceneProof Status
 
-Last updated: 2026-09-12
-Current branch: `feat/p0-findings-workspace`
-Current milestone: PR3 implementation committed and pushed; external review pending, not merged.
-Current task: Review `feat/p0-findings-workspace`; no steering work authorized here.
+Last updated: 2026-09-13
+Current branch: `feat/p0-intentional-change-steering`
+Current milestone: PR4 committed, pushed and locally verified; code review passed, not merged.
+Current task: Await final merge approval; no merge or next slice authorized.
 
-## PR3 recovery
+## PR4 recovery
+
+Fetched origin and fast-forwarded clean main to exactly
+`a821d89c4f7aa0396cf447ec9951f189d42617f2`, the GitHub PR3 merge of `3312550`
+into `602cf1c`. Verified main equals origin/main, then created only the PR4 branch.
+Read the recovery protocol, product/technical docs, existing ADRs and actual PR2/PR3
+implementation. The PR3 review/merge-pending statements below describe the historical
+handoff, not the current repository state. Patrick explicitly authorizes PR4 now.
+
+PR4 implements V4 immutable creator actions/scopes/results, targeted re-evaluation
+through the existing Astra port/Responses transport, atomic effective-judgement
+supersession, and creator resolve/dismiss without inference. Original finding rows,
+reasoning and evidence remain intact; API status projects the effective judgement.
+Strict typed outcomes permit accepted intent, maintained issue or insufficient
+evidence. The UI preserves history, original evidence/selection, real pending/errors,
+and unresolved request UUIDs across reload for replay-safe recovery.
+
+Verified: **52 backend tests**, zero failed/skipped; **31 frontend tests**;
+**8 Chromium E2E tests**; Kotlin/Gradle build, TypeScript/Vite build, OpenAPI drift
+and git diff checks. Chromium covers acceptance, issue-remains then dismiss, resolve,
+reload/history, keyboard activation, real images and tablet/mobile layout. PR4
+persistence fixtures now use a dedicated sceneproof_steering_test schema; initial
+test-data pollution and other failed setup/test attempts are recorded in PR4-REVIEW,
+not counted as successful checks. No normal test calls paid OpenAI.
+
+One successful paid targeted smoke reused the original synthetic PR2 finding.
+Astra independently returned **ISSUE_REMAINS** because the unchanged red-throughout
+rule conflicts with the new repainting intent. Run `04beb368-a347-46c2-aceb-294861fde67f`,
+action `2be395df-2e9e-4891-87ca-1c7bcbcfaec5`. Usage 1,472 input / 1,591 output /
+3,063 total, including 1,469 cache-write and 929 reasoning tokens. About 31.662s and
+USD $0.09794 at published standard rates; not a billing receipt. Replay produced
+no second inference. A prior authentication failure caused by a stale inherited key
+remains auditable; .env was loaded only server-side and keys were never displayed.
+
+The successful action, prior failure and original evidence survived restart of the
+normal jar without any OpenAI key. Separate Chromium inspection blocked API writes,
+loaded both original PNGs, restored the real judgement/history on reload and observed
+zero writes. Desktop/tablet captures were inspected. No further paid call was made.
+
+ADR-0005 records the authorized immutable-history/projection choice. Full review
+contract, IDs, verification, cost and limits: [PR4 review](PR4-REVIEW.md).
+Committed and pushed implementation: `7446a40728fdf8579924bea8a880ce5a659e6116`;
+main remains at the base SHA above. Code review passed with no implementation blocker.
+This follow-up corrects documentation only; implementation tests and the Astra smoke
+were not rerun. Remote CI was not checked in this follow-up.
+Scope stays local/synchronous; no terminal reopen, global
+cross-analysis reconciliation, Reference Bible editor, demo, tour or hosting.
+Await final merge approval. Do not merge or start P1.
+
+## Historical PR3 recovery and handoff
 
 PR2 is merged as `602cf1c2a1dac4c6dcd563d01a3e580c53caef59` (merge of
 `fe89f16` into `7275f17`). Fetched origin, fast-forwarded local main, verified

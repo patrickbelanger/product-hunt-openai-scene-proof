@@ -12,14 +12,13 @@ a pixel difference. An **Intentional change** is creator-supplied context, not a
 automatic dismissal of every visually similar issue. A **Correction prompt** guides
 the creator's next generation outside SceneProof.
 
-Implemented foundation: landing/library → create project with name, optional
-description and rules → saved workspace → reload/reopen. Projects are persistent;
-the library shows newest first in pages of 20. The workspace contains the Reference
-Bible, inspector, findings and timeline as truthful empty states.
-
-Next P0 journey: import media → representative frames → real Astra analysis →
-validated persisted finding → inspect two images and copy correction. Second P0:
-declare intentional change → save explanation/scope → re-evaluate → retain history.
+Implemented: landing/library → create project → import media → explicit API analysis
+→ persisted finding → compare original evidence and copy correction. The library is
+persistent and paginated. PR4 adds declare intentional change → save explanation and
+scope → independent targeted Astra judgement → inspect the updated judgement and
+original history. Astra may accept the explanation, maintain the issue, or report
+insufficient evidence. Resolve records a creator correction; dismiss records a
+creator decision not to treat the finding. Neither claims model agreement.
 
 ## MVP and future
 

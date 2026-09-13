@@ -60,6 +60,7 @@ data class AnalysisContext(val projectId: UUID, val name: String, val descriptio
 
 interface ContinuityAnalysisPort {
     fun analyze(context: AnalysisContext): AnalysisCompletion
+    fun reanalyze(context: TargetedContext): TargetedCompletion
 }
 
 class AnalysisFailure(

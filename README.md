@@ -2,10 +2,11 @@
 
 **Keep every shot in character.** Your AI continuity supervisor for generative film.
 
-Current slice: PR3 findings workspace — open an analyzed project, select saved
-findings, compare their real evidence frames and copy the suggested correction.
-PR2 analysis runs, validated findings, evidence and usage persist in PostgreSQL.
-Analysis is still explicitly started through the backend API; viewing or refreshing
+Current slice: PR4 intentional-change steering — explain a visual change and let
+Astra independently re-evaluate the original finding. Intent may explain the
+difference, the issue may remain, or evidence may be insufficient. Creator context,
+judgements, resolve/dismiss actions and original evidence persist in PostgreSQL.
+Initial sequence analysis is explicitly started through the backend API; viewing or refreshing
 the workspace never calls OpenAI. The curated demo remains upcoming.
 
 Start a new session with [STATUS](docs/STATUS.md), then follow the recovery protocol
@@ -97,7 +98,10 @@ npm.cmd run build
 ```
 
 Backend integration tests use a dedicated `sceneproof_test` schema and roll back
-their writes. TEST_DATABASE_URL may override the test JDBC URL; never point tests
+or clean their writes. PR4 uses `sceneproof_steering_test` and truncates its own
+fixture tables between tests, preserving immutable-history rules in normal paths.
+STEERING_TEST_DATABASE_URL may override its JDBC URL, but must select that dedicated
+schema. TEST_DATABASE_URL may override the other test JDBC URL; never point tests
 at production. For browser/contract tests, start the isolated test API in a separate terminal:
 
 ```powershell
@@ -179,8 +183,9 @@ or failure; the full prompt remains selectable for manual copying.
 
 Limits: 8 READY shots, first/middle/last representative frames (24 total), 16 MiB
 images, one active analysis globally, 100 attempts/project, one provider request
-and zero retries. Larger sequences are explicitly rejected. No reference editing
-or intentional-change steering yet. See [Astra integration](docs/ASTRA-INTEGRATION.md)
+and zero retries. Larger whole-sequence requests are explicitly rejected. Targeted
+steering uses the bounded affected scope and immediate neighbors. No reference editor.
+See [Astra integration](docs/ASTRA-INTEGRATION.md)
 for exact request/response bounds, failure recovery and cost limitations.
 
 One separately executable **paid** smoke path uses generated original PNG fixtures:
@@ -196,6 +201,57 @@ it imports two original frames, performs one real analysis, checks persisted fin
 and replays the same requestId to verify deduplication. Each new invocation spends
 credits and leaves a named local project/media for review. No private fixture/key
 is committed. Normal tests never call paid OpenAI endpoints.
+
+### Creator intent, resolve and dismiss (PR4)
+
+Select an OPEN finding and choose **This change is intentional**. Supply a required
+explanation and narrative scope, then explicitly confirm one targeted paid Astra
+re-evaluation. Creator intent is context, not model agreement. The current judgement
+appears separately from the original assessment; immutable history remains available.
+Resolve records that the creator corrected the issue. Dismiss records a decision not
+to treat it. Both require an audit note and perform no model call.
+
+REST uses POST/GET `/api/v1/projects/{projectId}/findings/{findingId}/actions` and
+GET the same path with `/{actionId}`. POST body:
+
+```json
+{
+  "requestId": "<client UUID>",
+  "type": "INTENTIONAL_CHANGE",
+  "explanation": "The character changes clothes after arriving home.",
+  "scope": "The transition between these two affected shots.",
+  "affectedShotIds": ["<original affected shot UUIDs>"]
+}
+```
+
+The affected-shot set must match the original finding exactly. Other types are
+RESOLVE and DISMISS; their scope can describe the finding as a whole. Same requestId
+and payload returns the existing action, including failed/running work, without a
+second inference. Changed payload conflicts. After network loss use **Recover same
+request**; the browser retains the unresolved request in sessionStorage. A failed
+attempt stays failed on replay. Only a new explicit confirmation/UUID authorizes a
+new attempt. Reload/history/refresh/selection perform no provider work.
+
+Finding `status` is the effective OPEN/INTENTIONAL/RESOLVED/DISMISSED state; original
+reasoning/evidence fields remain intact. Read action history for the newer judgement.
+AnalysisRun `kind` distinguishes SEQUENCE from TARGETED. Non-open findings remain
+selectable but are excluded from page open counts and issue markers. Terminal
+findings cannot reopen in this slice. See [PR4 review](docs/PR4-REVIEW.md).
+
+The targeted paid smoke reuses the original synthetic PR2 finding, avoiding another
+full analysis. With a newly built normal API on 8093 and its server-side key loaded:
+
+```powershell
+$env:SCENEPROOF_API_URL = 'http://127.0.0.1:8093'
+node scripts/astra-targeted-smoke.mjs --project dc4ee12a-b72d-43a3-a072-9a7fe091ccdf --finding 9e9fd139-241f-4136-a931-61d5d4c0b613
+node scripts/astra-targeted-smoke.mjs --verify
+```
+
+Those IDs exist only in the original local smoke database; pass your own original
+synthetic fixture IDs on another machine. The first invocation writes an ignored
+`.local/pr4-smoke-request.json` manifest before POST; further invocations reuse it.
+`--verify` makes GETs only. Any valid independent outcome is accepted by the smoke;
+it never loops to obtain approval. Exact recorded result/cost: PR4-REVIEW.
 
 ### Contract maintenance
 
