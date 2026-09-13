@@ -87,12 +87,36 @@ The browserTestServer Gradle task uses a test-only primary ContinuityAnalysisPor
 real PR2 services and PostgreSQL in sceneproof_browser, plus separate local media.
 Its marker prevents E2E fixture creation against a normal provider server. Test
 classes/configuration are excluded from the production jar. No runtime backend,
-API contract, migration or Astra adapter change is needed for PR3.
+API contract, migration or Astra adapter change was needed for PR3.
+
+## Implemented targeted steering (PR4)
+
+FindingActionController → FindingActionService → ContinuityAnalysisPort.reanalyze →
+the existing Astra adapter and JDK Responses transport. A typed TargetedContext and
+TargetedCompletion keep provider HTTP types out of the application boundary. The
+original analyze operation retains its PR2 prompt/schema and sampling strategy.
+
+V4 adds finding_actions, finding_action_shots, targeted_results, immutable-history
+triggers, and finding_current_state. AnalysisRun.kind identifies SEQUENCE/TARGETED.
+Action admission takes the existing transaction advisory lock and locks the finding;
+intent reserves an AnalysisRun in the same short transaction. The existing unique
+RUNNING index bounds all sequence and targeted provider work globally. Resolve and
+dismiss write only an action. Model work holds no PostgreSQL transaction. Validated
+targeted result and run success commit atomically; effective status is a read
+projection, so failed finalization cannot partially supersede the old judgement.
+
+React FindingActions consumes the generated contract, keeps an unresolved request
+in sessionStorage before POST, and refreshes findings/history through GET. Original
+finding IDs, URL selection and evidence stay stable. Latest judgement is distinct
+from original fields; history shows all actions including failures. Normal tests
+stub the port. PR4 persistence tests use a dedicated sceneproof_steering_test schema
+and explicitly truncate only that test schema's fixture tables between tests.
+See [ADR-0005](adr/ADR-0005-immutable-finding-steering.md).
 
 ## Boundaries reserved for later slices
 
-Analysis jobs/progress transport, reference editing and
-intentional-change steering remain planned. Raw media stays outside PostgreSQL.
+Analysis jobs/progress transport and reference editing remain planned.
+Raw media stays outside PostgreSQL.
 Spring AI is not loaded: the verified Responses transport uses JDK HTTP (ADR-0004).
 
 Public hosting, durable media mounts, anonymous project isolation and live-analysis

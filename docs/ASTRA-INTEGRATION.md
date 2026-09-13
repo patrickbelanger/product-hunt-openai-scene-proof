@@ -1,5 +1,58 @@
 # Astra integration
 
+## PR4 targeted re-evaluation
+
+The official model card and Structured Outputs guide were rechecked for PR4.
+The existing Responses HTTP transport, image input and strict text.format suffice;
+no SDK/dependency migration is required. Targeted calls pin `gpt-6-astra` and
+`reasoning.effort=high`; the PR2 sequence operation retains `low`.
+
+`ContinuityAnalysisPort.reanalyze(TargetedContext)` returns a typed TargetedCompletion.
+TargetedContext carries the complete original finding, expected/observed states,
+original explanation, original evidence, current creator explanation/scope and
+preceding successful targeted judgement when present. Project rules/description and
+shot order accompany the images. All creator/project strings and image text are
+untrusted data. The system prompt explicitly permits disagreement and uncertainty;
+creator intent is never an instruction to approve or erase the finding.
+
+Select the original affected shots and all their original evidence frames. Add
+immediate READY neighbors deterministically up to the same eight-shot limit, in
+timeline order; each neighbor uses first/middle/last sampling. At most three frames
+per shot, 24 total, the same per-frame/aggregate/request byte bounds. A large project
+does not trigger whole-project sampling/rejection when the targeted scope fits.
+Warnings identify targeted scope and temporal limitations. The run snapshot strategy
+is `original-evidence-neighbors-v1`, retaining metadata/hashes without image copies.
+
+`targeted-result.schema.json` version 1 requires projectId, originalFindingId,
+outcome, summary, explanation, evaluatedScope, affectedShotIds, evidenceFrameIds,
+inspectedShots, remainingIssue and suggestedCorrection. Allowed outcomes are
+INTENT_ACCEPTED, ISSUE_REMAINS and INSUFFICIENT_EVIDENCE. Acceptance requires empty
+remainingIssue/correction; a maintained issue requires both. The validator rejects
+unknown fields, duplicate JSON keys, trailing JSON, foreign IDs, incomplete coverage,
+duplicate IDs, omitted original evidence and oversized/blank required text. Every
+submitted image must appear in inspectedShots. Provider-generated durable IDs are
+not part of the schema. Refusal/incomplete/malformed output is durable failure.
+
+INTENTIONAL_CHANGE and its TARGETED AnalysisRun commit before image/provider work.
+All paid work shares PR2's global RUNNING admission, 100-run project limit, 120-second
+deadline, zero retries, safe failures, usage and provider IDs. Resolve/dismiss have
+no run or provider call. Validated result plus SUCCEEDED is one transaction. Status
+is projected only from successful actions; failed/rolled-back completion leaves
+the previous judgement effective. Provider work holds no database transaction.
+
+Same request UUID/payload returns the existing action, including RUNNING/FAILED;
+changed payload conflicts. No automatic provider retry, even after timeout. A new
+explicit UUID authorizes another attempt; prior failure remains visible. Database
+unavailability can prevent recording the failure; five-minute lazy run recovery
+then exposes an interruption without retrying. Timeout can still incur provider cost.
+
+The separately invoked `scripts/astra-targeted-smoke.mjs` reuses a persisted original
+synthetic PR2 finding, avoiding a second full-sequence paid analysis. Its ignored
+manifest records the request before POST and makes reruns replay the same UUID.
+`--verify` reads only and checks preservation after restart. No desired outcome is
+asserted: any valid independent outcome proves transport/durability. Normal tests
+use fake ports and never execute this smoke. Final evidence belongs in PR4-REVIEW.
+
 ## PR2 current implementation — 2026-09-12
 
 The first real transport spike succeeded before adapter integration: gpt-6-astra

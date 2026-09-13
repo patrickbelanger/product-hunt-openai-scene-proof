@@ -1,0 +1,113 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "projectId",
+    "originalFindingId",
+    "schemaVersion",
+    "outcome",
+    "summary",
+    "explanation",
+    "evaluatedScope",
+    "affectedShotIds",
+    "evidenceFrameIds",
+    "inspectedShots",
+    "remainingIssue",
+    "suggestedCorrection"
+  ],
+  "properties": {
+    "projectId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "originalFindingId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "enum": [
+        "1"
+      ]
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "INTENT_ACCEPTED",
+        "ISSUE_REMAINS",
+        "INSUFFICIENT_EVIDENCE"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "explanation": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 3000
+    },
+    "evaluatedScope": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "affectedShotIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "minItems": 1,
+      "maxItems": 8
+    },
+    "evidenceFrameIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "minItems": 1,
+      "maxItems": 24
+    },
+    "inspectedShots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "shotId",
+          "frameIds"
+        ],
+        "properties": {
+          "shotId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "frameIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "minItems": 1,
+            "maxItems": 3
+          }
+        }
+      },
+      "minItems": 1,
+      "maxItems": 8
+    },
+    "remainingIssue": {
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 2000
+    },
+    "suggestedCorrection": {
+      "type": "string",
+      "minLength": 0,
+      "maxLength": 3000
+    }
+  }
+}

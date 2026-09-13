@@ -52,7 +52,7 @@ class ContinuityResultValidator(private val mapper: ObjectMapper) {
         }
     }
 
-    private fun validateNode(node: JsonNode, definition: JsonNode) {
+    internal fun validateNode(node: JsonNode, definition: JsonNode) {
         when (definition["type"].asString()) {
             "object" -> {
                 require(node.isObject)
@@ -69,7 +69,7 @@ class ContinuityResultValidator(private val mapper: ObjectMapper) {
             "string" -> {
                 require(node.isString)
                 val value = node.asString()
-                require(value.isNotBlank())
+                require(value.isNotBlank() || definition["minLength"]?.asInt() == 0)
                 if (definition.has("maxLength")) require(value.codePointCount(0, value.length) <= definition["maxLength"].asInt())
                 if (definition.has("enum")) require(definition["enum"].any { it.asString() == value })
                 if (definition.has("format")) require(UUID.fromString(value).toString() == value)

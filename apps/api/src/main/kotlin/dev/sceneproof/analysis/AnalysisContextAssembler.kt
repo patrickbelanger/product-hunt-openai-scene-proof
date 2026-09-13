@@ -10,16 +10,26 @@ import javax.imageio.ImageIO
 
 @Component
 class AnalysisContextAssembler(private val projects: ProjectService, private val media: MediaRepository, private val storage: MediaStorage) {
-    fun assemble(projectId: UUID): AnalysisContext {
+    fun assemble(projectId: UUID, finding: FindingView? = null): AnalysisContext {
         val project = projects.get(projectId)
         val imports = media.list(projectId)
-        val ready = imports.filter { it.status == "READY" }
+        val allReady = imports.filter { it.status == "READY" }
+        val ready = if (finding == null) allReady else {
+            val affected = allReady.filter { it.id in finding.affectedShotIds }
+            require(affected.size == finding.affectedShotIds.size)
+            val neighbors = allReady.flatMapIndexed { index, shot ->
+                if (shot.id in finding.affectedShotIds) listOfNotNull(allReady.getOrNull(index - 1), allReady.getOrNull(index + 1)) else emptyList()
+            }.distinctBy { it.id }.filter { it.id !in finding.affectedShotIds }
+            (affected + neighbors.take(8 - affected.size)).sortedBy { it.position }
+        }
         if (ready.isEmpty()) throw AnalysisFailure("NO_USABLE_SHOTS", "Import at least one usable shot before analysis.")
         if (ready.size > 8) throw AnalysisFailure("ANALYSIS_SHOT_LIMIT", "Analysis currently supports at most 8 ready shots. Use a smaller project.")
         var totalBytes = 0L
         val shots = ready.map { shot ->
             if (shot.frames.isEmpty()) throw AnalysisFailure("NO_USABLE_FRAMES", "A ready shot has no representative frames.")
-            val selected = selectedPositions(shot.frames.size).map { shot.frames[it] }
+            val original = shot.frames.filter { finding?.relevantFrameIds?.contains(it.id) == true }
+            val selected = if (original.isNotEmpty()) original else selectedPositions(shot.frames.size).map { shot.frames[it] }
+            require(selected.size in 1..3)
             val frames = selected.map { frame ->
                 val bytes = try {
                     val (owner, key) = media.content(projectId, frame.id)
@@ -49,7 +59,8 @@ class AnalysisContextAssembler(private val projects: ProjectService, private val
             AnalysisShot(shot.id, shot.position, shot.name, shot.kind, shot.durationMs, shot.frames.size, frames)
         }
         val warnings = buildList {
-            if (imports.size != ready.size) add("Failed import attempts were excluded from analysis.")
+            if (imports.any { it.status != "READY" }) add("Failed import attempts were excluded from analysis.")
+            if (finding != null) add("Targeted review of original evidence and bounded immediate neighbors; other project shots are outside scope.")
             if (shots.any { it.availableFrameCount > it.frames.size }) add("Temporal subsampling may miss brief continuity changes.")
         }
         return AnalysisContext(projectId, project.name, project.description, project.rules, shots, warnings)

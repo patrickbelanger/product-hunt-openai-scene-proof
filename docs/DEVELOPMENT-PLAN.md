@@ -35,9 +35,10 @@ ingestion (`95ee2f9`) is approved, locally verified and merged into local main.
 PR2 is merged into main as `602cf1c`, based on `7275f17`;
 real transport and imported-project persistence smoke tests passed.
 Finding persistence/API move into PR2 under Patrick's explicit scope; PR3 owns UI.
-PR3 implementation `fa0dbc9` is committed, pushed and locally verified on
-`feat/p0-findings-workspace`, awaiting external review without merge. Review
-preparation synchronizes its handoff documentation; steering awaits a separate instruction.
+PR3 is merged through PR #3 as `a821d89`, including the review handoff `3312550`.
+Patrick authorized PR4 on `feat/p0-intentional-change-steering`: immutable creator
+context, independent targeted judgement and durable resolve/dismiss. PR4 remains
+unmerged and must stop for review before any P1 slice.
 No dates or
 priorities have been changed. The dates are delivery targets, not assertions of completed work; actual progress
 lives in [STATUS](STATUS.md) and [Implementation Plan](IMPLEMENTATION-PLAN.md).

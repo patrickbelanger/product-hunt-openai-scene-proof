@@ -56,7 +56,7 @@ calls are part of PR1. Abrupt termination orphan cleanup is documented local deb
 - [x] Real imported-project analysis with a persisted finding and usage; verify after restart.
 - [x] Final review handoff and verified status; subsequently merged through PR #2.
 
-### PR3 — pushed, external review pending `feat/p0-findings-workspace`, base `602cf1c`
+### PR3 — merged as `a821d89`, `feat/p0-findings-workspace`, base `602cf1c`
 
 - [x] Recover clean synchronized main at the requested SHA; reconcile PR2 merge documentation.
 - [x] Consume generated findings client with honest loading/error/empty and URL selection state.
@@ -71,10 +71,11 @@ Verification: 34 backend, 21 frontend and 5 Chromium tests pass. Normal suite us
 the test-only port plus real persistence. The original PR2 live finding was also
 inspected without any new provider call. Exact evidence and limits: PR3-REVIEW.
 Implementation commit `fa0dbc9` is pushed; the review-preparation documentation
-follow-up preserves the same scope and base. No merge or steering started.
+follow-up preserves the same scope and base. PR #3 subsequently merged `3312550`
+into main at `a821d89`; PR4 recovery verified the exact synchronized SHA.
 
 Patrick explicitly includes finding persistence/read API in PR2. This supersedes
-the older placement below; the next branch is solely the findings workspace UI.
+the older placement below; PR3 delivered the findings workspace UI.
 
 1. `feat/p0-media-ingestion`: MediaStorage and local adapter; image validation,
    bounded upload; controlled FFprobe/FFmpeg adapter; representative sampling,
@@ -95,6 +96,21 @@ docs, plans and STATUS in the same pass. Complete the real flow before visual po
 `feat/p0-intentional-change-steering`: explanation and affected scope, immutable
 context history, targeted re-analysis, finding supersession, resolve/dismiss actions,
 failure-safe UI refresh. Test state transitions and preservation of prior evidence.
+
+### PR4 — implementation on base `a821d89`, review pending
+
+- [x] Complete recovery, reconcile PR3 merge and create only the authorized branch.
+- [x] V4 immutable actions/scope/results with strong original-finding/run ownership.
+- [x] Reuse durable run admission, request replay, usage and failure recovery.
+- [x] Typed targeted port operation, original evidence plus bounded immediate neighbors.
+- [x] Strict independent judgement: INTENT_ACCEPTED / ISSUE_REMAINS / INSUFFICIENT_EVIDENCE.
+- [x] Atomic effective-judgement supersession; preserve all original fields/evidence.
+- [x] Creator resolve/dismiss without inference; reject invalid state transitions.
+- [x] OpenAPI actions/history contract and regenerated TypeScript client.
+- [x] Compact intent form, explicit confirmation, pending/failure/recovery and history.
+- [x] Final backend/frontend/build/OpenAPI/diff and Chromium verification: 52 / 31 / 8 tests.
+- [x] One successful original-fixture targeted Astra smoke and restart verification; real ISSUE_REMAINS, no forced acceptance.
+- [x] Synchronize PR4 review handoff and stop without merge or starting P1.
 
 ## P1 / P2
 

@@ -1,5 +1,10 @@
 # PR3 review handoff — 2026-09-12
 
+Present-state correction during PR4 recovery: PR3 is merged through GitHub PR #3
+at `a821d89c4f7aa0396cf447ec9951f189d42617f2` (parents `602cf1c`, `3312550`).
+The pending-review/merge statements in this document preserve the historical PR3
+handoff. PR4 is separately authorized on `feat/p0-intentional-change-steering`.
+
 ## Branch and recovery
 
 - Branch: `feat/p0-findings-workspace`.

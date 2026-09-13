@@ -4,6 +4,47 @@
  */
 
 export interface paths {
+    "/api/v1/projects/{projectId}/findings/{findingId}/actions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                findingId: string;
+            };
+            cookie?: never;
+        };
+        /** @description Read-only immutable history, oldest first, at most 100 actions. supersedesActionId links the preceding effective judgement; only a successful result becomes effective. Original finding fields/evidence remain intact. */
+        get: operations["listFindingActions"];
+        put?: never;
+        /** @description An explicit INTENTIONAL_CHANGE authorizes one bounded targeted provider call. RESOLVE and DISMISS never call the provider. Scope must exactly match the original affected shots. Replaying the same requestId and payload returns the existing action without inference; changed payload conflicts. Failures retain the action and original finding. A new UUID explicitly authorizes a separate attempt. */
+        post: operations["createFindingAction"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{projectId}/findings/{findingId}/actions/{actionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                findingId: string;
+                actionId: string;
+            };
+            cookie?: never;
+        };
+        get: operations["getFindingAction"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{projectId}/analyses": {
         parameters: {
             query?: never;
@@ -125,6 +166,60 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        CreateFindingAction: {
+            /** Format: uuid */
+            requestId: string;
+            /** @enum {string} */
+            type: "INTENTIONAL_CHANGE" | "RESOLVE" | "DISMISS";
+            explanation: string;
+            scope: string;
+            affectedShotIds: string[];
+        };
+        TargetedResult: {
+            /** Format: uuid */
+            projectId: string;
+            /** Format: uuid */
+            originalFindingId: string;
+            /** @enum {string} */
+            schemaVersion: "1";
+            /** @enum {string} */
+            outcome: "INTENT_ACCEPTED" | "ISSUE_REMAINS" | "INSUFFICIENT_EVIDENCE";
+            summary: string;
+            explanation: string;
+            evaluatedScope: string;
+            affectedShotIds: string[];
+            evidenceFrameIds: string[];
+            inspectedShots: {
+                /** Format: uuid */
+                shotId: string;
+                frameIds: string[];
+            }[];
+            remainingIssue: string;
+            suggestedCorrection: string;
+        };
+        FindingAction: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            projectId: string;
+            /** Format: uuid */
+            findingId: string;
+            /** Format: uuid */
+            originalAnalysisRunId: string;
+            /** Format: uuid */
+            requestId: string;
+            /** @enum {string} */
+            type: "INTENTIONAL_CHANGE" | "RESOLVE" | "DISMISS";
+            explanation: string;
+            scope: string;
+            affectedShotIds: string[];
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: uuid */
+            supersedesActionId: string | null;
+            reanalysis: components["schemas"]["AnalysisRun"] | null;
+            result: components["schemas"]["TargetedResult"] | null;
+        };
         CreateAnalysis: {
             /** Format: uuid */
             requestId: string;
@@ -163,6 +258,8 @@ export interface components {
             usage: components["schemas"]["AnalysisUsage"] | null;
             providerResponseId: string | null;
             providerRequestId: string | null;
+            /** @enum {string} */
+            kind: "SEQUENCE" | "TARGETED";
         };
         Finding: {
             /** Format: uuid */
@@ -184,7 +281,7 @@ export interface components {
             relevantReferenceIds: string[];
             suggestedCorrectionPrompt: string;
             /** @enum {string} */
-            status: "OPEN";
+            status: "OPEN" | "RESOLVED" | "INTENTIONAL" | "DISMISSED";
         };
         Frame: {
             /** Format: uuid */
@@ -267,6 +364,83 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    listFindingActions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                findingId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Durable creator action and actual targeted result, if available */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FindingAction"][];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    createFindingAction: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                findingId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateFindingAction"];
+            };
+        };
+        responses: {
+            /** @description Durable creator action and actual targeted result, if available */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FindingAction"];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    getFindingAction: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                findingId: string;
+                actionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Durable creator action and actual targeted result, if available */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FindingAction"];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
     createAnalysis: {
         parameters: {
             query?: never;

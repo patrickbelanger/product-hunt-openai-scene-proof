@@ -14,6 +14,18 @@ class FindingsBrowserConfiguration {
     @Bean
     @Primary
     fun browserAnalysisPort(): ContinuityAnalysisPort = object : ContinuityAnalysisPort {
+        override fun reanalyze(context: TargetedContext): TargetedCompletion {
+            val remains = context.explanation.contains("issue remains", ignoreCase = true)
+            return TargetedCompletion(TargetedResult(context.sequence.projectId, context.originalFinding.id, "1",
+                if (remains) IntentOutcome.ISSUE_REMAINS else IntentOutcome.INTENT_ACCEPTED,
+                if (remains) "The continuity issue remains" else "The narrative transition explains the difference",
+                if (remains) "The explanation does not account for the unchanged scene rule." else "The creator describes a coherent change between these shots.",
+                context.scope, context.affectedShotIds, context.originalFinding.relevantFrameIds,
+                context.sequence.shots.map { InspectedShot(it.id, it.frames.map { frame -> frame.id }) },
+                if (remains) "The square still contradicts the rule." else "", if (remains) "Keep the square red." else ""),
+                ANALYSIS_MODEL, "resp_browser_targeted", "req_browser_targeted", AnalysisUsage(100, 50, 150, 0, 0))
+        }
+
         override fun analyze(context: AnalysisContext): AnalysisCompletion = AnalysisCompletion(
             ContinuityAnalysisResult(
                 "Deterministic browser test result",

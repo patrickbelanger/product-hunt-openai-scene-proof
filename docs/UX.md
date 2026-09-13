@@ -60,12 +60,39 @@ Findings move below the viewer at widths up to 1100px; panels stack below 700px.
 Critical Chromium verifies persisted evidence pixels, keyboard selection/copy,
 clipboard contents/failure, reload, GET-only UI actions and responsive widths.
 
-## Planned
+## Creator context and history (PR4)
+
+An OPEN finding offers This change is intentional, Resolve and Dismiss. Intent
+opens a compact form requiring explanation and narrative scope across exactly the
+affected shots. Confirm intent & re-evaluate explicitly authorizes one targeted
+paid request. The UI explains that Astra may accept, disagree or remain uncertain.
+Resolve/dismiss require an audit note and clearly state that no Astra call occurs.
+
+Pending work shows actual re-evaluation text, with no percentage or optimistic
+status. Session storage saves the request UUID/payload before POST. Connection loss
+preserves the original inspection and offers Recover same request; it replays the
+same UUID, preventing duplicate inference. A saved FAILED attempt stays failed on
+replay. A fresh form/confirmation creates a separate paid attempt. On reload, GET
+history restores running/failed/completed state; selection and refresh never infer.
+
+The latest successful model judgement has its own summary, explanation, evaluated
+scope and remaining concern/correction. The original assessment is explicitly
+identified underneath. All saved findings remain selectable with OPEN / INTENTIONAL /
+RESOLVED / DISMISSED labels. Counts and timeline issue markers include only OPEN
+findings on the page; they do not claim a latest whole-project assessment. Original
+evidence selection remains available even for a historical/non-open finding.
+
+A compact View immutable history disclosure shows original analysis identity,
+creator explanations/scopes, timestamps, action UUIDs, actual failures and the
+preceding judgement link. New model judgement replaces only the effective assessment,
+never the historical record. Terminal creator actions explain their distinct meaning.
+Refresh history is GET-only. No reference editor, demo, tour or public hosting is added.
+
+## Planned later slices
 
 Demo entry opens a populated film without upload. Tour: Reference Bible → timeline
 → findings → resolve/steer, always skippable and restartable.
-Intentional change asks for an explanation and reflects real
-re-analysis state. Progress stages must originate in backend work; no fake percentages.
+Progress stages must originate in backend work; no fake percentages.
 
 Before launch verify normal laptop/tablet, keyboard-only flow, empty/loading/error
 states, readable evidence images, contrast and an under-one-minute demo journey.
