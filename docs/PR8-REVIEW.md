@@ -42,6 +42,8 @@ demo/launch docs, decisions, ADR-0008, plans and README describe the actual PR8 
 - V8: immutable original proposals/terminal creator decisions/completed results;
   confirmed-only same-project, uniquely linked reference provenance. Source,
   segment and transcript evidence is immutable. Existing V1–V6 remain unchanged.
+- V9: new-record defaults select `gpt-4o-transcribe-diarize` and diarized segment
+  estimate provenance; historical model names/timestamps/runs are not rewritten.
 - Eight film paths under `/api/v1/projects/{projectId}/film`: GET intelligence;
   POST `/source`; POST `/runs` with UUID/source/paidConsent; GET `/runs/{runId}`;
   GET run `/transcript` and `/candidates`; POST candidate `/decision` and `/reference`.
@@ -51,7 +53,10 @@ demo/launch docs, decisions, ADR-0008, plans and README describe the actual PR8 
 ## Provider, timestamps and bounded cost
 
 AudioTranscriptionPort / OpenAiAudioTranscriptionAdapter use the verified current
-`/v1/audio/transcriptions`, `whisper-1`, verbose JSON and segment timestamps.
+`/v1/audio/transcriptions`, `gpt-4o-transcribe-diarize`, `diarized_json` and
+`chunking_strategy=auto`. Timed text segments are retained; speaker IDs are discarded.
+No Whisper timestamp parameter, Responses/Chat transcription or local four-call
+orchestration. [ADR-0009](adr/ADR-0009-timed-audio-transcription.md) records the comparison.
 FFmpeg extracts mono PCM s16le/16 kHz, max 120 seconds/4 MB, common container origin.
 The actual PCM sample duration, audio hash and transcription request ID are stored
 on successful transcription; temporary WAV is deleted. No audio stream makes no
@@ -59,7 +64,7 @@ transcription call. Failed transcription prevents Film Understanding.
 
 Decoded video times account for video-stream/container-start offset. Transcript
 seconds are validated, rounded to ms and assigned server UUIDs; provenance labels
-them approximate Whisper segment estimates, never exact alignment, speaker proof
+them approximate diarized segment estimates, never exact alignment, speaker proof
 or literal evidence that a lyric happened. Source frames supplied to later continuity
 also use common source time. Narrative interpretation is separately labelled.
 
@@ -249,3 +254,18 @@ artifact names: [transcription review](PR8-TRANSCRIPTION-REVIEW.md).
 **Merge readiness remains limited:** real transcription transport/parsing and real
 Astra Film Understanding are still unverified. Stop for Patrick's review, not another
 request, merge or PR9. No film-discovery or screen-opening observation is claimed.
+
+## Timed transcription transport follow-up
+
+Patrick's later model comparison selects the documented one-request diarized Audio
+Transcriptions contract, not the proposed four-call GPT-Transcribe fallback.
+`gpt-4o-transcribe-diarize` + `diarized_json` + `chunking_strategy=auto` preserves
+timed text provenance and one-request bounds without speaker identity authority.
+Safe local transport categories, actual binary HTTP capture, endpoint/redirect
+regressions and V9 new-record defaults accompany the change. No new live request,
+historical run rewrite, Astra change or general UX work. Final checks, unknown
+historical cause, dashboard interpretation and separate future authorization gate:
+[focused review](PR8-TRANSCRIPTION-REVIEW.md).
+Verified 38 focused / 121 full backend tests, Gradle build, frontend production build,
+OpenAPI drift and diff checks. No failures/errors/skips. Frontend/Chromium suites
+were not rerun for this backend-only change. Real provider acceptance is not claimed.

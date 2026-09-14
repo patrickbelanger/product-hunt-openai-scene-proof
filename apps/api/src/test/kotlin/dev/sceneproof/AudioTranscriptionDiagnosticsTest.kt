@@ -84,9 +84,9 @@ class AudioTranscriptionDiagnosticsTest {
         assertThat(request.headers().firstValue("Content-Type").orElseThrow()).isEqualTo("multipart/form-data; boundary=test-boundary")
         assertThat(request.headers().firstValue("OpenAI-Project")).isEmpty()
         assertThat(request.headers().firstValue("OpenAI-Organization")).isEmpty()
-        val expected = ("--test-boundary\r\nContent-Disposition: form-data; name=\"model\"\r\n\r\nwhisper-1\r\n" +
-            "--test-boundary\r\nContent-Disposition: form-data; name=\"response_format\"\r\n\r\nverbose_json\r\n" +
-            "--test-boundary\r\nContent-Disposition: form-data; name=\"timestamp_granularities[]\"\r\n\r\nsegment\r\n" +
+        val expected = ("--test-boundary\r\nContent-Disposition: form-data; name=\"model\"\r\n\r\ngpt-4o-transcribe-diarize\r\n" +
+            "--test-boundary\r\nContent-Disposition: form-data; name=\"response_format\"\r\n\r\ndiarized_json\r\n" +
+            "--test-boundary\r\nContent-Disposition: form-data; name=\"chunking_strategy\"\r\n\r\nauto\r\n" +
             "--test-boundary\r\nContent-Disposition: form-data; name=\"file\"; filename=\"source.wav\"\r\nContent-Type: audio/wav\r\n\r\n").toByteArray() + bytes + "\r\n--test-boundary--\r\n".toByteArray()
         assertThat(adapter.requestBody(input, "test-boundary")).isEqualTo(expected)
         assertThat(request.bodyPublisher().orElseThrow().contentLength()).isEqualTo(expected.size.toLong())

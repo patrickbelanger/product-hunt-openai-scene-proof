@@ -32,7 +32,7 @@ PROVIDER_OR_ACCOUNT_RESTRICTION or TRANSIENT_PROVIDER_FAILURE.
 Whisper availability is verified by official documentation and Patrick's Playground
 check; model unavailability is not treated as a likely explanation.
 
-## Offline contract review
+## Historical Whisper offline contract review
 
 | Item | Observed implementation / conclusion |
 | --- | --- |
@@ -165,3 +165,74 @@ historical verified gates for the same application code. Documentation diff chec
 **Merge impact:** the acceptance gap is not closed. Real transcription transport,
 successful response parsing/timestamps and real Astra Film Understanding remain
 unverified. Stop for Patrick's review; no further provider request is authorized.
+
+## One-call diarized migration and transport investigation — current
+
+Patrick then requested a current transcription model, safe pre-response diagnostics
+and an actual local HTTP capture. `gpt-transcribe` was verified as the general
+completed-file recommendation, but its JSON response does not provide the required
+Whisper timestamp contract. Four local 30-second chunks were proposed as a material
+call-bound decision, not implemented. Patrick instead preferred evaluation of
+`gpt-4o-transcribe-diarize`, which supplies timed segments in one Audio Transcriptions
+request. That option is selected; no material format/duration incompatibility was
+identified for the existing 120-second/4 MB PCM contract.
+
+Exact request: **POST https://api.openai.com/v1/audio/transcriptions**; multipart
+`model=gpt-4o-transcribe-diarize`, `response_format=diarized_json`,
+`chunking_strategy=auto`, binary `file` / `source.wav` / `audio/wav`. No
+`timestamp_granularities[]`, `verbose_json`, prompts, keywords, speaker references,
+Responses/Chat endpoint or local multi-request orchestration. The provider handles
+its own audio chunking within the one request. Official contracts, language/context
+restrictions, usage alternatives, limits and cost comparison are in
+[ADR-0009](adr/ADR-0009-timed-audio-transcription.md).
+
+SceneProof retains only validated timed text: finite/ordered/positive segment seconds
+rounded to source-relative milliseconds within decoded PCM duration. Speaker and
+provider segment IDs are discarded, not adopted as entity/creator truth. Missing
+times fail instead of receiving whole-film or synthetic replacements. V9 changes
+only defaults for new model/provenance records; immutable old records remain Whisper.
+No public API field or source extraction change, and no new transcription/Astra call.
+
+Transport exceptions now preserve only DNS_FAILURE, CONNECT_FAILURE, TLS_FAILURE,
+HTTP_TIMEOUT, IO_FAILURE, INTERRUPTED or UNKNOWN_TRANSPORT_FAILURE. Cause traversal
+is cycle-safe/bounded; no messages, stacks, secrets, paths or suppressed content are
+persisted. Synchronous send and asynchronous completion failures both use this path.
+Actual received headers/status/request ID remain distinct from pre-header failure;
+non-2xx bodies retain the prior reviewed allowlisted diagnostics. No proxy, TLS,
+HTTP-version or retry workaround is made without evidence.
+
+**Historical reconstruction:** the original non-2xx status/body and later transport
+exception cause were discarded at their respective tested HEADs. Existing safe
+artifacts contain no recoverable copy. Both failures remain INSUFFICIENT_EVIDENCE;
+the later 423 ms result does not prove DNS, TLS, timeout or account denial. Patrick
+reports Audio Transcriptions dashboard usage of zero requests/seconds; unrelated
+Astra Responses/Chat usage must not be counted as transcription. An accepted future
+request belongs to Audio Transcriptions for the selected model; neither dashboard
+accounting nor model replacement is used to fabricate acceptance or diagnose history.
+
+The local capture exercises the actual adapter send path with a dummy key and
+synthetic WAVs, including the full 120-second PCM payload. It checks POST/audio-only
+path, matching boundary, exact four-part binary body, extension/MIME and delivered
+Content-Length. Redirects to Responses are rejected without a second request;
+external/Chat/Responses test endpoints are rejected before dispatch. No real OpenAI
+or Astra call occurs in normal tests.
+
+Early offline checks found two test-fixture issues: a generic IOException wrapper
+correctly classified as IO_FAILURE rather than unknown, and Mockito disallowing a
+checked exception in a synchronous stub. Both fixtures were corrected, not counted
+as passing gates. While Patrick refined the model choice, only the verified-empty
+disposable film-test schema was rebuilt to apply the final uncommitted V9 cleanly;
+the public database/original runs were never changed.
+
+Validation: **38 focused tests** (6 transport/capture, 12 diagnostics, 6 adapter,
+14 film integration); **121 full backend tests**, zero failures/errors/skips.
+Final Gradle build, frontend TypeScript/Vite build, OpenAPI drift and diff checks
+pass. Frontend/Chromium suites were not rerun for the unchanged UI/API shape; previous
+results remain historical. The existing ~519 kB Vite entry-chunk warning remains.
+Public readback still shows the original FAILED Whisper run/request ID and V8 as its
+last migration; V9 has only been applied to isolated test schemas in this task.
+Original artifact hash verification and presence of both consumed locks pass.
+One new isolated transcription-only live validation is justified **only after**
+green gates and new explicit authorization. Both previous locks remain consumed.
+Real timed transcription and Astra Film Understanding are still separately
+unvalidated; no merge or PR9 is authorized.

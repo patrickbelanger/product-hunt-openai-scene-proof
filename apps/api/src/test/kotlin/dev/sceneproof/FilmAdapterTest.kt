@@ -57,20 +57,26 @@ class FilmAdapterTest {
         invalid.forEach { assertThatThrownBy { validator.validate(it, context) }.isInstanceOf(AnalysisFailure::class.java) }
     }
 
-    @Test fun `transcription multipart uses timestamp capable model without hints or answer injection`() {
+    @Test fun `transcription multipart uses purpose built model without unsupported timestamps or hints`() {
         val body = audio.requestBody(AudioInput(ByteArray(64), 3000), "test-boundary").toString(Charsets.UTF_8)
-        assertThat(body).contains("whisper-1", "verbose_json", "timestamp_granularities[]", "segment", "audio/wav", "filename=\"source.wav\"")
-        assertThat(body).doesNotContain("prompt", "keywords", "I opened", "Between the Line", "gpt-6-astra")
+        assertThat(body).contains("gpt-4o-transcribe-diarize", "diarized_json", "chunking_strategy", "auto", "audio/wav", "filename=\"source.wav\"")
+        assertThat(body).doesNotContain("verbose_json", "timestamp_granularities", "whisper-1", "prompt", "keywords", "I opened", "Between the Line", "gpt-6-astra")
     }
 
-    @Test fun `transcription preserves approximate segments and rejects fabricated out of range timestamps`() {
-        val valid = """{"text":"Original words","segments":[{"start":0.125,"end":1.25,"text":" Original words "}]}"""
+    @Test fun `diarized transcription retains provider times and discards optional speaker identity`() {
+        val valid = """{"text":"Original words","duration":3,"task":"transcribe","segments":[{"start":0.125,"end":1.25,"text":" Original words ","speaker":"Untrusted identity","id":"speaker_segment"}]}"""
         val parsed = audio.parse(valid.toByteArray(), 3000, "req_test")
         assertThat(parsed.segments.single()).isEqualTo(TranscribedSegment(125, 1250, "Original words"))
-        listOf(valid.replace("1.25", "4.0"), valid.replace("0.125", "-1"), valid.replace("0.125", "1.25"), valid.replace("1.25", "\"unknown\""), """{"text":"Unaligned words","segments":[]}""").forEach { invalid ->
+        assertThat(parsed.toString()).doesNotContain("Untrusted identity", "speaker_segment")
+        assertThat(audio.parse(valid.replace(",\"speaker\":\"Untrusted identity\"", "").toByteArray(), 3000, null).segments).isEqualTo(parsed.segments)
+        listOf("{}", """{"text":123}""", """{"text":"ok","text":"duplicate"}""", valid + " {}", """{"text":"${"x".repeat(24001)}"}""",
+            valid.replace("1.25", "4.0"), valid.replace("0.125", "-1"), valid.replace("0.125", "1.25"), valid.replace("1.25", "\"unknown\""),
+            """{"text":"Unaligned words","segments":[]}""", """{"text":"No timestamps"}""").forEach { invalid ->
             assertThatThrownBy { audio.parse(invalid.toByteArray(), 3000, null) }.isInstanceOf(AnalysisFailure::class.java)
         }
         assertThat(audio.parse("""{"text":"","segments":[]}""".toByteArray(), 3000, null).segments).isEmpty()
+        assertThatThrownBy { audio.parse(valid.toByteArray(), 0, null) }.isInstanceOf(AnalysisFailure::class.java)
+        assertThatThrownBy { audio.parse(valid.toByteArray(), 120001, null) }.isInstanceOf(AnalysisFailure::class.java)
     }
 
     @Test fun `empty discovery is valid and images remain bounded`() {

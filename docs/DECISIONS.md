@@ -49,7 +49,7 @@ metadata/hash snapshots and archive; eight active references share analysis budg
   Understanding plus truthful durable stages → PR9 general UX → optional P2.
   `docs/intial-context.md` priorities, branch plan and merge order now agree; historical
   references are labelled superseded. No unrelated historical context is rewritten.
-- [ADR-0008](adr/ADR-0008-film-understanding.md) records bounded immutable SourceFilm,
+- [ADR-0008](adr/ADR-0008-film-understanding.md) initially recorded bounded immutable SourceFilm,
   separate audio/discovery ports, Whisper segment estimates, Astra medium, strict
   evidence validation, candidate authority, normal reference promotion and polling.
   These are within Patrick's explicit PR8 delegation, not a new product-scope change.
@@ -60,6 +60,14 @@ metadata/hash snapshots and archive; eight active references share analysis budg
   bounded to 24 and one-way decisions; editing an already confirmed anchor is a later
   lifecycle feature, not silent mutation. Ten film attempts/project, one globally active.
 - September 18 is unchanged. No NLE, public tenancy, deployment or PR9 work is added.
+- Patrick's later transcription-model clarification supersedes the initial Whisper
+  choice: evaluate one-call diarized timed segments before local GPT-Transcribe
+  chunking. Official documentation supports the bounded WAV contract; select
+  `gpt-4o-transcribe-diarize` / Audio Transcriptions / `diarized_json` / server auto
+  chunking. The proposed four-call increase is not adopted. Speaker metadata is
+  discarded; source-time estimates, one-call bounds and Astra separation remain.
+  V9 only changes new-record defaults. [ADR-0009](adr/ADR-0009-timed-audio-transcription.md)
+  records the comparison, safe transport categories and no-live-call restriction.
 - Patrick's focused rejection review authorizes bounded sanitized diagnostics, not a
   live reroll. Existing failure detail/request-ID fields suffice; no request/provider
   architecture change. Original rejection remains INSUFFICIENT_EVIDENCE, while the

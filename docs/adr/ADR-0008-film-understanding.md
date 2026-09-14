@@ -21,7 +21,8 @@ analysis segments, not editable scenes or claimed exhaustive cut detection.
 Provider timestamps are approximate evidence; decoded picture timestamps and
 transcription timestamps retain their distinct provenance and common source origin.
 
-Use AudioTranscriptionPort with OpenAI `/v1/audio/transcriptions`, `whisper-1`,
+Historical initial choice, superseded by [ADR-0009](ADR-0009-timed-audio-transcription.md):
+use AudioTranscriptionPort with OpenAI `/v1/audio/transcriptions`, `whisper-1`,
 `verbose_json`, segment timestamps. Current official documentation recommends this
 specialized model for timestamps. Extract bounded mono PCM audio; no lyric or
 benchmark hint enters transcription. Lyrics/dialogue describe context, never prove
@@ -44,8 +45,9 @@ consent/UUID creates a new attempt. No synthetic percentages or thinking narrati
 SSE adds connection/event recovery complexity without improving this bounded flow;
 polling reuses TanStack Query and durable GET state. General task queues and NLE
 editing exceed PR8. Automatic promotion would mistake observations for truth.
-`gpt-transcribe` is the current general transcription recommendation, but Whisper
-supplies documented segment timestamps without inventing forced alignment.
+Initially `gpt-transcribe` was the general transcription recommendation, but Whisper
+supplied documented segment timestamps without inventing forced alignment. Patrick's
+later one-call diarized selection and safe transport correction are in ADR-0009.
 This keeps September 18 unchanged; PR9 general UX and optional P2 stay separate.
 Local unauthenticated storage, retained history and orphan-file limits remain.
 

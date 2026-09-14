@@ -185,6 +185,8 @@ PR8; there is no separate progress branch. General UX remains PR9.
 - [x] Focused rejection review: INSUFFICIENT_EVIDENCE; bounded sanitized diagnostics fixed, 32 focused / 115 full backend tests and build/OpenAPI checks pass. No new live call.
 - [x] Patrick's separately authorized single corrective transcription-only invocation: TRANSCRIPTION_UNAVAILABLE in 423 ms; no upstream status/request ID, no retry/Astra, original history preserved. No application code changes or suite rerun; see PR8-TRANSCRIPTION-REVIEW.
 - [ ] Successful real transcription transport/parsing and real Astra multimodal provider acceptance remain unverified. The corrective authorization is consumed; stop for Patrick's review.
+- [x] Verify and select one-call `gpt-4o-transcribe-diarize` timed segments after comparing `gpt-transcribe`; V9 preserves historical defaults/records, no local four-call orchestration or speaker authority.
+- [x] Safe transport categories and production-path HTTP capture/endpoint guards: 38 focused / 121 full backend tests, Gradle/frontend builds and OpenAPI drift pass. No new live request; details in PR8-TRANSCRIPTION-REVIEW.
 - [x] Synchronized product/technical docs, ADR and PR8-REVIEW for the final commit/push handoff; stop for review.
 
 Implemented stages (ADR-0008): PREPARING_SOURCE, DETECTING_STRUCTURE,

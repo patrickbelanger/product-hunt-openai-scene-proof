@@ -206,6 +206,9 @@ authoritative. No percentages, timers predicting completion or model-thought dis
 V7 adds six normalized film tables, including candidate decisions,
 and finding evidence JSON; bounded nested discovery stays a strict JSON document.
 V8 adds decision/result integrity and same-project reference provenance constraints.
+V9 changes only new transcription model/time-origin defaults to the one-call diarized
+Audio Transcriptions contract. No local multi-call chunking, speaker domain or
+Chat/Responses transcription is introduced; see [ADR-0009](adr/ADR-0009-timed-audio-transcription.md).
 Media remains outside PostgreSQL. Staged frame directories may remain after failures;
 there is no new disk GC. Transcript API reads are no-store; generic exception logs
 exclude messages/causes that could contain SQL row data. This is not public tenancy.

@@ -10,7 +10,7 @@ enum class FilmStage { PREPARING_SOURCE, DETECTING_STRUCTURE, TRANSCRIBING_AUDIO
 enum class CandidateStatus { PENDING, ACCEPTED, EDITED, REJECTED }
 data class SourceFilm(val id: UUID, val projectId: UUID, val name: String, val sha256: String, val byteSize: Long, val durationMs: Long, val createdAt: Instant)
 data class FilmSegment(val id: UUID, val position: Int, val startMs: Long, val endMs: Long, val shot: ShotView)
-data class TranscriptSegment(val id: UUID, val startMs: Long, val endMs: Long, val text: String, val timestampOrigin: String = "WHISPER_SEGMENT_ESTIMATE_SOURCE_START")
+data class TranscriptSegment(val id: UUID, val startMs: Long, val endMs: Long, val text: String, val timestampOrigin: String = "OPENAI_DIARIZED_SEGMENT_ESTIMATE_SOURCE_START")
 data class FilmStageView(val stage: FilmStage, val startedAt: Instant, val completedAt: Instant?)
 data class FilmRun(
     val id: UUID, val projectId: UUID, val sourceFilmId: UUID, val requestId: UUID,

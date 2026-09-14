@@ -117,9 +117,11 @@ class FilmUnderstandingApiTest @Autowired constructor(
         val run = await(start())
         assertThat(run.stage).isEqualTo(FilmStage.SUCCEEDED)
         assertThat(run.reasoning).isEqualTo("medium")
+        assertThat(run.transcriptionModel).isEqualTo("gpt-4o-transcribe-diarize")
         assertThat(run.stages.map { it.stage }).containsExactly(*FilmStage.entries.filter { it != FilmStage.FAILED }.toTypedArray())
         assertThat(run.stages.all { it.completedAt != null }).isTrue()
         assertThat(repository.transcript(source.projectId, run.id).single().startMs).isEqualTo(100)
+        assertThat(repository.transcript(source.projectId, run.id).single().timestampOrigin).isEqualTo("OPENAI_DIARIZED_SEGMENT_ESTIMATE_SOURCE_START")
         assertThat(repository.segments(source.projectId)).hasSizeBetween(1, 8)
         assertThat(repository.segments(source.projectId).flatMap { it.shot.frames }.size).isLessThanOrEqualTo(24)
         assertThat(repository.candidates(source.projectId, run.id)).allMatch { it.status == CandidateStatus.PENDING }
@@ -144,9 +146,11 @@ class FilmUnderstandingApiTest @Autowired constructor(
     }
 
     @Test fun `transcription failure remains durable and prevents understanding call`() {
-        doThrow(AnalysisFailure("TRANSCRIPTION_UNAVAILABLE", "Safe failure", 503)).`when`(audioPort).transcribe(anyAudio())
+        val failure = OpenAiAudioTranscriptionAdapter("").incompleteResponse(null, cause = javax.net.ssl.SSLHandshakeException("Private transport information"))
+        doThrow(failure).`when`(audioPort).transcribe(anyAudio())
         val run = await(start())
         assertThat(run.stage).isEqualTo(FilmStage.FAILED)
+        assertThat(run.failureMessage).contains("TLS_FAILURE", "No upstream response headers").doesNotContain("Private transport information")
         assertThat(start(run.requestId).id).isEqualTo(run.id)
         assertThat(repository.candidates(source.projectId, run.id)).isEmpty()
         verifyNoInteractions(filmPort)

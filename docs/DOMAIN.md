@@ -143,7 +143,8 @@ attempts per project. Terminal failure/success is durable. V8 protects completed
 runs and creator decisions; V7 protects source/segment/transcript evidence.
 
 TranscriptSegment has server UUID, run/project, ordinal, text and approximate source
-start/end with `WHISPER_SEGMENT_ESTIMATE_SOURCE_START` provenance. No word alignment,
+start/end with `OPENAI_DIARIZED_SEGMENT_ESTIMATE_SOURCE_START` provenance for new runs;
+historical `WHISPER_SEGMENT_ESTIMATE_SOURCE_START` records are unchanged. No word alignment,
 speaker identity or literal-event guarantee is inferred. Narrative cue IDs are stable
 server-derived UUIDs within a saved run and explicitly denote model interpretation.
 

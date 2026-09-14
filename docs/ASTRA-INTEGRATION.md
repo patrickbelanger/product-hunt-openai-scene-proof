@@ -239,12 +239,15 @@ estimate USD $0.269555, not a billing receipt. Exact provenance and evaluation a
 
 ## PR8 separate transcription and Film Understanding
 
-AudioTranscriptionPort uses OpenAI `/v1/audio/transcriptions`: `whisper-1`,
-`response_format=verbose_json`, `timestamp_granularities[]=segment`. The current
-[speech-to-text guide](https://developers.openai.com/api/docs/guides/speech-to-text#timestamps)
-specifically recommends Whisper for timestamps; the newer general transcription
-recommendation does not supply this same timestamp contract. PR8 verified that API
-rather than inventing alignment or adding a second paid model step.
+AudioTranscriptionPort uses OpenAI `/v1/audio/transcriptions`:
+`gpt-4o-transcribe-diarize`, `response_format=diarized_json`, `chunking_strategy=auto`.
+The [documented diarized response](https://developers.openai.com/api/docs/guides/speech-to-text#speaker-diarization)
+provides timed text segments in one request, including inputs longer than 30 seconds.
+Patrick prefers this over four local `gpt-transcribe` chunk calls. Do not send Whisper's
+`verbose_json`/`timestamp_granularities[]`, or use Chat/Responses for transcription.
+Speaker/provider segment identity is discarded, never creator-confirmed truth.
+V9 changes new-record model/provenance defaults only; historical Whisper records stay
+unchanged. Full contract, alternatives, limits and pricing: [ADR-0009](adr/ADR-0009-timed-audio-transcription.md).
 
 JDK HTTP sends one bounded WAV, generic filename, no prompt or lyric hint; fixed
 endpoint, 10-second connection and 120-second request timeout, no retries/redirects,
@@ -298,6 +301,9 @@ HTTP status, allowlisted type/code and exact safe-message literals in the existi
 only up to 8 KiB within the 256 KiB body cap; received rejection headers survive
 body timeout/oversize/interruption. Unknown/free-form text is withheld to prevent
 echoed credentials/audio/transcript from reaching persistence or logs. Successful
-parsing, request shape, model and no-retry semantics are unchanged. No new schema/API
-field is added. The original rejection remains INSUFFICIENT_EVIDENCE; see the
-[focused review](PR8-TRANSCRIPTION-REVIEW.md). No corrective live request is yet authorized.
+parsing/request/model were unchanged in that historical diagnostic-only correction.
+The subsequent diarized migration retains no-retry semantics and adds safe transport
+categories, loopback request capture and V9 defaults, with no API field change.
+Both historical attempts remain INSUFFICIENT_EVIDENCE; the single corrective live
+authorization was consumed by TRANSCRIPTION_UNAVAILABLE. No further live request
+is authorized. See the [focused review](PR8-TRANSCRIPTION-REVIEW.md).

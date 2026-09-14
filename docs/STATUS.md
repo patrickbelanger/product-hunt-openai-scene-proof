@@ -3,7 +3,7 @@
 Last updated: 2026-09-14
 Current branch: `feat/p1-ai-film-understanding`
 Current milestone: PR7 merged; PR8 ready for review with a real-provider validation limitation.
-Current task: Patrick's single corrective transcription-only attempt completed with TRANSCRIPTION_UNAVAILABLE; no retry or Astra call. Stop for review.
+Current task: One-call diarized transcription migration and offline transport diagnostics verified; stop for review, no live request authorized.
 Do not merge. Do not start PR9.
 
 ## PR8 recovery — current
@@ -14,7 +14,7 @@ Recovery began with a clean worktree; fetched origin and verified PR #7 merge wi
 authorized PR8 branch from that SHA. V6 and PR7 demo/reset are present. Required
 recovery/product/architecture documents and existing implementation inspected.
 Implemented V7/V8 source-film/run/stage/segment/transcript/candidate persistence,
-FFmpeg audio/video provenance, separate Whisper/Astra discovery ports, strict schema,
+FFmpeg audio/video provenance, separate purpose-built transcription/Astra discovery ports, strict schema,
 creator-confirmed memory and normal Reference Bible promotion/provenance. The UI
 exposes only durable real stages using polling, recovery, failures and explicit consent.
 Cross-modal findings/history preserve original context. New/reset demos include the
@@ -40,7 +40,7 @@ Understanding + required truthful stages → PR9 UX polish → optional P2 launc
 Historical/superseded `feat/p1-analysis-progress` is absorbed into PR8, never a separate
 next branch. The pre-merge handoff below is historical, not a blocker.
 
-## Transcription rejection review — current
+## Historical transcription rejection review
 
 Classification: **INSUFFICIENT_EVIDENCE**. Local PostgreSQL, saved artifacts and logs
 retain only the generic rejection/request ID, not the original HTTP status/error.
@@ -61,7 +61,7 @@ Original failed run and attempt lock are unchanged. The separately authorized
 corrective attempt is recorded below. Real provider acceptance remains a merge risk;
 see [focused review](PR8-TRANSCRIPTION-REVIEW.md).
 
-## Authorized corrective transcription validation — current
+## Historical authorized corrective transcription validation
 
 Patrick authorized exactly one isolated transcription-only dispatch using corrected
 HEAD `39009964927604cfe0a7e15e3dae99d2f4c2c909`. Clean branch/worktree, server key
@@ -81,6 +81,31 @@ No application code changed. No deterministic suites/builds were rerun for this
 validation/documentation-only follow-up; the prior 115 backend tests/build/OpenAPI
 passes remain the last applicable checks. Real transcription transport and real
 Astra Film Understanding acceptance both remain unverified. Do not merge or start PR9.
+
+## One-call timed transcription migration — current
+
+Patrick's follow-up prefers the verified `gpt-4o-transcribe-diarize` timed-segment
+contract over a proposed four-call `gpt-transcribe` fallback. Production remains
+POST `/v1/audio/transcriptions`, now with `diarized_json` and `chunking_strategy=auto`.
+One bounded WAV/request per film, unchanged source limits and no application retry.
+No Responses/Chat transcription, local four-call orchestration or speaker authority.
+V9 changes new-record defaults only; historical Whisper records/attempts stay intact.
+
+Safe transport classification and production-path loopback capture cover request
+delivery, endpoint restrictions and no-redirect behavior. The discarded historical
+exception cannot be reconstructed; neither the dashboard's reported zero Audio
+Transcription usage nor unrelated Astra usage establishes a specific network cause.
+The historical failure classifications remain INSUFFICIENT_EVIDENCE. No new live
+OpenAI request is made. [ADR-0009](adr/ADR-0009-timed-audio-transcription.md) records
+the exact contract, source-time semantics, alternatives, pricing and remaining limits.
+Verified: **38 focused / 121 full backend tests**, zero failures/errors/skips;
+full Gradle build, frontend TypeScript/Vite build, OpenAPI drift and diff checks pass.
+Frontend/Chromium test suites were not rerun because UI/API shape did not change;
+their prior results remain historical. The existing ~519 kB Vite warning remains.
+Public DB readback confirms the original FAILED Whisper run and V8 state unchanged;
+V9 is verified in isolated tests, not applied to the real-run schema. Both locks and
+original evidence hashes are preserved. One isolated Audio Transcriptions validation
+is justified only after fresh explicit authorization; real acceptance remains unverified.
 
 ## Historical post-PR7 planning (superseded by PR8 authorization)
 

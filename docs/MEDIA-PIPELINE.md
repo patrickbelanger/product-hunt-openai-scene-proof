@@ -151,9 +151,13 @@ protocols, no external references. RIFF format/data are checked and sample count
 determines submitted audio duration. The temporary WAV is deleted in `finally`;
 only the original film, audio hash/duration, transcript and provider IDs remain.
 
-Whisper segment seconds are rounded to milliseconds, validated for finite ordered
+OpenAI diarized segment seconds are rounded to milliseconds, validated for finite ordered
 bounds within the submitted PCM duration, then assigned server evidence UUIDs.
 They are approximate transcription estimates, not forced-aligned frame truth.
+One `gpt-4o-transcribe-diarize` Audio Transcriptions request uses `diarized_json` and
+server `chunking_strategy=auto`; no local four-request chunking is added. New evidence
+uses `OPENAI_DIARIZED_SEGMENT_ESTIMATE_SOURCE_START`; old Whisper origins remain
+historical. Speaker metadata is discarded. See [ADR-0009](adr/ADR-0009-timed-audio-transcription.md).
 No audio stream skips transcription honestly; no transcribed speech is separate
 from missing audio. Transcription failure fails the run before Astra. No fabricated
 silent fallback, song/lyric prompt or benchmark-specific audio trimming is used.
