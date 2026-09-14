@@ -9,6 +9,7 @@ import { GuidedTour, TOUR_PREFERENCE_KEY } from './GuidedTour';
 
 vi.mock('@sceneproof/api-client', async importOriginal => ({
   ...await importOriginal<typeof import('@sceneproof/api-client')>(),
+  getFilmIntelligence: vi.fn().mockResolvedValue({ source: null, runs: [], segments: [], confirmedAnchors: [] }),
   getProject: vi.fn(), listShots: vi.fn(), listFindings: vi.fn(), listReferences: vi.fn(),
   createProject: vi.fn(), updateProjectRules: vi.fn(), uploadReference: vi.fn(), updateReference: vi.fn(), archiveReference: vi.fn(),
   uploadShot: vi.fn(), createAnalysis: vi.fn(), createFindingAction: vi.fn(),

@@ -22,6 +22,7 @@ function prepare(asset, reference) {
 }
 const manifest = {
   version: curation.version,
+  sourceFilm: { file: 'source-film.mp4', sha256: curation.sourceSha256, title: 'Between the Line — source film' },
   project: curation.project,
   references: curation.references.map(asset => prepare(asset, true)),
   shots: curation.shots.map(asset => prepare(asset, false)),

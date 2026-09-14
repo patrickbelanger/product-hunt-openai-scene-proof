@@ -12,7 +12,8 @@ One multipart file per POST /api/v1/projects/{projectId}/shots. JPEG/PNG: 10 MiB
 signature check requires `ftyp` at byte offset 4, with no major-brand allowlist.
 FFprobe must report an MP4/QuickTime-compatible format (`mp4` or `mov` among its
 format names), a first video stream with H.264 and valid duration/dimensions/fps
-within those same limits. A signature alone is insufficient. Audio is ignored.
+within those same limits. A signature alone is insufficient. Legacy shot ingestion
+ignores audio; PR8 primary-source processing handles it separately below.
 Signatures and decoder results
 determine support; client MIME and extensions do not. EXIF rotation, animated
 images, HDR/color management and additional codecs are outside PR1.
@@ -124,3 +125,39 @@ and tablet overflow. Current executed results are in STATUS.
 References: [FFmpeg filters](https://ffmpeg.org/ffmpeg-filters.html),
 [FFprobe](https://ffmpeg.org/ffprobe.html),
 [ADR-0003](adr/ADR-0003-local-media-ingestion.md).
+
+## PR8 source film and audio provenance
+
+Primary upload preserves/hash-checks the original under the source UUID without a
+provider call. Same bytes recover the existing source; different bytes are refused.
+The existing 100 MiB, 120 s, H.264, 3840×2160, ≤60 fps limits remain unchanged.
+
+Understanding verifies source bytes, uses the existing scene-change/periodic decoder
+with maximum image side 768, and deterministically downsamples at most 32 decoded
+images to at most 24. Groups of three form at most eight analysis segments, not
+claimed editorial cuts. Segment start/end bounds reference the original film;
+normal Shot/Frame IDs provide reusable visual evidence. Separate imported clips
+remain intact but are not mixed into source-film sequence review.
+
+Video decoder times are shifted by video-stream start minus container start, verified
+by FFprobe; unsupported origins fail closed. Frame rows store segment-relative ms;
+Film Understanding and continuity provider contexts use source-relative ms. Evidence
+UI computes source time from segment start plus frame time, never clip-name guesses.
+
+The first audio stream is decoded to mono PCM s16le/16 kHz using
+`aresample=16000:async=1:first_pts=0`, aligned to the common container origin.
+At most 120 seconds/4,000,000 bytes, a 30-second subprocess deadline, local-file-only
+protocols, no external references. RIFF format/data are checked and sample count
+determines submitted audio duration. The temporary WAV is deleted in `finally`;
+only the original film, audio hash/duration, transcript and provider IDs remain.
+
+Whisper segment seconds are rounded to milliseconds, validated for finite ordered
+bounds within the submitted PCM duration, then assigned server evidence UUIDs.
+They are approximate transcription estimates, not forced-aligned frame truth.
+No audio stream skips transcription honestly; no transcribed speech is separate
+from missing audio. Transcription failure fails the run before Astra. No fabricated
+silent fallback, song/lyric prompt or benchmark-specific audio trimming is used.
+
+The original demo's black tail and complete audio remain in the bounded source;
+legacy curated silent clips are unchanged. Failure-staged PNG directories may remain
+on disk; local retention/GC and public storage protections are still limitations.

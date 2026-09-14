@@ -1311,17 +1311,31 @@ P1 — Reference Bible editor
 
 P1 — guided tour
 
-P1 — built-in polished demo
+P1 — built-in polished demo — completed by PR7
 
-P1 — progress UX
+P1 — AI Film Understanding / Multimodal Continuity Discovery
+- upload/understand the film;
+- bounded source-film analysis;
+- visual + audio/transcript context;
+- recurring entities / narrative cues;
+- candidate continuity anchors;
+- creator confirmation;
+- cross-modal continuity evidence;
+- real persisted analysis stages;
+- truthful progress/recovery/failure visibility.
 
-P1 — error/empty/loading state polish
+P1 — UX polish
+- general loading, empty and error states;
+- responsive behavior;
+- keyboard/accessibility improvements;
+- visual consistency;
+- workspace polish.
 
-P1 — responsive improvements
-
-P2 — animation / micro-interaction polish
-
-P2 — Product Hunt-specific presentation refinements
+P2 — Product Hunt polish
+- optional micro-interactions;
+- landing/demo presentation refinements;
+- screenshots/launch details;
+- must not delay release.
 
 Do not allow P2 work to endanger the core P0 flow.
 
@@ -2527,17 +2541,33 @@ Includes:
 - landing-page "Try the demo film" experience.
 
 ----------------------------------------------------------------------
-P1 — Analysis progress
+P1 — AI Film Understanding / Multimodal Continuity Discovery
 
-feat/p1-analysis-progress
+feat/p1-ai-film-understanding
 
 Includes:
 
-- real analysis stages;
-- backend progress events;
-- SSE if selected by architecture;
-- frontend progress presentation;
-- failure/retry states.
+- primary source-film concept;
+- bounded visual structure analysis;
+- audio extraction and transcription;
+- visual + transcript/narrative composition;
+- FilmUnderstandingPort;
+- strict Astra structured output;
+- recurring entities and narrative cues;
+- AI-discovered candidate continuity anchors;
+- Accept / Edit / Reject;
+- confirmed continuity memory;
+- Reference Bible promotion/provenance;
+- cross-modal continuity concerns/evidence;
+- durable FilmUnderstandingRun;
+- real backend processing stages and frontend stage presentation;
+- reload/recovery and failure visibility;
+- no fake progress.
+
+This branch absorbs the essential scope previously planned as
+feat/p1-analysis-progress (historical/superseded; no separate branch).
+General UX polish remains separate. Polling is sufficient if it is the smallest
+reliable implementation; SSE is optional. Backend state is authoritative.
 
 ----------------------------------------------------------------------
 P1 — UX polish
@@ -2651,12 +2681,18 @@ Expected initial merge order:
 5. feat/p0-intentional-change-steering
 6. feat/p1-reference-bible
 7. feat/p1-guided-tour
-8. feat/p1-demo-project
-9. feat/p1-analysis-progress
+8. feat/p1-demo-project — merged
+9. feat/p1-ai-film-understanding
 10. feat/p1-ux-polish
-11. feat/p2-product-hunt-polish
+11. feat/p2-product-hunt-polish — optional
 
 This order is a plan, not a prison.
+
+Patrick's September 14 plan evolved after PR7 real-film validation showed two
+product needs: AI work was too invisible / under the hood, and continuity
+understanding needs visual + narrative/audio context, not isolated image comparison
+alone. PR8 owns Film Understanding and its essential truthful processing stages;
+PR9 owns general UX polish. Other historical context remains preserved.
 
 Branches may be reordered when dependencies or delivery risk justify it.
 

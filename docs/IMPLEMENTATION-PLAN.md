@@ -159,24 +159,38 @@ failure-safe UI refresh. Test state transitions and preservation of prior eviden
 - [x] Exactly one real full-sequence Astra validation: succeeded, zero findings; independent results/usage in PR7-REVIEW. No reroll.
 - [x] Final synchronized PR7 review; implementation `5eac0b9` committed/pushed. Documentation-only handoff follow-up; stop without merge or PR8.
 
-### PR8 — AI Film Understanding / Multimodal Continuity Discovery (planned)
+### PR8 — AI Film Understanding / Multimodal Continuity Discovery (review handoff)
 
-Next authorized branch: `feat/p1-ai-film-understanding`. **Do not start until PR7
-is merged.** This replaces the previously planned standalone next branch
-`feat/p1-analysis-progress`; it absorbs only progress needed by this vertical slice.
+Active branch: `feat/p1-ai-film-understanding`, exact base
+`ed6066283d27da97484425f900b6bccb447b0911` (verified PR7 merge).
+The historical/superseded standalone `feat/p1-analysis-progress` is absorbed into
+PR8; there is no separate progress branch. General UX remains PR9.
 
-- [ ] Recover merged PR7 and create only the authorized PR8 branch.
-- [ ] Full-film understanding using audio/transcript plus visual context.
-- [ ] Propose candidate Reference Bible entries and continuity anchors grounded in the film.
-- [ ] Creator confirmation of candidates before adopting them as declared project context.
-- [ ] Persist truthful backend processing stages and expose authoritative stage state in the UI.
-- [ ] Reload/recover an active Film Understanding run and expose its actual failures; no fake percentages or invented progress.
+- [x] Recover merged PR7 and create only the authorized PR8 branch.
+- [x] Reconcile initial context priorities/branch plan/merge order with Patrick's explicit decision.
+- [x] SourceFilm, bounded upload and deterministic segments/frame provenance.
+- [x] FFmpeg audio extraction and verified AudioTranscriptionPort implementation.
+- [x] FilmUnderstandingPort, Astra MEDIUM strict schema and ID/evidence validation.
+- [x] Full-film understanding using audio/transcript plus visual context.
+- [x] Propose candidate Reference Bible entries and continuity anchors grounded in the film.
+- [x] Creator confirmation of candidates before adopting them as declared project context.
+- [x] Accept/Edit/Reject, confirmed memory and normal ReferenceService visual promotion.
+- [x] Later continuity context integration and transcript/narrative finding evidence.
+- [x] Explicit paid consent, durable deduplication, bounded cost and safe new attempts.
+- [x] Persist truthful backend processing stages and expose authoritative stage state in the UI.
+- [x] Reload/recover an active Film Understanding run and expose its actual failures; no fake percentages or invented progress.
+- [x] Between the Line source integration, isolated reset/history and evaluation exclusion.
+- [x] Deterministic backend/frontend tests, Chromium, builds and generated OpenAPI checks: 102 / 78 / 19.
+- [x] Capped real validation: one transcription request rejected; zero Astra calls. Failure/unknown cost recorded, no reroll.
+- [ ] Successful real multimodal provider acceptance remains unverified; a new attempt requires Patrick's separate authorization after diagnosing the rejection.
+- [x] Synchronized product/technical docs, ADR and PR8-REVIEW for the final commit/push handoff; stop for review.
 
-Possible stages, subject to final architecture: PREPARING_SOURCE, DETECTING_STRUCTURE,
+Implemented stages (ADR-0008): PREPARING_SOURCE, DETECTING_STRUCTURE,
 TRANSCRIBING_AUDIO, UNDERSTANDING_FILM, BUILDING_CANDIDATES, SUCCEEDED, FAILED.
-These are planning examples, not an implemented schema or transport decision.
+V7 persists actual stage transitions; frontend active-state polling is authoritative,
+not SSE or synthetic progress. V8 protects decisions/results and reference provenance.
 
 Residual generalized retries, unrelated failure polish, public hosting/anonymous
 isolation, production spend/rate protection and final launch hardening remain separate.
 Later `feat/p1-ux-polish` and optional `feat/p2-product-hunt-polish` remain planned;
-this reconciliation assigns no new PR numbers to residual work.
+PR9 owns general UX polish; optional P2 must not delay September 18. Do not start PR9 here.

@@ -1,12 +1,46 @@
 # SceneProof Status
 
-Last updated: 2026-09-13
-Current branch: `feat/p1-demo-project`
-Current milestone: PR6 merged; PR7 complete and verified, awaiting merge review.
-Current task: Documentation-only post-PR7 planning reconciliation; then stop for review.
-Do not merge. PR8 must not start until PR7 is merged.
+Last updated: 2026-09-14
+Current branch: `feat/p1-ai-film-understanding`
+Current milestone: PR7 merged; PR8 ready for review with a real-provider validation limitation.
+Current task: Review the completed implementation and the preserved transcription rejection; no reroll.
+Do not merge. Do not start PR9.
 
-## Authorized next slice (planning only)
+## PR8 recovery — current
+
+Recovery began with a clean worktree; fetched origin and verified PR #7 merge with parents `1e3f28f` /
+`dfc4adc`. Local main fast-forwarded to exactly
+`ed6066283d27da97484425f900b6bccb447b0911`, equal to origin/main; created only the
+authorized PR8 branch from that SHA. V6 and PR7 demo/reset are present. Required
+recovery/product/architecture documents and existing implementation inspected.
+Implemented V7/V8 source-film/run/stage/segment/transcript/candidate persistence,
+FFmpeg audio/video provenance, separate Whisper/Astra discovery ports, strict schema,
+creator-confirmed memory and normal Reference Bible promotion/provenance. The UI
+exposes only durable real stages using polling, recovery, failures and explicit consent.
+Cross-modal findings/history preserve original context. New/reset demos include the
+complete original source, never preloaded model results.
+
+Verified: **102 backend tests**, **78 frontend tests**, **19 Chromium tests**, full
+Gradle and TypeScript/Vite builds, OpenAPI generation/drift, production jar boundaries
+and diff checks. Desktop/tablet/mobile PR8 screenshots inspected. Normal tests made
+zero OpenAI calls. The concurrent reference-read connection-pool issue is fixed and
+regression tested. The ~519 kB Vite entry chunk warning remains visible.
+
+One real transcription attempt was rejected by OpenAI. Durable run
+`f8a8960c-a396-4524-b810-5b38661ed176` failed with TRANSCRIPTION_REJECTED after source
+verification and eight segments/24 frames. **Zero Astra Film Understanding calls**,
+zero transcript/candidates/AI film observations. No reroll, fabricated fallback or
+claimed screen-opening discovery. GET-only recovery verifies the saved failure.
+The rejection's specific cause/charged amount are not established; usage is absent.
+Successful real multimodal provider acceptance remains unverified. Full evidence,
+cost qualifications and review focus: [PR8 review](PR8-REVIEW.md).
+
+Patrick explicitly reconciles `docs/intial-context.md`: PR7 merged → PR8 Film
+Understanding + required truthful stages → PR9 UX polish → optional P2 launch polish.
+Historical/superseded `feat/p1-analysis-progress` is absorbed into PR8, never a separate
+next branch. The pre-merge handoff below is historical, not a blocker.
+
+## Historical post-PR7 planning (superseded by PR8 authorization)
 
 After PR7 merge, the next authorized branch is `feat/p1-ai-film-understanding`:
 **PR8 — AI Film Understanding / Multimodal Continuity Discovery**. This supersedes

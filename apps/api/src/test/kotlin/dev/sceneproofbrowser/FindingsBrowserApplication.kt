@@ -13,6 +13,22 @@ import org.springframework.web.bind.annotation.RestController
 class FindingsBrowserConfiguration {
     @Bean
     @Primary
+    fun browserFilmPort(): dev.sceneproof.film.FilmUnderstandingPort = object : dev.sceneproof.film.FilmUnderstandingPort {
+        override fun understand(context: dev.sceneproof.film.FilmUnderstandingContext): dev.sceneproof.film.FilmUnderstandingCompletion {
+            Thread.sleep(2500)
+            return dev.sceneproof.FilmFixtures.completion(context)
+        }
+    }
+
+    @Bean
+    @Primary
+    fun browserTranscriptionPort(): dev.sceneproof.film.AudioTranscriptionPort = object : dev.sceneproof.film.AudioTranscriptionPort {
+        override fun transcribe(input: dev.sceneproof.film.AudioInput): dev.sceneproof.film.TranscriptionCompletion =
+            dev.sceneproof.film.TranscriptionCompletion(listOf(dev.sceneproof.film.TranscribedSegment(100, 1200, "Original deterministic test narration")), "req_browser_transcription")
+    }
+
+    @Bean
+    @Primary
     fun browserAnalysisPort(): ContinuityAnalysisPort = object : ContinuityAnalysisPort {
         override fun reanalyze(context: TargetedContext): TargetedCompletion {
             val remains = context.explanation.contains("issue remains", ignoreCase = true)

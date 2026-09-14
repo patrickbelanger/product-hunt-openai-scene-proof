@@ -12,3 +12,4 @@ changed decisions with a new record rather than silently rewriting history.
 5. [Immutable creator actions and superseding judgements](ADR-0005-immutable-finding-steering.md)
 6. [Reference Bible history](ADR-0006-reference-bible-history.md)
 7. [Demo template and replacement copies](ADR-0007-demo-template-and-replacement.md)
+8. [Bounded Film Understanding and creator-confirmed memory](ADR-0008-film-understanding.md)

@@ -35,4 +35,24 @@ public deployment/isolation/spend controls. The demo starts without recorded fin
 The one PR7 validation returned zero findings and contextualized the apartment
 transition. It supplies no finding/evidence/steering scene for the proposed recording.
 Do not stage the superseded black-blazer issue or call intentional clothing an error.
-Further film curation or paid validation requires Patrick's approval; no reroll was made.
+Further film curation requires Patrick's approval; no PR7 reroll was made. Patrick
+separately authorizes PR8's capped multimodal validation after deterministic gates.
+
+## PR8 launch implications
+
+Film Intelligence now exposes real processing and invites creator confirmation of
+AI-discovered anchors. A recording may show upload/demo source → explicit consent →
+actual saved stages → visual/transcript evidence → Accept/Edit/Reject → confirmed
+memory. Do not compress waits into invented percentages or suggest private reasoning
+is visible. Any time-lapse/edit must be clearly a recording edit, not live progress.
+
+The prior finding-focused recording remains conditional on actual saved findings.
+Potential discovery concerns are not proven continuity errors, and transcript lyrics
+do not establish literal actions. Only the actual one-attempt PR8 result in PR8-REVIEW
+may support new claims; do not stage the screen-opening evaluation answer.
+General UX is PR9, optional Product Hunt cosmetics are P2 and must not delay release.
+Public hosting/auth/isolation/billing remain out of this branch.
+
+PR8's one live attempt failed at transcription before Astra. It supplies real failure
+visibility, not a successful multimodal-discovery recording. Use neither deterministic
+test screenshots nor invented screen-opening findings as live-provider launch evidence.

@@ -51,6 +51,7 @@ function ReferenceEditor({ projectId, reference, close }: { projectId: string; r
     <form onSubmit={event => { event.preventDefault(); submit(); }}><Stack>
       {reference ? <><ReferenceImage reference={reference} /><Text size="xs" c="dimmed">Image preserved. To replace it, archive this reference and add a new image. Earlier analyses keep their original evidence.</Text></>
         : <FileInput label="Reference image" description="JPEG / PNG · up to 10 MiB" accept="image/jpeg,image/png" value={file} onChange={setFile} disabled={pending} />}
+      {reference?.filmProvenance && <Text size="sm">Promoted from a creator-confirmed film anchor. <a href={`?filmRun=${reference.filmProvenance.runId}`}>Inspect the original discovery and evidence</a>. Later reference edits do not rewrite that decision.</Text>}
       <TextInput label="Reference title" value={title} onChange={event => setTitle(event.currentTarget.value)} maxLength={120} disabled={pending} data-autofocus />
       <Textarea label="Creator guidance" description="What does this image establish? Optional." placeholder="Keep the face, hairstyle and black blazer consistent." value={guidance} onChange={event => setGuidance(event.currentTarget.value)} maxLength={2000} autosize minRows={3} maxRows={8} disabled={pending} />
       {validation && <Text c="red.3" size="sm" role="alert">{validation}</Text>}

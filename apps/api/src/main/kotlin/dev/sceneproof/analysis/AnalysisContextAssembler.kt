@@ -10,11 +10,13 @@ import org.springframework.stereotype.Component
 import java.util.UUID
 
 @Component
-class AnalysisContextAssembler(private val projects: ProjectService, private val media: MediaRepository, private val storage: MediaStorage, private val references: ReferenceRepository, private val referenceService: ReferenceService) {
+class AnalysisContextAssembler(private val projects: ProjectService, private val media: MediaRepository, private val storage: MediaStorage, private val references: ReferenceRepository, private val referenceService: ReferenceService, private val films: dev.sceneproof.film.FilmRepository) {
     fun assemble(projectId: UUID, finding: FindingView? = null): AnalysisContext {
         val project = projects.get(projectId)
         val imports = media.list(projectId)
-        val allReady = imports.filter { it.status == "READY" }
+        val filmSegments = films.segments(projectId).associateBy { it.id }
+        val sourceSegments = if (finding == null) filmSegments.keys else emptySet()
+        val allReady = imports.filter { it.status == "READY" && (sourceSegments.isEmpty() || it.id in sourceSegments) }
         val ready = if (finding == null) allReady else {
             val affected = allReady.filter { it.id in finding.affectedShotIds }
             require(affected.size == finding.affectedShotIds.size)
@@ -41,7 +43,7 @@ class AnalysisContextAssembler(private val projects: ProjectService, private val
                 }
                 totalBytes += bytes.size
                 if (totalBytes > 16L * 1024 * 1024) throw AnalysisFailure("ANALYSIS_SIZE_LIMIT", "Selected frames exceed the 16 MiB analysis limit.")
-                AnalysisFrame(frame.id, frame.position, frame.timestampMs, frame.width, frame.height, bytes)
+                AnalysisFrame(frame.id, frame.position, frame.timestampMs?.let { it + (filmSegments[shot.id]?.startMs ?: 0L) }, frame.width, frame.height, bytes)
             }
             AnalysisShot(shot.id, shot.position, shot.name, shot.kind, shot.durationMs, shot.frames.size, frames)
         }
@@ -57,11 +59,12 @@ class AnalysisContextAssembler(private val projects: ProjectService, private val
             AnalysisReference(reference.id, projectId, reference.title, reference.guidance, reference.width, reference.height, reference.sha256, bytes)
         }
         val warnings = buildList {
+            if (sourceSegments.isNotEmpty()) add("Bounded primary-source segments are reviewed; separately imported clips are outside this sequence. Source frame timestamps share the transcript origin. Sampling may miss brief events.")
             if (imports.any { it.status != "READY" }) add("Failed import attempts were excluded from analysis.")
             if (finding != null) add("Targeted review of original evidence and bounded immediate neighbors; other project shots are outside scope.")
             if (shots.any { it.availableFrameCount > it.frames.size }) add("Temporal subsampling may miss brief continuity changes.")
         }
-        return AnalysisContext(projectId, project.name, project.description, project.rules, shots, warnings, referenceContext)
+        return AnalysisContext(projectId, project.name, project.description, project.rules, shots, warnings, referenceContext, films.memory(projectId))
     }
 
     companion object {

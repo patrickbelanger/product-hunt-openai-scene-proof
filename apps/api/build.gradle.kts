@@ -42,6 +42,10 @@ dependencies {
 }
 
 tasks.processResources {
+    from(rootProject.file("demo/between the lines - demo.mp4")) {
+        into("demo")
+        rename { "source-film.mp4" }
+    }
     from(rootProject.file("demo/runtime")) {
         into("demo")
     }

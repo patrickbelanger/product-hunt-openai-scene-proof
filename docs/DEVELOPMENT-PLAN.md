@@ -31,10 +31,11 @@ Use, in order: `feat/p0-foundation`, `feat/p0-media-ingestion`,
 The earlier plan placed standalone `feat/p1-analysis-progress` immediately after
 PR7. Patrick supersedes that next slice with **PR8 — AI Film Understanding /
 Multimodal Continuity Discovery** on `feat/p1-ai-film-understanding`, only after
-PR7 is merged. PR8 absorbs the minimal truthful progress needed by that vertical
+PR7 is merged (verified `ed6066283d27da97484425f900b6bccb447b0911`). PR8 absorbs the essential truthful progress needed by that vertical
 slice: durable backend processing stages, real UI stage visibility, reload/recovery
 of an active run and pipeline failure visibility. Backend state is authoritative;
-no fake percentages or invented progress. Exact stages/transport await architecture.
+no fake percentages or invented progress. ADR-0008 now defines persisted stages and
+1.5-second active-run GET polling, not SSE; process-loss recovery never replays paid work.
 
 Full-film understanding combines audio/transcript and visual context to propose
 candidate Reference Bible entries/continuity anchors for creator confirmation.
@@ -70,10 +71,14 @@ PR7 verification passes: 83 backend, 68 frontend and 17 Chromium tests. The one 
 film analysis succeeded with zero findings and contextualized the apartment transition;
 the historical ~five-issue target is not a promise of detections. A finding-focused
 launch recording remains a curation/review question, not grounds for a paid reroll.
-PR7 is committed/pushed and awaiting merge review. Patrick accepts its honest
+PR7 is merged through PR #7 at `ed6066283d27da97484425f900b6bccb447b0911`. Patrick accepts its honest
 zero-finding validation as evidence of independent analysis, not accuracy or a
 finding showcase. This documentation-only reconciliation does not reopen PR7 work
-or authorize another provider call. Do not start PR8 until PR7 is merged.
+or authorize another PR7 provider call. Patrick now authorizes PR8 implementation
+from that exact merged base, including at most one real transcription and one real
+Film Understanding call after deterministic verification, with no reroll.
+The authoritative forward path is PR7 merged → PR8 Film Understanding and required
+truthful stages → PR9 `feat/p1-ux-polish` → optional P2 Product Hunt polish.
 The dates are delivery targets, not assertions of completed work; actual progress
 lives in [STATUS](STATUS.md) and [Implementation Plan](IMPLEMENTATION-PLAN.md).
 

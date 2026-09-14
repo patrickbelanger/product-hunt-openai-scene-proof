@@ -14,7 +14,10 @@ data class ReferenceView(
     val id: UUID, val projectId: UUID, val title: String, val guidance: String,
     val width: Int, val height: Int, val sha256: String, val createdAt: Instant,
     val archivedAt: Instant?, val url: String,
+    val filmProvenance: ReferenceFilmProvenance? = null,
 )
+
+data class ReferenceFilmProvenance(val candidateId: UUID, val runId: UUID, val sourceFilmId: UUID)
 
 @Repository
 class ReferenceRepository(private val jdbc: JdbcTemplate, private val media: MediaRepository) {
@@ -34,6 +37,7 @@ class ReferenceRepository(private val jdbc: JdbcTemplate, private val media: Med
         return jdbc.query("SELECT * FROM visual_references WHERE project_id = ? AND archived_at IS NULL ORDER BY created_at, id LIMIT 8", { row, _ -> view(row) }, projectId)
     }
 
+    @Transactional(readOnly = true)
     fun get(projectId: UUID, referenceId: UUID): ReferenceView = jdbc.query(
         "SELECT * FROM visual_references WHERE project_id = ? AND id = ?", { row, _ -> view(row) }, projectId, referenceId,
     ).firstOrNull() ?: throw MediaFailure("REFERENCE_NOT_FOUND", "This reference does not exist in this project.", 404)
@@ -83,6 +87,10 @@ class ReferenceRepository(private val jdbc: JdbcTemplate, private val media: Med
         val projectId = row.getObject("project_id", UUID::class.java)
         return ReferenceView(id, projectId, row.getString("title"), row.getString("guidance"), row.getInt("width"), row.getInt("height"),
             row.getString("sha256"), row.getTimestamp("created_at").toInstant(), row.getTimestamp("archived_at")?.toInstant(),
-            "/api/v1/projects/$projectId/references/$id/content")
+            "/api/v1/projects/$projectId/references/$id/content", jdbc.query("""
+                SELECT candidate.id, candidate.run_id, run.source_film_id
+                FROM film_candidates candidate JOIN film_understanding_runs run ON run.id = candidate.run_id
+                WHERE candidate.project_id = ? AND candidate.reference_id = ?
+            """.trimIndent(), { provenance, _ -> ReferenceFilmProvenance(provenance.getObject("id", UUID::class.java), provenance.getObject("run_id", UUID::class.java), provenance.getObject("source_film_id", UUID::class.java)) }, projectId, id).firstOrNull())
     }
 }

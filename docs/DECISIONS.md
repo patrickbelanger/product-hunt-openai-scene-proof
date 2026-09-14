@@ -43,6 +43,24 @@ metadata/hash snapshots and archive; eight active references share analysis budg
   authored inputs, local working instance identity, atomic creation and replacement
   reset with historical copies retained. No recorded findings baseline is shipped.
 
+## PR8 accepted scope and implementation decisions — September 14
+
+- Patrick supersedes the old standalone progress branch: PR7 merged → PR8 Film
+  Understanding plus truthful durable stages → PR9 general UX → optional P2.
+  `docs/intial-context.md` priorities, branch plan and merge order now agree; historical
+  references are labelled superseded. No unrelated historical context is rewritten.
+- [ADR-0008](adr/ADR-0008-film-understanding.md) records bounded immutable SourceFilm,
+  separate audio/discovery ports, Whisper segment estimates, Astra medium, strict
+  evidence validation, candidate authority, normal reference promotion and polling.
+  These are within Patrick's explicit PR8 delegation, not a new product-scope change.
+- Polling is chosen over SSE for the smallest reliable durable-state recovery; no
+  model thought or invented progress. Worker process loss becomes a visible failed
+  attempt after a ten-minute deadline, never automatic paid replay.
+- V7/V8 preserve original media/discovery/creator provenance. Confirmed anchors are
+  bounded to 24 and one-way decisions; editing an already confirmed anchor is a later
+  lifecycle feature, not silent mutation. Ten film attempts/project, one globally active.
+- September 18 is unchanged. No NLE, public tenancy, deployment or PR9 work is added.
+
 ## DECISION REQUIRED format (for future decisions)
 
 Current technology/choice; problem; proposed alternative; alternatives considered;

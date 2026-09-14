@@ -8,6 +8,7 @@ import { Providers } from '../providers';
 
 vi.mock('@sceneproof/api-client', async importOriginal => ({
   ...await importOriginal<typeof import('@sceneproof/api-client')>(),
+  getFilmIntelligence: vi.fn().mockResolvedValue({ source: null, runs: [], segments: [], confirmedAnchors: [] }),
   createProject: vi.fn(), getProject: vi.fn(), listProjects: vi.fn(), listShots: vi.fn(), listFindings: vi.fn(), listReferences: vi.fn(),
 }));
 

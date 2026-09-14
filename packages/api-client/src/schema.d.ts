@@ -4,6 +4,160 @@
  */
 
 export interface paths {
+    "/api/v1/projects/{projectId}/film": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+            };
+            cookie?: never;
+        };
+        /** @description Read source, bounded run history and confirmed anchors. No inference. Private no-store response. */
+        get: operations["getFilmIntelligence"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{projectId}/film/source": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Register one immutable MP4/H.264 primary source. Same content is recoverable; different content requires another project. No provider work. */
+        post: operations["uploadSourceFilm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{projectId}/film/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Explicit paid consent admits one durable Film Understanding attempt. Reuse requestId/source after connection loss. No automatic provider retries. Failed UUID stays failed. Backend stages are authoritative. */
+        post: operations["understandFilm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{projectId}/film/runs/{runId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                runId: string;
+            };
+            cookie?: never;
+        };
+        get: operations["getFilmRun"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{projectId}/film/runs/{runId}/transcript": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                runId: string;
+            };
+            cookie?: never;
+        };
+        get: operations["getFilmTranscript"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{projectId}/film/runs/{runId}/candidates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                runId: string;
+            };
+            cookie?: never;
+        };
+        get: operations["getFilmCandidates"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{projectId}/film/candidates/{candidateId}/decision": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                candidateId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Accept/Edit/Reject without inference. Same decision replays; changed terminal decision conflicts. Only confirmed anchors inform continuity enforcement. */
+        post: operations["decideFilmCandidate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{projectId}/film/candidates/{candidateId}/reference": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                candidateId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Promote the first cited frame of a confirmed anchor through normal ReferenceService. Existing Bible capacity/immutable image rules apply. Same candidate replays. */
+        post: operations["promoteFilmCandidate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/demo": {
         parameters: {
             query?: never;
@@ -322,6 +476,174 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        SourceFilm: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            projectId: string;
+            name: string;
+            sha256: string;
+            byteSize: number;
+            durationMs: number;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        FilmSegment: {
+            /** Format: uuid */
+            id: string;
+            position: number;
+            startMs: number;
+            endMs: number;
+            shot: components["schemas"]["Shot"];
+        };
+        TranscriptSegment: {
+            /** Format: uuid */
+            id: string;
+            startMs: number;
+            endMs: number;
+            text: string;
+            timestampOrigin: string;
+        };
+        FilmEvidence: {
+            frameIds: string[];
+            transcriptSegmentIds: string[];
+        };
+        FilmEntity: {
+            localId: string;
+            name: string;
+            description: string;
+            evidence: components["schemas"]["FilmEvidence"];
+        };
+        CandidateAnchor: {
+            title: string;
+            rule: string;
+            scope: string;
+            entityIds: string[];
+            evidence: components["schemas"]["FilmEvidence"];
+            uncertainty: string;
+        };
+        NarrativeCue: {
+            title: string;
+            interpretation: string;
+            evidence: components["schemas"]["FilmEvidence"];
+            uncertainty: string;
+        };
+        FilmConcern: {
+            title: string;
+            explanation: string;
+            evidence: components["schemas"]["FilmEvidence"];
+            uncertainty: string;
+        };
+        FilmUnderstandingResult: {
+            /** Format: uuid */
+            projectId: string;
+            /** Format: uuid */
+            sourceFilmId: string;
+            schemaVersion: string;
+            summary: string;
+            inspectedSegmentIds: string[];
+            inspectedFrameIds: string[];
+            entities: components["schemas"]["FilmEntity"][];
+            candidates: components["schemas"]["CandidateAnchor"][];
+            narrativeCues: components["schemas"]["NarrativeCue"][];
+            potentialConcerns: components["schemas"]["FilmConcern"][];
+            warnings: string[];
+        };
+        FilmRun: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            projectId: string;
+            /** Format: uuid */
+            sourceFilmId: string;
+            /** Format: uuid */
+            requestId: string;
+            /** @enum {string} */
+            stage: "PREPARING_SOURCE" | "DETECTING_STRUCTURE" | "TRANSCRIBING_AUDIO" | "UNDERSTANDING_FILM" | "BUILDING_CANDIDATES" | "SUCCEEDED" | "FAILED";
+            /** Format: date-time */
+            startedAt: string;
+            completedAt: string | null;
+            failureCode: string | null;
+            failureMessage: string | null;
+            stages: {
+                /** @enum {string} */
+                stage: "PREPARING_SOURCE" | "DETECTING_STRUCTURE" | "TRANSCRIBING_AUDIO" | "UNDERSTANDING_FILM" | "BUILDING_CANDIDATES" | "SUCCEEDED" | "FAILED";
+                /** Format: date-time */
+                startedAt: string;
+                completedAt: string | null;
+            }[];
+            model: string;
+            reasoning: string;
+            transcriptionModel: string;
+            audioStatus: string | null;
+            audioDurationMs: number | null;
+            transcriptionRequestId: string | null;
+            providerResponseId: string | null;
+            providerRequestId: string | null;
+            usage: components["schemas"]["AnalysisUsage"] | null;
+            result: components["schemas"]["FilmUnderstandingResult"] | null;
+        };
+        FilmCandidate: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            runId: string;
+            proposal: components["schemas"]["CandidateAnchor"];
+            /** @enum {string} */
+            status: "PENDING" | "ACCEPTED" | "EDITED" | "REJECTED";
+            confirmedTitle: string | null;
+            confirmedRule: string | null;
+            confirmedScope: string | null;
+            decidedAt: string | null;
+            referenceId: string | null;
+        };
+        ConfirmedFilmAnchor: {
+            /** Format: uuid */
+            candidateId: string;
+            /** Format: uuid */
+            sourceFilmId: string;
+            /** Format: uuid */
+            runId: string;
+            title: string;
+            rule: string;
+            scope: string;
+        };
+        FilmContextEvidence: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            sourceFilmId: string;
+            /** Format: uuid */
+            runId: string;
+            kind: string;
+            text: string;
+            startMs: number | null;
+            endMs: number | null;
+            timestampOrigin: string;
+            frameIds: string[];
+            transcriptSegmentIds: string[];
+        };
+        FilmIntelligence: {
+            source: components["schemas"]["SourceFilm"] | null;
+            runs: components["schemas"]["FilmRun"][];
+            segments: components["schemas"]["FilmSegment"][];
+            confirmedAnchors: components["schemas"]["ConfirmedFilmAnchor"][];
+        };
+        UnderstandFilmRequest: {
+            /** Format: uuid */
+            requestId: string;
+            /** Format: uuid */
+            sourceFilmId: string;
+            /** @constant */
+            paidConsent: true;
+        };
+        DecideFilmCandidate: {
+            /** @enum {string} */
+            status: "ACCEPTED" | "EDITED" | "REJECTED";
+            title: string;
+            rule: string;
+            scope: string;
+        };
         UpdateRules: {
             rules: string;
         };
@@ -344,6 +666,14 @@ export interface components {
             /** Format: date-time */
             archivedAt: string | null;
             url: string;
+            filmProvenance?: null | {
+                /** Format: uuid */
+                candidateId: string;
+                /** Format: uuid */
+                runId: string;
+                /** Format: uuid */
+                sourceFilmId: string;
+            };
         };
         CreateFindingAction: {
             /** Format: uuid */
@@ -458,6 +788,7 @@ export interface components {
             affectedShotIds: string[];
             relevantFrameIds: string[];
             relevantReferenceIds: string[];
+            filmEvidence?: components["schemas"]["FilmContextEvidence"][];
             suggestedCorrectionPrompt: string;
             /** @enum {string} */
             status: "OPEN" | "RESOLVED" | "INTENTIONAL" | "DISMISSED";
@@ -549,6 +880,210 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    getFilmIntelligence: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Persisted result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FilmIntelligence"];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    uploadSourceFilm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Persisted result */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SourceFilm"];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    understandFilm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UnderstandFilmRequest"];
+            };
+        };
+        responses: {
+            /** @description Persisted result */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FilmRun"];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    getFilmRun: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                runId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Persisted result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FilmRun"];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    getFilmTranscript: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                runId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Persisted result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptSegment"][];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    getFilmCandidates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                runId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Persisted result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FilmCandidate"][];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    decideFilmCandidate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                candidateId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecideFilmCandidate"];
+            };
+        };
+        responses: {
+            /** @description Persisted result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FilmCandidate"];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    promoteFilmCandidate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+                candidateId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Persisted result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FilmCandidate"];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
     openDemo: {
         parameters: {
             query?: never;

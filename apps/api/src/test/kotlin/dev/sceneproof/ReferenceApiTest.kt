@@ -60,6 +60,7 @@ class ReferenceApiTest @Autowired constructor(private val mvc: MockMvc, private 
 
     @BeforeEach
     fun setup() {
+        cleanup()
         check(jdbc.queryForObject("SELECT current_schema()", String::class.java) == "sceneproof_reference_test")
         projectId = project()
         `when`(port.analyze(anyContext())).thenAnswer { invocation ->
@@ -79,7 +80,7 @@ class ReferenceApiTest @Autowired constructor(private val mvc: MockMvc, private 
     @AfterEach
     fun cleanup() {
         check(jdbc.queryForObject("SELECT current_schema()", String::class.java) == "sceneproof_reference_test")
-        jdbc.execute("TRUNCATE demo_replacements, finding_references, analysis_references, visual_references, targeted_results, finding_action_shots, finding_actions, finding_frames, finding_shots, findings, analysis_runs, frames, shots, projects")
+        jdbc.execute("TRUNCATE film_candidates, film_transcript_segments, film_segments, film_understanding_stages, film_understanding_runs, source_films, demo_replacements, finding_references, analysis_references, visual_references, targeted_results, finding_action_shots, finding_actions, finding_frames, finding_shots, findings, analysis_runs, frames, shots, projects")
     }
 
     private fun project(): UUID = UUID.fromString(mapper.readTree(mvc.post("/api/v1/projects") {

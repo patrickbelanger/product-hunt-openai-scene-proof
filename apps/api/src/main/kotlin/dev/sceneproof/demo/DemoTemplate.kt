@@ -11,7 +11,7 @@ import java.io.File
 import java.io.InputStream
 
 data class DemoAsset(val file: String, val sha256: String, val title: String, val guidance: String = "")
-data class DemoTemplate(val version: String, val project: CreateProjectRequest, val references: List<DemoAsset>, val shots: List<DemoAsset>)
+data class DemoTemplate(val version: String, val project: CreateProjectRequest, val references: List<DemoAsset>, val shots: List<DemoAsset>, val sourceFilm: DemoAsset? = null)
 
 interface DemoTemplateSource {
     fun template(): DemoTemplate
@@ -29,6 +29,7 @@ class PackagedDemoTemplate(private val mapper: ObjectMapper) : DemoTemplateSourc
             require(template.project.description.length <= 2000 && template.project.rules.length <= 8000)
             require(template.references.size in 1..8 && template.shots.size in 1..8)
             (template.references + template.shots).forEach { asset -> upload(asset) }
+            template.sourceFilm?.let { upload(it) }
         }
     }
 

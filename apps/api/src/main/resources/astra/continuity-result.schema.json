@@ -96,6 +96,12 @@
             "minItems": 0,
             "maxItems": 8
           },
+          "relevantFilmEvidenceIds": {
+            "type": "array",
+            "items": { "type": "string", "format": "uuid" },
+            "minItems": 0,
+            "maxItems": 30
+          },
           "suggestedCorrectionPrompt": {
             "type": "string",
             "minLength": 1,
@@ -114,6 +120,7 @@
           "affectedShotIds",
           "relevantFrameIds",
           "relevantReferenceIds",
+          "relevantFilmEvidenceIds",
           "suggestedCorrectionPrompt"
         ],
         "additionalProperties": false

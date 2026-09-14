@@ -20,7 +20,8 @@ Picture ends at 36.291667; the remaining tail is black. The original file is pre
 The authored clips exclude that tail, retain source order and use full-frame 432×768
 derivatives; references use 540×960. This fits existing image budgets without
 manufacturing objects/text/drift.
-Audio is omitted because current analysis and media inspection use extracted pictures.
+Audio was omitted from PR7's curated clips. PR8 additionally ingests the complete
+original source and its audio without changing those clips; see below.
 
 | Order | Persisted clip title | Source seconds |
 | --- | --- | --- |
@@ -86,6 +87,30 @@ library but accessible at its old URL. Repeated requests recover the current cop
 failed creation/reset cannot publish partial state. No ordinary/other demo is touched.
 The template has no mutation route. See ADR-0007 for transaction and retention limits.
 
-No public deployment, anonymous production isolation, spend quota or progress transport
-is added. Those remain prerequisites for a public launch. PR7 baseline is empty;
+No public deployment, anonymous production isolation or spend quota is added.
+Those remain prerequisites for a public launch. PR7 baseline is empty;
 a future recorded baseline must originate from a validated real run and be labelled.
+
+## PR8 original-film understanding
+
+The `between-the-line-v1` authored clips/references/rules remain unchanged. An additive
+manifest sourceFilm entry references the approved original hash; Gradle packages the
+original as `demo/source-film.mp4`, not evaluation/curation notes. New and reset demo
+copies ingest that primary source through SourceFilmService. Existing PR7 copies
+are not silently mutated: reset or upload the same original to add the new capability.
+
+No understanding, transcription, candidate or finding is seeded on launch/reset.
+Only explicit **Understand film** consent starts the two bounded provider stages.
+Reset gives independent source/shot/reference IDs and no film runs/anchors; the old
+copy retains its discoveries, decisions, transcripts and findings for historical reads.
+
+The real PR8 benchmark uses all 92.459 seconds, including the black tail and original
+audio. It does not splice in a desired answer or tailor sampling to a lyric. The
+screen-opening relationship is an evaluation question only, never prompt input.
+Actual observations, uncertainty, costs and missed relationships are recorded in
+[PR8 review](PR8-REVIEW.md). Test-only synthetic discovery is never runtime demo data.
+
+The one real PR8 attempt prepared eight segments/24 frames, then OpenAI rejected
+transcription. No Astra discovery call or transcript/candidate result exists. The
+screen-opening question is unassessed, not a claimed detection or miss. The failed
+run remains inspectable; no reroll or recorded demo baseline was added.

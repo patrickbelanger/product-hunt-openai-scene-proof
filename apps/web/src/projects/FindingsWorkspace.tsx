@@ -85,6 +85,7 @@ export function FindingsWorkspace({ projectId, demo = false }: { projectId: stri
           <div><Title order={3} size="h5">Why it matters</Title><Text size="sm" mt="sm" className="rules-text">{selected.explanation}</Text></div>
           <Correction key={selected.id} prompt={selected.suggestedCorrectionPrompt} />
           <FindingReferences key={`references-${selected.id}`} projectId={projectId} finding={selected} />
+          {!!selected.filmEvidence?.length && <section aria-label="Film narrative evidence"><Title order={3} size="h5">Transcript / narrative evidence</Title><Text size="xs" c="dimmed">Original submitted context. Lyrics and narrative interpretation are not automatic truth.</Text>{selected.filmEvidence.map(evidence => <blockquote key={evidence.id}><Text size="xs" c="dimmed">{evidence.kind} · {evidence.startMs == null ? 'Interpretation of cited evidence' : `${(evidence.startMs / 1000).toFixed(2)}–${((evidence.endMs ?? 0) / 1000).toFixed(2)}s, approximate source time`}</Text><Text size="sm">{evidence.text}</Text></blockquote>)}</section>}
         </Stack></section>}
       </Stack>
     </aside>

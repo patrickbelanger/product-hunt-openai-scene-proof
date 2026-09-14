@@ -50,6 +50,8 @@ class ContinuityResultValidator(private val mapper: ObjectMapper) {
                 require(finding.affectedShotIds.all { shotId -> finding.relevantFrameIds.any { frames[it] == shotId } })
                 require(finding.relevantReferenceIds.distinct().size == finding.relevantReferenceIds.size)
                 require(finding.relevantReferenceIds.all { it in references })
+                require(finding.relevantFilmEvidenceIds.distinct().size == finding.relevantFilmEvidenceIds.size)
+                require(finding.relevantFilmEvidenceIds.all { evidenceId -> context.filmMemory.evidence.any { it.id == evidenceId } })
             }
         } catch (_: Exception) {
             throw invalid()

@@ -14,6 +14,58 @@ export type CreateFindingAction = components['schemas']['CreateFindingAction'];
 export type Reference = components['schemas']['Reference'];
 export type ReferenceMetadata = components['schemas']['ReferenceMetadata'];
 export type UpdateRules = components['schemas']['UpdateRules'];
+export type FilmIntelligence = components['schemas']['FilmIntelligence'];
+export type FilmRun = components['schemas']['FilmRun'];
+export type FilmCandidate = components['schemas']['FilmCandidate'];
+export type FilmEvidence = components['schemas']['FilmEvidence'];
+export type TranscriptSegment = components['schemas']['TranscriptSegment'];
+export type DecideFilmCandidate = components['schemas']['DecideFilmCandidate'];
+export type UnderstandFilmRequest = components['schemas']['UnderstandFilmRequest'];
+
+export async function getFilmIntelligence(projectId: string, signal?: AbortSignal): Promise<FilmIntelligence> {
+  const { data, error, response } = await api.GET('/api/v1/projects/{projectId}/film', { params: { path: { projectId } }, signal });
+  if (!data) throw new ApiError(response.status, error);
+  return data;
+}
+
+export async function uploadSourceFilm(projectId: string, file: File) {
+  const { data, error, response } = await api.POST('/api/v1/projects/{projectId}/film/source', {
+    params: { path: { projectId } }, body: { file: '' },
+    bodySerializer: () => { const form = new FormData(); form.append('file', file); return form; },
+  });
+  if (!data) throw new ApiError(response.status, error);
+  return data;
+}
+
+export async function understandFilm(projectId: string, body: UnderstandFilmRequest): Promise<FilmRun> {
+  const { data, error, response } = await api.POST('/api/v1/projects/{projectId}/film/runs', { params: { path: { projectId } }, body });
+  if (!data) throw new ApiError(response.status, error);
+  return data;
+}
+
+export async function getFilmCandidates(projectId: string, runId: string, signal?: AbortSignal): Promise<FilmCandidate[]> {
+  const { data, error, response } = await api.GET('/api/v1/projects/{projectId}/film/runs/{runId}/candidates', { params: { path: { projectId, runId } }, signal });
+  if (!data) throw new ApiError(response.status, error);
+  return data;
+}
+
+export async function getFilmTranscript(projectId: string, runId: string, signal?: AbortSignal): Promise<TranscriptSegment[]> {
+  const { data, error, response } = await api.GET('/api/v1/projects/{projectId}/film/runs/{runId}/transcript', { params: { path: { projectId, runId } }, signal });
+  if (!data) throw new ApiError(response.status, error);
+  return data;
+}
+
+export async function decideFilmCandidate(projectId: string, candidateId: string, body: DecideFilmCandidate): Promise<FilmCandidate> {
+  const { data, error, response } = await api.POST('/api/v1/projects/{projectId}/film/candidates/{candidateId}/decision', { params: { path: { projectId, candidateId } }, body });
+  if (!data) throw new ApiError(response.status, error);
+  return data;
+}
+
+export async function promoteFilmCandidate(projectId: string, candidateId: string): Promise<FilmCandidate> {
+  const { data, error, response } = await api.POST('/api/v1/projects/{projectId}/film/candidates/{candidateId}/reference', { params: { path: { projectId, candidateId } } });
+  if (!data) throw new ApiError(response.status, error);
+  return data;
+}
 
 export async function openDemo(requestId: string): Promise<Project> {
   const { data, error, response } = await api.POST('/api/v1/demo', { body: { requestId } });
