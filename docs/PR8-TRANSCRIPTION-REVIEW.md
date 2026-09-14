@@ -236,3 +236,18 @@ One new isolated transcription-only live validation is justified **only after**
 green gates and new explicit authorization. Both previous locks remain consumed.
 Real timed transcription and Astra Film Understanding are still separately
 unvalidated; no merge or PR9 is authorized.
+
+## Subsequent authorized derived-source result
+
+After Patrick explicitly authorized a separate 0–36.291667-second source derivative
+and confirmed conditional execution, one request at HEAD `8f3c689` returned **HTTP 401**,
+type `invalid_request_error`, code **invalid_api_key**, provider request ID
+`req_c02bddf06cbb41a789eece448c0f6f25`. Run `87e8fdfb-7abd-4d21-ba10-4a5975a47038`
+failed before Astra; no retry or model fallback. This new failure is classified
+PROVIDER_OR_ACCOUNT_RESTRICTION (authentication rejection of the supplied credential),
+not a retrospective diagnosis of either older unknown failure. No raw error/key or
+transcript is exposed. [Derived-source review](PR8-DERIVED-SOURCE.md) records the
+immutable master mapping, 39 focused/122 full backend gates, exact safe evidence,
+timing/cost limitations and consumed authorization. Correct credentials and obtain
+fresh approval before another request. Successful live transcription/Astra remain
+unverified; no merge or PR9.

@@ -88,6 +88,9 @@ historical evidence. No source-limit, API or PR9 expansion. After new determinis
 gates, the previously unconsumed authorization permits one transcription and only
 then one Astra call if timed transcription validates. No fallback/retry/reroll.
 See [derived-source verification](PR8-DERIVED-SOURCE.md); September 18 scope is unchanged.
+That authorization was consumed once: derived-source run `87e8fdfb-7abd-4d21-ba10-4a5975a47038`
+received HTTP 401 invalid_api_key and made zero Astra calls. Stop for credential
+correction/review; no retry, fallback or additional provider request is authorized.
 
 ## DECISION REQUIRED format (for future decisions)
 

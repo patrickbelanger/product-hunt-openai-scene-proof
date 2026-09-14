@@ -307,3 +307,10 @@ categories, loopback request capture and V9 defaults, with no API field change.
 Both historical attempts remain INSUFFICIENT_EVIDENCE; the single corrective live
 authorization was consumed by TRANSCRIPTION_UNAVAILABLE. No further live request
 is authorized. See the [focused review](PR8-TRANSCRIPTION-REVIEW.md).
+
+The subsequently authorized 36.291667-second derived-source validation reached the
+Audio Transcriptions API and received HTTP 401 / invalid_api_key. It stopped before
+Astra, with no retry. This establishes credential rejection for that request, not
+successful audio decoding or the cause of either historical unknown failure. The
+[derived-source review](PR8-DERIVED-SOURCE.md) preserves exact safe evidence and the
+consumed authorization. No new live request is authorized.

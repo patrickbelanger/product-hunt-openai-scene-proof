@@ -3,7 +3,7 @@
 Last updated: 2026-09-14
 Current branch: `feat/p1-ai-film-understanding`
 Current milestone: PR7 merged; PR8 ready for review with a real-provider validation limitation.
-Current task: Derived 0–36.291667-second source preparation and deterministic gates; one conditional transcription/Astra validation explicitly authorized afterward.
+Current task: Derived source verified; the single authorized live transcription failed HTTP 401 invalid_api_key. Zero Astra calls; stop for review.
 Do not merge. Do not start PR9.
 
 ## Derived source gate — current
@@ -14,9 +14,15 @@ New/reset demo Film Intelligence uses the 0–36.291667-second derivative, SHA-2
 master/range provenance. Repeated generation matches exactly; matching audio and
 last picture frame are verified. 39 focused / 122 full backend tests, Gradle/frontend
 builds, OpenAPI drift, script syntax and diff checks pass. Prior attempt locks/history
-remain intact. One new transcription, followed only on valid timed text by one Astra
-request, is explicitly authorized by Patrick after this gate. See [derived-source
-verification](PR8-DERIVED-SOURCE.md) for the new validation outcome.
+remain intact. The one authorized validation ran at clean HEAD `8f3c689925b537e7678d1f356900df877cb95445`.
+Run `87e8fdfb-7abd-4d21-ba10-4a5975a47038` prepared eight segments/24 frames, then
+failed TRANSCRIPTION_REJECTED: **HTTP 401**, `invalid_request_error`, `invalid_api_key`,
+request ID `req_c02bddf06cbb41a789eece448c0f6f25`. No retry, transcript or Astra call.
+Classification: PROVIDER_OR_ACCOUNT_RESTRICTION (credential authentication rejection);
+no inference about why that credential is invalid. Earlier unknown failures remain
+unchanged. Authorization is consumed; successful live transcription/Astra remain
+unverified. Correct server credentials before any separately authorized future request.
+See [derived-source verification](PR8-DERIVED-SOURCE.md) for complete evidence/cost limits.
 
 ## PR8 recovery — current
 

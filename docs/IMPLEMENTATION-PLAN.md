@@ -189,6 +189,7 @@ PR8; there is no separate progress branch. General UX remains PR9.
 - [x] Safe transport categories and production-path HTTP capture/endpoint guards: 38 focused / 121 full backend tests, Gradle/frontend builds and OpenAPI drift pass. No new live request; details in PR8-TRANSCRIPTION-REVIEW.
 - [x] Prepare separate deterministic master-range 0–36.291667-second Film Intelligence source with matching audio, explicit manifest provenance and new/reset source-history tests. Master unchanged; see PR8-DERIVED-SOURCE.
 - [x] Derived-source gate: 39 focused / 122 full backend tests, repeat hash, picture/audio/structure preflight, Gradle/frontend builds and OpenAPI checks pass before the authorized live attempt.
+- [x] Execute the separately authorized derived-source validation once: HTTP 401 invalid_api_key, zero Astra; durable failure, request ID and original history preserved. Authorization consumed, successful live acceptance still unverified.
 - [x] Synchronized product/technical docs, ADR and PR8-REVIEW for the final commit/push handoff; stop for review.
 
 Implemented stages (ADR-0008): PREPARING_SOURCE, DETECTING_STRUCTURE,

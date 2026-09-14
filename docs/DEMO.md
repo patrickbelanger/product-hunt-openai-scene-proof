@@ -115,7 +115,7 @@ screen-opening relationship is an evaluation question only, never prompt input.
 Actual observations, uncertainty, costs and missed relationships are recorded in
 [PR8 review](PR8-REVIEW.md). Test-only synthetic discovery is never runtime demo data.
 
-The one real PR8 attempt prepared eight segments/24 frames, then OpenAI rejected
+The initial real PR8 attempt prepared eight segments/24 frames, then OpenAI rejected
 transcription. No Astra discovery call or transcript/candidate result exists. The
 screen-opening question is unassessed, not a claimed detection or miss. The failed
 run remains inspectable; no reroll or recorded demo baseline was added.
@@ -124,3 +124,6 @@ Derivation command: `node scripts/prepare-analysis-source.mjs`. Full demo regene
 also derives this file through `scripts/prepare-demo.mjs`; curated PR7 clips/references
 are unchanged. [Derived-source verification](PR8-DERIVED-SOURCE.md) records the hash,
 frame/sample cut, determinism/preflight and separately authorized live result.
+The authorized derived-source run also prepared eight segments/24 frames, then
+received HTTP 401 invalid_api_key. No transcript or Astra discovery followed; this
+authentication failure is not a film-quality result. No retry or recorded baseline.

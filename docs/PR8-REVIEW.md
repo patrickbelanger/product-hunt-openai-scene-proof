@@ -272,3 +272,24 @@ historical cause, dashboard interpretation and separate future authorization gat
 Verified 38 focused / 121 full backend tests, Gradle build, frontend production build,
 OpenAPI drift and diff checks. No failures/errors/skips. Frontend/Chromium suites
 were not rerun for this backend-only change. Real provider acceptance is not claimed.
+
+## Derived source and final authorized validation
+
+Patrick's explicitly selected master range 0–36.291667 seconds now supplies new/reset
+demo Film Intelligence sources, with matching lossless audio and manifest master
+provenance. Master bytes/hash and historical 92.459-second attempts are unchanged.
+Two deterministic encodes match; the final picture frame contains film content.
+39 focused / 122 full backend tests, Gradle/frontend builds, OpenAPI/script/diff checks
+pass. Full hashes, timing, format and reset/preflight evidence: [derived-source review](PR8-DERIVED-SOURCE.md).
+
+Exactly one live request at clean HEAD `8f3c689925b537e7678d1f356900df877cb95445`:
+run `87e8fdfb-7abd-4d21-ba10-4a5975a47038`, eight segments/24 frames, then
+TRANSCRIPTION_REJECTED / **HTTP 401 invalid_api_key**. Request ID
+`req_c02bddf06cbb41a789eece448c0f6f25`; safe type `invalid_request_error`, raw message
+withheld. This is an authentication rejection, not evidence of model/format failure.
+Run elapsed 11.140 s; transcription stage 3.749 s including audio extraction, not pure
+network latency. Zero transcript segments and zero Astra calls/output. No screen-opening
+evaluation, fallback, retry or reroll. Transcription billed cost is unknown; Astra cost
+is zero because no call occurred. GET-only recovery and original artifact hashes pass.
+The authorization is consumed; correct the server credential and obtain new approval
+before any future validation. No successful live transcription/Astra claim or merge.

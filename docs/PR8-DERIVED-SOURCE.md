@@ -75,6 +75,65 @@ No Chat/Responses transcription, model fallback, local multi-call chunks, retry 
 reroll. The existing original and corrective attempt locks remain preserved; the
 derived validation uses a distinct `pr8-derived-film` lock/identity.
 
-No live dispatch has occurred at this documentation checkpoint. The final result,
-safe diagnostics/IDs, latency, output counts and usage limitations will be recorded
-after the one authorized execution. No merge or PR9 is authorized.
+Executed once from clean HEAD `8f3c689925b537e7678d1f356900df877cb95445` after all
+gates above, against the current production jar on an isolated local API port.
+The server key was present. Pre-dispatch output recorded master/source durations,
+derived hash, exact Audio Transcriptions endpoint/model and no Chat/Responses
+transcription. The application created a new independent demo/project/run; no
+previous paid identity or lock was reused.
+
+| Evidence | Actual result |
+| --- | --- |
+| Project | `d145e66c-0a4c-4444-a2ba-3a1977cac673` |
+| Validation/run | `87e8fdfb-7abd-4d21-ba10-4a5975a47038` |
+| Client request identity | `ae4002b3-0c45-4d45-95fe-69d85926a897` |
+| SourceFilm | `f2581347-32c0-47b9-b3d4-f2668afe2022`; 36,292 ms domain duration; derived hash above |
+| Started / completed UTC | `2026-09-14T13:56:27.404685Z` / `2026-09-14T13:56:38.544431Z` |
+| Run elapsed | 11.140 s, including local preparation |
+| Transcription stage elapsed | 3.749 s, including local audio extraction and failure persistence; not isolated HTTP latency |
+| Outcome | FAILED / TRANSCRIPTION_REJECTED |
+| Upstream HTTP | **401** |
+| OpenAI error type / code | `invalid_request_error` / **`invalid_api_key`** |
+| Provider request ID | `req_c02bddf06cbb41a789eece448c0f6f25` |
+| Provider message | Withheld by the safe-message allowlist; no raw key-containing error retained |
+| Visual preparation | 8 deterministic segments / 24 frames, source-bounded |
+| Transcription model / endpoint | `gpt-4o-transcribe-diarize` / POST `/v1/audio/transcriptions` |
+| Transcript / timestamp validation | No successful transcript, zero segments; provider-time validation not reached |
+| Astra calls / output | **Zero**; no summary, entities, candidates, concerns or warnings from Film Understanding |
+| Usage / charged cost | Transcription usage/billed charge unknown; absent response usage is not a zero-charge claim. Astra: zero calls/tokens/cost |
+
+Classification of this new failure: **PROVIDER_OR_ACCOUNT_RESTRICTION**, specifically
+provider authentication rejection of the supplied server credential (`invalid_api_key`).
+The exact credential issue (for example revoked versus incorrectly configured) is
+not established. Do not infer insufficient credit, model unavailability or a broken
+audio format. The HTTP response/request ID establish provider contact, not successful
+audio decoding/transcription. Previous attempts retain their original
+INSUFFICIENT_EVIDENCE classifications; this response does not reconstruct those errors.
+
+Only PREPARING_SOURCE, DETECTING_STRUCTURE, TRANSCRIBING_AUDIO and FAILED stages
+occurred. No UNDERSTANDING_FILM stage or Astra request followed. The screen-opening
+relationship was not evaluated, detected, missed or injected. No fallback or reroll.
+
+GET-only recovery confirms the identical durable failure. Original attempt/result/
+lock SHA-256 values remain unchanged, as does the master hash; both earlier locks and
+the new `.local/pr8-derived-film-paid-attempt.lock` remain preserved. Safe result and
+identity are retained privately in `.local/pr8-derived-film-result.json` and
+`.local/pr8-derived-film-attempt.json`. Temporary extracted audio is absent. The
+owned validation API was stopped after completion; user services were not touched.
+
+**Merge readiness:** derivative preparation, deterministic processing and truthful
+failure diagnostics are verified. Successful live timed transcription and Astra
+Film Understanding remain unvalidated. The supplied server credential must be
+corrected before any newly authorized future request; this authorization is consumed.
+Stop for Patrick's review. No merge or PR9.
+
+## Interruption recovery verification
+
+Recovery found the source implementation committed at `8f3c689925b537e7678d1f356900df877cb95445`
+and only the outcome documentation uncommitted. The retained attempt manifest, paid
+lock, result and dispatch log confirm the request above occurred before interruption;
+authorization is consumed. Recovery rechecked both asset hashes, derivative stream
+durations/zero timestamps, manifest provenance and the 122-test XML totals (zero
+failures/errors/skips). Existing focused/full build logs confirm successful gates.
+No implementation changed or provider request was made during recovery. Only outcome
+documentation was finalized; unchanged deterministic suites were not rerun.
