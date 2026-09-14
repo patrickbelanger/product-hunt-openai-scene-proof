@@ -6,6 +6,22 @@
     "description": "Local development foundation. No authentication; do not expose publicly."
   },
   "paths": {
+    "/api/v1/demo": {
+      "post": {
+        "operationId": "openDemo",
+        "description": "Create or recover the current populated demo copy for a client request UUID. Same UUID always recovers the current copy, including after reset. No model calls. Atomic metadata publication; preparation failures can retry the same UUID.",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "additionalProperties": false, "required": ["requestId"], "properties": { "requestId": { "type": "string", "format": "uuid" } } } } } },
+        "responses": { "200": { "description": "Ready working demo", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Project" } } } }, "default": { "$ref": "#/components/responses/Problem" } }
+      }
+    },
+    "/api/v1/projects/{projectId}/demo/reset": {
+      "parameters": [{ "name": "projectId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+      "post": {
+        "operationId": "resetDemo",
+        "description": "Replace only this demo copy with fresh authored data. Retain historical copy and immutable analysis/actions. Ordinary projects return 409. Replays for the same source project recover the current replacement without creating another copy. Does not start inference.",
+        "responses": { "200": { "description": "Ready replacement demo", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Project" } } } }, "default": { "$ref": "#/components/responses/Problem" } }
+      }
+    },
     "/api/v1/projects/{id}/rules": {
       "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
       "put": {
@@ -891,6 +907,11 @@
           "createdAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "demo": {
+            "type": ["object", "null"], "additionalProperties": false,
+            "required": ["instanceId", "templateVersion", "retired"],
+            "properties": { "instanceId": { "type": "string", "format": "uuid" }, "templateVersion": { "type": "string", "maxLength": 80 }, "retired": { "type": "boolean" } }
           },
           "updatedAt": {
             "type": "string",

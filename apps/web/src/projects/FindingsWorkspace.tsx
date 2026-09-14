@@ -31,7 +31,7 @@ function Correction({ prompt }: { prompt: string }) {
   </section>;
 }
 
-export function FindingsWorkspace({ projectId }: { projectId: string }) {
+export function FindingsWorkspace({ projectId, demo = false }: { projectId: string; demo?: boolean }) {
   const [params, setParams] = useSearchParams();
   const analysisId = params.get('analysisId') || undefined;
   const selectedId = params.get('finding');
@@ -61,7 +61,7 @@ export function FindingsWorkspace({ projectId }: { projectId: string }) {
     if (frame) document.getElementById(`frame-${frame.id}`)?.focus({ preventScroll: true });
   }
   return <>
-    <MediaWorkspace projectId={projectId} finding={selected} findings={(findings.data ?? []).filter(finding => finding.status === 'OPEN')} frameId={frameId} onSelectFrame={setFrameId} />
+    <MediaWorkspace projectId={projectId} demo={demo} finding={selected} findings={(findings.data ?? []).filter(finding => finding.status === 'OPEN')} frameId={frameId} onSelectFrame={setFrameId} />
     <aside data-tour="findings" className="workspace-panel findings-panel" aria-labelledby="findings-title">
       <Stack gap="md">
         <Group justify="space-between"><Text className="panel-label" id="findings-title">CONTINUITY FINDINGS</Text><Button size="compact-xs" variant="subtle" loading={findings.isFetching || analysis.isFetching} onClick={() => { void findings.refetch(); if (analysisId) void analysis.refetch(); }}>Refresh findings</Button></Group>

@@ -210,3 +210,29 @@ successful smoke calls total approximately $0.04380. Actual billing may differ
 with account/service-tier settings. No further paid call was made for restart or
 contract verification. The smoke proves the pipeline on a tiny original fixture;
 it is not an accuracy benchmark for complex film continuity.
+
+### PR7 real film validation
+
+The demo uses the same production assembler/adapter. Only authored rules, actual
+media and reference metadata enter context; template identity and evaluation notes
+do not. Gradle packages `demo/runtime` only. DemoApiTest checks both AnalysisContext
+and the real adapter's serialized request for evaluation keys/case IDs/questions.
+There is no demo-specific prompt or injected Finding row. Sequence reasoning remains
+LOW and targeted reasoning HIGH; PR7 changes neither. Eight shots, 24 selected frames,
+five references and all existing byte/duration/shot bounds remain unchanged.
+
+Deterministic preflight exposed unnecessary FFmpeg upscaling of small videos. PR7
+corrects the scaler to decrease only, consistent with still-image normalization;
+the 1600-pixel maximum is unchanged. Authored clips are 432×768, references 540×960.
+Final selected image payload is 14,985,129 bytes, below the existing 16 MiB bound.
+
+After all deterministic checks passed, the sole authorized real call succeeded on
+2026-09-14 UTC (September 13 Toronto), run `9b30f01d-54e6-4586-b7ac-63c0f2eb6880`.
+It returned zero findings, explicitly contextualized the apartment transition and
+warned about sampling, small UI and device-identity ambiguity. No repeated call seeks
+the historical five-issue target. No finding-level citation/evidence quality can be
+scored from an empty result. GET-only verification confirms the persisted result.
+Usage: 16,861 input, 1,176 output, 18,037 total; zero cache hits, 16,858 cache-write,
+26 reasoning tokens already included in output. Duration 28.709 seconds; standard-rate
+estimate USD $0.269555, not a billing receipt. Exact provenance and evaluation are in
+[PR7 review](PR7-REVIEW.md); this run is not installed as a recorded demo baseline.

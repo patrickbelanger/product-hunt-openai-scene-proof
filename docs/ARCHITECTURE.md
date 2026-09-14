@@ -147,7 +147,25 @@ state owns navigation. A versioned localStorage string records only skipped/comp
 onboarding, independent of Project and the generated API client. No backend, DB,
 OpenAPI, provider or dependency changes are introduced. See UX for focus/fallbacks.
 
-## Boundaries reserved for later slices
+## Implemented demo lifecycle (PR7)
+
+DemoController → DemoService → packaged DemoTemplateSource → existing ProjectService,
+ReferenceService and MediaService. Gradle copies only `demo/runtime`; the original
+source, authoring notes and evaluation manifest are not application resources.
+V6 adds explicit instance/version/retirement identity and replacement mapping.
+An instance advisory lock and bounded seed transaction publish a complete project
+or roll back. Reset creates new domain data and retains historical copies unchanged.
+This curated operation deliberately holds a transaction during decoding; ordinary
+uploads retain their existing short transactions. Details and compensation limits:
+[ADR-0007](adr/ADR-0007-demo-template-and-replacement.md).
+
+React DemoLaunch persists a request UUID in sessionStorage before calling the typed
+API; pending state guards double clicks and failures reuse the same UUID. DemoReset
+confirms consequences, disables duplicate actions and navigates only after success.
+Workspace identity comes from Project.demo, never its name. Bible/timeline/evidence
+remain existing components reading real persisted API data. No analysis is started.
+
+## Boundaries reserved for later slices (unchanged)
 
 Analysis jobs/progress transport remain planned.
 Raw media stays outside PostgreSQL.

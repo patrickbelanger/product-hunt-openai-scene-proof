@@ -1,0 +1,36 @@
+{
+  "version": "between-the-line-v1",
+  "source": "between the lines - demo.mp4",
+  "sourceSha256": "ac9b29c47eeb399dbd1ac5cdfcde19273e0e4e68f5df8fd67fedbef3d284a7a7",
+  "authors": ["Laurie", "Patrick"],
+  "provenance": "Patrick supplied and explicitly authorized his original/generated film, created using his generated references, for SceneProof and the public Product Hunt demo on 2026-09-13. Attribution: Laurie and Patrick.",
+  "project": {
+    "name": "Between the Line — Continuity Study",
+    "description": "A journey through the metro and into an apartment, told through Patrick and the screens around him. Original film by Laurie and Patrick.",
+    "rules": "Patrick is the principal character throughout the sequence. The metro and apartment are separate scenes in his journey. Use the Reference Bible as visual context for the character, locations and devices."
+  },
+  "shots": [
+    { "file": "shot-01.mp4", "title": "Metro platform", "start": 0, "end": 3.208333 },
+    { "file": "shot-02.mp4", "title": "Inside the carriage", "start": 3.208333, "end": 8.916667 },
+    { "file": "shot-03.mp4", "title": "Phone and passenger intercut", "start": 8.916667, "end": 15.541667 },
+    { "file": "shot-04.mp4", "title": "Patrick with his phone", "start": 15.541667, "end": 17.541667 },
+    { "file": "shot-05.mp4", "title": "City transition", "start": 17.541667, "end": 20.5 },
+    { "file": "shot-06.mp4", "title": "At home", "start": 20.5, "end": 24.791667 },
+    { "file": "shot-07.mp4", "title": "Device on the sofa", "start": 24.791667, "end": 27.375 },
+    { "file": "shot-08.mp4", "title": "At the workstation", "start": 27.375, "end": 36.291667 }
+  ],
+  "references": [
+    { "file": "reference-01.png", "title": "Patrick — metro appearance", "guidance": "Principal character in the metro scene.", "at": 4 },
+    { "file": "reference-02.png", "title": "Metro platform", "guidance": "Location reference for the opening scene.", "at": 1 },
+    { "file": "reference-03.png", "title": "Handheld phone", "guidance": "Device and visible screen in the metro scene.", "at": 10 },
+    { "file": "reference-04.png", "title": "Apartment sitting area", "guidance": "Location and character reference for the apartment scene.", "at": 22 },
+    { "file": "reference-05.png", "title": "Apartment workstation", "guidance": "Workstation and screens in the apartment.", "at": 32 }
+  ],
+  "humanNotes": [
+    "The file supplied in the repository is named between the lines - demo.mp4; Patrick also referred to the supplied film as Between the lines - 4(1).mp4. The SHA-256 above identifies the actual source used.",
+    "Source: H.264, 1080x1920, 24 fps, 92.458667 seconds, 42842998 bytes. Picture ends at 36.291667 seconds; the remaining tail is black.",
+    "Eight authored import segments retain source order. The third segment contains the original phone/passenger intercut; these are imported clips, not claims of automatic cut segmentation.",
+    "Clips are scaled to 432x768 and full-frame references to 540x960 for the existing combined image budget. No visual objects, text or continuity changes are added or removed. Audio is omitted because the current media pipeline reviews pictures.",
+    "Apartment clothing is an authored scene/time transition. This note is human/evaluation-only; no intent action is pre-recorded."
+  ]
+}

@@ -4,6 +4,42 @@
  */
 
 export interface paths {
+    "/api/v1/demo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Create or recover the current populated demo copy for a client request UUID. Same UUID always recovers the current copy, including after reset. No model calls. Atomic metadata publication; preparation failures can retry the same UUID. */
+        post: operations["openDemo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{projectId}/demo/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Replace only this demo copy with fresh authored data. Retain historical copy and immutable analysis/actions. Ordinary projects return 409. Replays for the same source project recover the current replacement without creating another copy. Does not start inference. */
+        post: operations["resetDemo"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{id}/rules": {
         parameters: {
             query?: never;
@@ -463,6 +499,12 @@ export interface components {
             rules: string;
             /** Format: date-time */
             createdAt: string;
+            demo?: {
+                /** Format: uuid */
+                instanceId: string;
+                templateVersion: string;
+                retired: boolean;
+            } | null;
             /** Format: date-time */
             updatedAt: string;
         };
@@ -507,6 +549,57 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    openDemo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: uuid */
+                    requestId: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Ready working demo */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Project"];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    resetDemo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Ready replacement demo */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Project"];
+                };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
     updateProjectRules: {
         parameters: {
             query?: never;

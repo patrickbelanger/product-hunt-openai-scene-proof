@@ -19,7 +19,7 @@ const failureMessages: Record<string, string> = {
   STORAGE_FAILURE: 'The file could not be stored. Please retry.',
 };
 
-export function MediaWorkspace({ projectId, finding, findings = [], frameId, onSelectFrame }: { projectId: string; finding?: Finding; findings?: Finding[]; frameId?: string; onSelectFrame?: (id: string) => void }) {
+export function MediaWorkspace({ projectId, demo = false, finding, findings = [], frameId, onSelectFrame }: { projectId: string; demo?: boolean; finding?: Finding; findings?: Finding[]; frameId?: string; onSelectFrame?: (id: string) => void }) {
   const cache = useQueryClient();
   const [file, setFile] = useState<File | null>(null);
   const [selection, setSelection] = useState<string>();
@@ -37,7 +37,7 @@ export function MediaWorkspace({ projectId, finding, findings = [], frameId, onS
   function selectFrame(id: string | undefined) { if (id) { setSelection(id); onSelectFrame?.(id); } }
   return <section data-tour="media" className="viewer-panel media-workspace" aria-label="Media workspace">
     <Stack p="md">
-      <details className="import-panel" open={!finding}><summary>Import a shot</summary><Stack mt="md">
+      <details className="import-panel" open={!finding && !demo}><summary>Import a shot</summary><Stack mt="md">
       <Text size="xs" c="dimmed">JPEG/PNG up to 10 MiB and 16 MP, or MP4/H.264 up to 100 MiB, 120 seconds, 3840 × 2160 and 60 fps. One file per import.</Text>
       <Group align="end"><FileInput className="media-file" label="Shot file" placeholder="Choose an image or video" accept="image/jpeg,image/png,video/mp4" value={file} onChange={setFile} disabled={upload.isPending} clearable /><Button disabled={!file} loading={upload.isPending} onClick={() => file && upload.mutate(file)}>Import shot</Button></Group>
       {upload.isPending && <Text role="status" size="sm">Uploading and processing your shot…</Text>}

@@ -1,5 +1,10 @@
 # PR6 review handoff — 2026-09-13
 
+Historical handoff: PR6 subsequently merged through GitHub PR #6 at
+`1e3f28fb162bcdc9d608c40d61d7fcfbcad97909`. PR7 recovery verified that exact main
+and the PR6 implementation parent `8923cea`. Review/stop instructions below describe
+the original handoff; Patrick has now authorized PR7.
+
 ## Branch and recovery
 
 - Branch: `feat/p1-guided-tour`.

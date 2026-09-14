@@ -12,7 +12,7 @@ class ProjectNotFound : RuntimeException()
 @Transactional(readOnly = true)
 class ProjectService(private val repository: ProjectRepository) {
     fun list(page: Int): ProjectPage {
-        val projects = repository.findAll(
+        val projects = repository.findByDemoRetiredFalse(
             PageRequest.of(page, 20, Sort.by(Sort.Direction.DESC, "createdAt", "id")),
         )
         return ProjectPage(projects.content.map(ProjectView::from), page, projects.hasNext())
@@ -29,6 +29,12 @@ class ProjectService(private val repository: ProjectRepository) {
         project.updatedAt = java.time.Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS)
         return ProjectView.from(repository.save(project))
     }
+
+    @Transactional
+    fun createDemo(request: CreateProjectRequest, instanceId: UUID, version: String): ProjectView = ProjectView.from(
+        repository.saveAndFlush(Project(name = request.name.trim(), description = request.description.trim(),
+            rules = request.rules.trim(), demoInstanceId = instanceId, demoTemplateVersion = version)),
+    )
 
     @Transactional
     fun create(request: CreateProjectRequest): ProjectView = ProjectView.from(

@@ -11,7 +11,7 @@ tell SceneProof and it adapts. Publish claims only after the corresponding flow 
 ## 60–75 second recording
 
 0–8s: show drift across generated shots. 8–15s: introduce SceneProof.
-15–30s: demo film, references and real processing stages. 30–48s: wardrobe finding,
+15–30s: demo film, references and real preparation. 30–48s: an actual saved finding,
 side-by-side evidence and correction. 48–65s: intentional-change explanation and
 real re-evaluation. 65–75s: final product line and URL.
 
@@ -19,8 +19,8 @@ real re-evaluation. 65–75s: final product line and URL.
 
 - [ ] Verify challenge terms, submission requirements and exact cutoff/timezone.
 - [ ] Approve public deployment, anonymous isolation and live-demo spend limits.
-- [ ] Confirm original/licensed asset provenance and no proprietary product reuse.
-- [ ] Test first-run demo from a fresh browser; visitors need no upload or account.
+- [x] Confirm original/generated film provenance: Patrick supplied his work and authorizes public demo use; attribution Laurie and Patrick. No proprietary product code reused.
+- [x] Test local first-run demo from a fresh Chromium browser without upload/account, including reset/reload; repeat against a future public deployment before launch.
 - [ ] Capture landing, populated workspace, evidence comparison and steering result.
 - [ ] Record actual app behavior; avoid staged fake progress or invented responses.
 - [ ] Prepare short description, maker comment, screenshots, thumbnail and video.
@@ -29,3 +29,10 @@ real re-evaluation. 65–75s: final product line and URL.
 - [ ] Submit using Patrick's account only with explicit publishing authorization.
 
 No submission or external publishing action has been taken in foundation.
+
+PR7 supplies a local populated film and safe per-instance reset; it does not supply
+public deployment/isolation/spend controls. The demo starts without recorded findings.
+The one PR7 validation returned zero findings and contextualized the apartment
+transition. It supplies no finding/evidence/steering scene for the proposed recording.
+Do not stage the superseded black-blazer issue or call intentional clothing an error.
+Further film curation or paid validation requires Patrick's approval; no reroll was made.

@@ -1,11 +1,64 @@
 # SceneProof Status
 
 Last updated: 2026-09-13
-Current branch: `feat/p1-guided-tour`
-Current milestone: PR5 merged; PR6 optional guided tour implemented and verified.
-Current task: Review PR6 on `feat/p1-guided-tour`. Do not merge or start PR7.
+Current branch: `feat/p1-demo-project`
+Current milestone: PR6 merged; PR7 complete and verified, awaiting merge review.
+Current task: Documentation-only post-PR7 planning reconciliation; then stop for review.
+Do not merge. PR8 must not start until PR7 is merged.
 
-## PR6 recovery and current behavior
+## Authorized next slice (planning only)
+
+After PR7 merge, the next authorized branch is `feat/p1-ai-film-understanding`:
+**PR8 — AI Film Understanding / Multimodal Continuity Discovery**. This supersedes
+`feat/p1-analysis-progress` as the next standalone branch. PR8 absorbs necessary
+durable backend stages, truthful UI visibility, active-run reload/recovery and
+Film Understanding failure visibility; backend state remains authoritative, with
+no fake percentages or invented progress. General/transversal launch hardening is
+not automatically included; see the development and implementation plans.
+
+Patrick accepts PR7's honest zero-finding validation on populated-demo/reset and
+independent-validation merits. No runtime, assets or provider evidence change, no
+accuracy claim and no new provider call. The current result alone still cannot
+support a finding-focused recording. Previously recorded green checks remain valid;
+this follow-up runs only documentation/scope/diff checks, not the full suites.
+
+## PR7 recovery and current behavior
+
+Fetched origin; verified PR6 merge and exact main SHA
+`1e3f28fb162bcdc9d608c40d61d7fcfbcad97909` (parents `3184af6` / `8923cea`).
+Initial worktree was clean. Patrick supplied/staged the demo video during recovery;
+it was preserved across clean main fast-forward and PR7 branch creation, then restored.
+No existing implementation was re-scaffolded. Original recovery context is unchanged.
+PR6 pending-review instructions below are historical handoff facts, superseded by
+its verified merge and Patrick's explicit PR7 authorization.
+
+Implemented: immutable `between-the-line-v1` runtime manifest, eight approved real
+video clips and five visual references; server-side atomic creation/recovery and
+replacement reset; typed demo identity, landing entry and confirmed reset UX.
+Source is Patrick's original/generated film, attributed to Laurie and Patrick.
+Dark/navy metro polo replaces the historical blazer assumption; apartment clothing
+is a deliberate transition. No invented findings or preloaded model baseline.
+
+Verified: Gradle build and **83 backend tests** (zero failures/errors/skips), **68
+frontend tests**, **17 Chromium tests**, frontend production build, OpenAPI drift and
+diff checks. Browser verification uses deterministic API 8097, no key, isolated
+browser schema; source and final 1280/820/390 screenshots were inspected.
+Earlier failed attempts and their corrections are recorded in the review, not counted
+as passes. Normal tests made zero paid calls.
+
+Exactly one real full-sequence Astra validation succeeded: eight shots, 24 selected
+frames, five references, **zero findings**. The model contextualized the apartment
+wardrobe/lighting transition and noted device identity ambiguity and unreadable small
+UI. This does not prove the film error-free or establish a finding showcase.
+Run `9b30f01d-54e6-4586-b7ac-63c0f2eb6880`: 16,861 input / 1,176 output tokens,
+28.709 seconds, estimated USD **$0.26956** (not a billing receipt). GET-only verification
+passed; no reroll, targeted paid call or recorded baseline was added.
+Implementation `5eac0b9ba3fc9b2a91b0e9467102eb8e11c781ac` is committed/pushed.
+This documentation-only follow-up records the review point; final handoff reports tip HEAD.
+Remote CI is not checked. Final evidence: [PR7 review](PR7-REVIEW.md).
+Run/setup remains in README. ADR-0007 records transaction/disk-retention limitations.
+
+## Historical PR6 recovery and handoff
 
 Fetched origin and verified PR #5 merge `3184af6cf0119be1fa2949ca1fb60a2584483a56`
 (parents `0901f4b` / `5071eb4`). Clean local main fast-forwarded to that exact SHA,

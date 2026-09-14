@@ -11,7 +11,8 @@ preserving trim/bounds and updating updatedAt; no general project edit or deleti
 HTTP validation rejects blank names before persistence, and
 PostgreSQL reinforces non-empty names. Projects are independently retrievable by ID.
 
-Project creation/read has no lifecycle state machine. The API returns immutable
+Ordinary project creation/read has no lifecycle state machine; PR7 demo copies have
+the explicit replacement/retirement identity described below. The API returns immutable
 views instead of JPA entities. Lists contain at most 20 projects, sorted by creation
 and UUID descending. Page input is 0–10,000. Later deletion must own media cleanup.
 
@@ -112,7 +113,23 @@ never current replacements. Original rules and current rules are separately iden
 Edits/archive after context assembly do not alter its selected inputs.
 See [ADR-0006](adr/ADR-0006-reference-bible-history.md).
 
-## Planned for successive slices
+## Demo template and working instances (PR7)
+
+DemoTemplate is controlled packaged authored input, not a mutable Project. Its
+explicit version and per-asset SHA-256 identify the baseline. Project has nullable
+demoInstanceId/demoTemplateVersion plus demoRetired; the public `demo` object is
+null on ordinary projects. Each instance has at most one current Project under a
+V6 unique index. Project/reference/shot/frame UUIDs are independently allocated.
+
+Creation publishes all authored rules, references and shots atomically. Reset retires
+the old project and seeds a new one under the same instance/version. A replacement
+mapping keyed by source project deduplicates repeated resets. History remains in the
+old copy; new copies have no analysis/findings/actions. Retired copies are excluded
+from the library but retain direct historical reads. No ordinary project can reset.
+Version mismatch refuses reset rather than silently adopting new authored content.
+Expected evaluation outcomes are not domain fields. See ADR-0007 for failure/locking.
+
+## Planned for successive slices (unchanged)
 
 Future queued/progress stages require explicit worker/recovery design.
 Creator context does not erase prior analysis.

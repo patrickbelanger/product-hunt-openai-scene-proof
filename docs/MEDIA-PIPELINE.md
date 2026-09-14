@@ -59,9 +59,14 @@ With interval=duration/24 and spacing=duration/32, the filter is:
 ```text
 setpts=PTS-STARTPTS,
 select='isnan(prev_selected_t)+gte(t-prev_selected_t,spacing)*(gt(scene,0.3)+gte(t-prev_selected_t,interval))',
-scale=1600:1600:force_original_aspect_ratio=decrease,
+scale='min(1600,iw)':'min(1600,ih)':force_original_aspect_ratio=decrease,
 showinfo
 ```
+
+PR7 corrects unintended video-frame upscaling: clips below 1600 pixels retain their
+dimensions, matching the still-image normalizer. The previous fixed 1600×1600 target
+enlarged smaller footage and needlessly consumed the existing shared image budget.
+No upload, duration, shot, frame-count or model bounds change.
 
 The first frame, spaced cuts and periodic fallback are retained. Minimum spacing
 bounds dense cuts; short clips yield fewer frames. This is representative sampling,

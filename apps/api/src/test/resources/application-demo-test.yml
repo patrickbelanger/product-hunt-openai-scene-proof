@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:55432/sceneproof?currentSchema=sceneproof_demo_test
+  flyway:
+    default-schema: sceneproof_demo_test
+    schemas: sceneproof_demo_test
+  jpa:
+    properties:
+      hibernate:
+        default_schema: sceneproof_demo_test

@@ -113,6 +113,8 @@ class MediaApiTest @Autowired constructor(private val mvc: MockMvc, private val 
             status { isCreated() }
             jsonPath("$.kind") { value("VIDEO") }
             jsonPath("$.durationMs") { value(2000) }
+            jsonPath("$.frames[0].width") { value(160) }
+            jsonPath("$.frames[0].height") { value(90) }
         }.andReturn().response.contentAsString
         val frames = mapper.readTree(response)["frames"]
         val timestamps = frames.toList().map { it["timestampMs"].asLong() }

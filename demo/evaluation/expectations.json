@@ -1,0 +1,20 @@
+{
+  "templateVersion": "between-the-line-v1",
+  "purpose": "Human regression evaluation only. These are open continuity questions, not guaranteed errors or model answers. Never package this directory or pass it to model context.",
+  "cases": [
+    { "id": "character-consistency", "category": "CHARACTER", "question": "Are Patrick's face, glasses and hairstyle coherent across the carriage, phone and apartment views?", "segments": [2, 4, 6, 8], "expectedDisposition": "independent-evidence-based-judgement" },
+    { "id": "device-consistency", "category": "PROP", "question": "Do the handheld device and later sofa device show any unsupported identity or state change, accounting for the scene transition?", "segments": [3, 4, 7], "expectedDisposition": "independent-evidence-based-judgement" },
+    { "id": "visible-ui", "category": "TEXT_UI", "question": "Is visible phone/screen content coherent when legible, allowing changing content and different devices?", "segments": [3, 7, 8], "expectedDisposition": "independent-evidence-based-judgement" },
+    { "id": "metro-geography", "category": "SPATIAL", "question": "Do carriage layout, passenger positions and screen direction support the edited metro sequence?", "segments": [1, 2, 3, 4], "expectedDisposition": "independent-evidence-based-judgement" },
+    { "id": "apartment-transition", "category": "WARDROBE", "question": "Does the analysis contextualize the deliberate clothing and lighting change after the city/scene transition?", "segments": [5, 6, 8], "expectedDisposition": "contextualize-intentional-scene-time-transition" }
+  ],
+  "historicalCandidates": [
+    { "case": "Facial / hairstyle drift", "status": "Reframed as an open character-consistency question, not an established defect." },
+    { "case": "Black blazer changes navy / wider lapels", "status": "Superseded: actual metro wardrobe is a dark/navy polo. Not an expected detection." },
+    { "case": "Phone shape / state changes", "status": "Reframed as an open device-consistency question, not an established defect." },
+    { "case": "Unmotivated screen-direction reversal", "status": "Unconfirmed; evaluate actual metro geography without assuming a reversal." },
+    { "case": "Unexpected phone display text change", "status": "Unconfirmed; evaluate legible visible UI without assuming an error." },
+    { "case": "Warmer apartment lighting", "status": "Generalized to the actual deliberate apartment scene/time transition." },
+    { "case": "Phone switches hand while opening door", "status": "Unsupported by this footage; not an expected detection." }
+  ]
+}

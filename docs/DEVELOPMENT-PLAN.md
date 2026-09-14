@@ -1,14 +1,15 @@
 # Development Plan
 
-Baseline: September 12, 2026. Implements the priorities and branch order authorized
-in the initial context; no change to product scope. Deadline: September 18.
+Historical delivery baseline: September 12, 2026. The initial schedule below is
+preserved; Patrick's authorized post-PR7 branch/scope reconciliation follows it.
+Deadline: September 18; this planning update does not revise the delivery date.
 
 | Day | Goal | Exit evidence |
 | --- | --- | --- |
 | Sep 12 — Day 1 | P0 foundation; start media ingestion after review | Runnable API/web, real PostgreSQL project flow, green checks |
 | Sep 13 — Day 2 | P0 media, Astra and findings | Video → bounded frames → live Astra → persisted finding → visual inspection |
 | Sep 14 — Day 3 | P0 intentional-change steering; Reference Bible | Context persisted, affected analysis repeated, auditable updated finding |
-| Sep 15 — Day 4 | P1 demo, guided tour, real progress | Curated film with ~5 issues and intentional differences; bounded live use |
+| Sep 15 — Day 4 | P1 demo, guided tour, real progress | Curated film and independent continuity evaluation; bounded live use |
 | Sep 16 — Day 5 | P1 polish, deployment rehearsal, recording | Laptop/tablet QA; launch candidate and recording rehearsal |
 | Sep 17 | Buffer and demo freeze | Fix launch blockers only, record 60–75s demo, prepare submission |
 | Sep 18 | Submit and monitor | Public URL, screenshots, video, tested first-run experience |
@@ -24,8 +25,26 @@ early on Day 2. No P2 animations or launch cosmetics may delay P0.
 Use, in order: `feat/p0-foundation`, `feat/p0-media-ingestion`,
 `feat/p0-astra-analysis`, `feat/p0-findings-workspace`,
 `feat/p0-intentional-change-steering`, `feat/p1-reference-bible`,
-`feat/p1-guided-tour`, `feat/p1-demo-project`, `feat/p1-analysis-progress`,
+`feat/p1-guided-tour`, `feat/p1-demo-project`, `feat/p1-ai-film-understanding`,
 `feat/p1-ux-polish`, optional `feat/p2-product-hunt-polish`.
+
+The earlier plan placed standalone `feat/p1-analysis-progress` immediately after
+PR7. Patrick supersedes that next slice with **PR8 — AI Film Understanding /
+Multimodal Continuity Discovery** on `feat/p1-ai-film-understanding`, only after
+PR7 is merged. PR8 absorbs the minimal truthful progress needed by that vertical
+slice: durable backend processing stages, real UI stage visibility, reload/recovery
+of an active run and pipeline failure visibility. Backend state is authoritative;
+no fake percentages or invented progress. Exact stages/transport await architecture.
+
+Full-film understanding combines audio/transcript and visual context to propose
+candidate Reference Bible entries/continuity anchors for creator confirmation.
+Generalized retry UX, unrelated failure polish, public hosting/anonymous isolation,
+production spend/rate protection and broader responsive/accessibility/launch polish
+remain separate subsequent hardening unless required by PR8-touched surfaces.
+The earlier ADR-0007 suggestion that PR8 could bind public sessions is a future
+architectural possibility, not authorization to include public isolation in PR8.
+The standalone progress branch is no longer a separate next delivery slice; later
+`feat/p1-ux-polish` and optional Product Hunt polish remain in the plan.
 
 Create each branch when work begins, after prerequisites are integrated into main.
 Keep main runnable, no permanent develop branch. Feature documentation travels
@@ -42,9 +61,20 @@ through PR #4 as `0901f4b`; Patrick authorizes PR5 Reference Bible from that bas
 PR5 is merged through PR #5 as `3184af6`; PR6 recovery verified the exact main SHA
 `3184af6cf0119be1fa2949ca1fb60a2584483a56`. Patrick authorizes only
 `feat/p1-guided-tour`: optional four-step onboarding, no model/backend changes.
-PR6 must be verified, committed and pushed, then stop for review before PR7.
-No dates or
-priorities have been changed. The dates are delivery targets, not assertions of completed work; actual progress
+PR6 is merged through PR #6 at `1e3f28fb162bcdc9d608c40d61d7fcfbcad97909`.
+Patrick authorizes PR7 on `feat/p1-demo-project`: approved original film, up to eight
+clips, five references, deterministic creation/reset, evaluation separation and
+honest empty baseline. Current curation supersedes the unsupported blazer candidate.
+No analysis-limit change, public isolation/deployment or later scene-management work.
+PR7 verification passes: 83 backend, 68 frontend and 17 Chromium tests. The one real
+film analysis succeeded with zero findings and contextualized the apartment transition;
+the historical ~five-issue target is not a promise of detections. A finding-focused
+launch recording remains a curation/review question, not grounds for a paid reroll.
+PR7 is committed/pushed and awaiting merge review. Patrick accepts its honest
+zero-finding validation as evidence of independent analysis, not accuracy or a
+finding showcase. This documentation-only reconciliation does not reopen PR7 work
+or authorize another provider call. Do not start PR8 until PR7 is merged.
+The dates are delivery targets, not assertions of completed work; actual progress
 lives in [STATUS](STATUS.md) and [Implementation Plan](IMPLEMENTATION-PLAN.md).
 
 ## Risk buffer and launch dependencies

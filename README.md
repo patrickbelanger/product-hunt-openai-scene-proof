@@ -2,12 +2,13 @@
 
 **Keep every shot in character.** Your AI continuity supervisor for generative film.
 
-Current slice: PR5 Reference Bible — edit continuity rules and add explicit visual
-truth. JPEG/PNG references inform Astra's independent judgement and can be cited
-alongside shot/frame evidence. Images are immutable; metadata edits and archive
-preserve historical evidence. PR4 steering and resolve/dismiss remain available.
-Initial sequence analysis is explicitly started through the backend API; viewing or refreshing
-the workspace never calls OpenAI. The curated demo remains upcoming.
+Current slice: PR7 populated demo film, following merged PR6 optional guided tour.
+Choose **Try the demo film** to open **Between the Line — Continuity Study** with
+eight real video clips and five persisted visual references. Original film by Laurie
+and Patrick, explicitly authorized by Patrick. **Create a project** remains available.
+Reset demo confirms replacement of only the current copy; original analysis history
+is retained. The demo starts with no recorded findings. Initial analysis is explicitly
+started through the backend API; opening, refreshing and resetting never call OpenAI.
 
 Start a new session with [STATUS](docs/STATUS.md), then follow the recovery protocol
 in [AGENTS.md](AGENTS.md). Product requirements: [BRD](docs/BRD.md). Delivery:
@@ -136,6 +137,47 @@ are under `test-results/`. The GitHub workflow verifies builds, tests and contra
 against PostgreSQL, then runs the real browser flow. Remote CI requires a push.
 
 ## API and dependency maintenance
+
+### Demo film (PR7)
+
+Approved assets are checked in under `demo/runtime` and packaged by Gradle. No upload,
+project form or key is needed to open the demo. The first launch normalizes references
+and extracts video frames through the normal media services; pending state is real.
+Later launches in the same tab recover its working copy. Session storage must work
+before a creation request is sent. This is local convenience, not public isolation.
+
+POST `/api/v1/demo` with `{ "requestId": "<client UUID>" }` creates or recovers the
+current copy. Reuse the UUID after failure. POST
+`/api/v1/projects/{projectId}/demo/reset` atomically returns a fresh project UUID.
+Repeating reset for the same source UUID recovers its replacement. Project DTO `demo`
+is null for ordinary projects, otherwise `{ instanceId, templateVersion, retired }`.
+Old copies leave the library and retain their history/media at their original URLs.
+
+`demo/curation.json` records exact source hash, attribution, clip ranges and reference
+times. `node scripts/prepare-demo.mjs` reproduces packaged derivatives with FFmpeg;
+it verifies the authorized source hash first. It is an authoring tool, not a visitor
+step. Different FFmpeg builds can change derivative hashes; commit reviewed outputs
+with their manifest and change the template version when authored content changes.
+Evaluation notes in `demo/evaluation` are never packaged or submitted to Astra.
+The old black-blazer candidate is superseded by the actual dark/navy polo footage.
+Details: [Demo](docs/DEMO.md), [ADR-0007](docs/adr/ADR-0007-demo-template-and-replacement.md).
+
+PR7 backend tests use the dedicated `sceneproof_demo_test` schema and tiny generated
+images. Browser tests use the approved film with the existing test-only provider.
+No test provider or evaluation answers are packaged in the normal jar.
+
+PR7 verification: 83 backend, 68 frontend and 17 Chromium tests; builds and OpenAPI
+drift pass. The one real film analysis succeeded with zero findings, contextualized
+the apartment transition and warned about device ambiguity/small UI. It is not a
+claim of an error-free film or a preloaded baseline. Full evidence: [PR7 review](docs/PR7-REVIEW.md).
+
+The operator-only validation script requires a normal local API (default 8098),
+server-side credentials and explicit authorization for a paid call. PR7's authorized
+call is already spent; use only `node scripts/astra-demo-validation.mjs --verify`
+to GET the existing local run. On a separately authorized new environment, `--run`
+persists `.local/pr7-validation-request.json` before creation/inference and refuses
+another attempt after dispatch. Keep that ignored manifest, even on failure. It never
+reads the evaluation manifest, and no validation result is imported into new demos.
 
 ### Real analysis (PR2)
 
