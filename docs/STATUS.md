@@ -3,7 +3,7 @@
 Last updated: 2026-09-14
 Current branch: `feat/p1-ai-film-understanding`
 Current milestone: PR7 merged; PR8 ready for review with a real-provider validation limitation.
-Current task: Rejection review complete; sanitized diagnostics verified. Await explicit corrective-validation authorization; no reroll.
+Current task: Patrick's single corrective transcription-only attempt completed with TRANSCRIPTION_UNAVAILABLE; no retry or Astra call. Stop for review.
 Do not merge. Do not start PR9.
 
 ## PR8 recovery — current
@@ -57,9 +57,30 @@ No migration, API change, request-shape/model/reasoning/retry change or new live
 Verified follow-up: **32 focused tests**, **115 full backend tests**, Gradle build,
 OpenAPI drift and diff checks pass. Frontend/Chromium are unchanged and were not
 rerun in this backend-only review; their prior 78/19 passes remain historical checks.
-Original failed run and attempt lock are unchanged. One isolated transcription-only
-corrective validation is justified only after explicit authorization. Real provider
-acceptance remains a merge risk; see [focused review](PR8-TRANSCRIPTION-REVIEW.md).
+Original failed run and attempt lock are unchanged. The separately authorized
+corrective attempt is recorded below. Real provider acceptance remains a merge risk;
+see [focused review](PR8-TRANSCRIPTION-REVIEW.md).
+
+## Authorized corrective transcription validation — current
+
+Patrick authorized exactly one isolated transcription-only dispatch using corrected
+HEAD `39009964927604cfe0a7e15e3dae99d2f4c2c909`. Clean branch/worktree, server key
+presence, built adapter and bounded original-source WAV were verified before dispatch.
+Validation identity: `87b0d170-3387-4959-8711-a2ef647f20ca` (not a FilmUnderstandingRun).
+At `2026-09-14T11:24:13.284144300Z`, the single adapter invocation returned
+**TRANSCRIPTION_UNAVAILABLE** in **423 ms**. No upstream HTTP status/request ID/error
+fields were exposed; local 503 is not an OpenAI HTTP status. Receipt by OpenAI is
+unconfirmed. Classification: **INSUFFICIENT_EVIDENCE**, not a proven provider rejection,
+account restriction or implementation defect. No retry; authorization is consumed.
+
+No transcript completion, segment count or timestamp validation; usage/billed cost
+unknown. **Zero Astra calls**. Original failed artifacts/lock hashes are unchanged;
+no database/application run was created or mutated. New isolated lock and safe
+metadata-only result remain under ignored `.local/`; temporary WAV deleted.
+No application code changed. No deterministic suites/builds were rerun for this
+validation/documentation-only follow-up; the prior 115 backend tests/build/OpenAPI
+passes remain the last applicable checks. Real transcription transport and real
+Astra Film Understanding acceptance both remain unverified. Do not merge or start PR9.
 
 ## Historical post-PR7 planning (superseded by PR8 authorization)
 

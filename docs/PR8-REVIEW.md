@@ -224,5 +224,28 @@ failure as **INSUFFICIENT_EVIDENCE**. Request/audio contract review identifies n
 proven rejection-causing defect; availability is verified, not presumed absent.
 The confirmed observability defect is corrected with bounded allowlisted rejection
 details using existing durable fields and deterministic coverage. No original
-failure is rewritten and no new live request is made. One isolated transcription-only
-corrective validation is recommended only after explicit authorization, before merge.
+failure was rewritten and no new live request was made during that diagnostic review.
+Patrick's subsequent, separately authorized corrective attempt is recorded below.
+
+## Single authorized corrective transcription-only validation
+
+Tested clean HEAD `39009964927604cfe0a7e15e3dae99d2f4c2c909`; new isolated identity
+`87b0d170-3387-4959-8711-a2ef647f20ca`. The current corrected adapter was invoked
+exactly once with the reviewed bounded WAV, after verifying the server key and audio
+metadata. No application worker/FilmUnderstandingRun was started; Astra could not
+follow. The original failed run and attempt artifacts/lock remain unchanged.
+
+Result: **TRANSCRIPTION_UNAVAILABLE**, **423 ms**, starting
+`2026-09-14T11:24:13.284144300Z`. No upstream HTTP status or request ID was exposed;
+local 503 is an application status only. Provider receipt is unconfirmed. No transcript
+completion/segment count/timestamp validation; usage and charged cost unknown.
+Classification: **INSUFFICIENT_EVIDENCE**, not a proven rejection or parser defect.
+Exactly one invocation, no retry, **zero Astra calls**. The single authorization is
+consumed. Safe metadata and a new permanent lock are retained privately; WAV deleted.
+
+No application code changes and no deterministic test/build rerun; prior green gates
+apply to the unchanged code. Documentation diff check passes. Full details and
+artifact names: [transcription review](PR8-TRANSCRIPTION-REVIEW.md).
+**Merge readiness remains limited:** real transcription transport/parsing and real
+Astra Film Understanding are still unverified. Stop for Patrick's review, not another
+request, merge or PR9. No film-discovery or screen-opening observation is claimed.

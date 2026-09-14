@@ -2,7 +2,9 @@
 
 Date: September 14, 2026. Branch: `feat/p1-ai-film-understanding`.
 Reviewed implementation: `af42338d90934a9fdb6d304e43d0e418ae8d6484`.
-No new OpenAI inference/API request, reroll, merge or PR9 work is authorized or performed.
+The initial diagnostic review authorized/performed no new OpenAI inference/API request.
+Patrick subsequently authorized one isolated corrective transcription-only attempt;
+its separate outcome is recorded below. No retry, Astra call, merge or PR9 work follows.
 Official documentation retrieval is separate from provider execution.
 
 ## Classification: INSUFFICIENT_EVIDENCE
@@ -97,7 +99,7 @@ PR8's 78 frontend/19 Chromium results remain historical, not newly claimed check
 One **isolated transcription-only** corrective live validation is justified after
 explicit authorization, using the same request/audio contract and new diagnostics.
 It must not silently continue into Astra or remove/reuse the original attempt lock
-to bypass the no-reroll record. None is performed in this review.
+to bypass the no-reroll record. None was performed during the initial diagnostic review.
 
 Without it, real transcription acceptance remains unverified and the primary
 multimodal flow may fail for this account/environment. A successful response's
@@ -105,3 +107,61 @@ timestamp parsing and downstream Astra discovery remain live-unverified as well.
 Recommend resolving that functional acceptance risk before merge; deterministic
 diagnostic correctness is not proof of provider compatibility. A rejected future
 call should now yield bounded safe evidence instead of another opaque failure.
+
+## Separately authorized corrective attempt — September 14
+
+Patrick explicitly authorized exactly one transcription-only validation after the
+diagnostic fix. Tested HEAD: `39009964927604cfe0a7e15e3dae99d2f4c2c909`, branch
+`feat/p1-ai-film-understanding`; worktree was clean immediately before dispatch.
+Server-side key presence was checked without printing it. No application code change
+was needed. An ignored, compiled local Java harness directly invoked the built
+`OpenAiAudioTranscriptionAdapter.transcribe` exactly once, without starting Spring,
+the Film Understanding worker or any Astra adapter. It used an exclusive new lock,
+not the original attempt identity, lock, database row or Film Understanding endpoint.
+
+Preflight re-extraction matched the reviewed source/audio contract: original SHA-256
+`ac9b29c47eeb399dbd1ac5cdfcde19273e0e4e68f5df8fd67fedbef3d284a7a7`, source duration
+92.458667 s (domain 92,459 ms), WAV PCM s16le/mono/16 kHz/16-bit, 2,958,756 bytes,
+92.458688 s (existing PCM-duration calculation supplies 92,458 ms). Audio SHA-256:
+`2711f31198d9d7e974af4e416ecec2ba07c1b01e7382e2c5605148e163fbc199`.
+The current adapter's request construction and corrected diagnostics were used
+unchanged. The harness only records safe completion/failure metadata, never audio
+or transcript text in its evidence output.
+
+| Evidence | Actual result |
+| --- | --- |
+| New validation identity | `87b0d170-3387-4959-8711-a2ef647f20ca`; isolated validation, not an application FilmUnderstandingRun. |
+| Started / completed UTC | `2026-09-14T11:24:13.284144300Z` / `2026-09-14T11:24:13.728034900Z`. |
+| Adapter-call latency | 423 ms. |
+| Outcome | FAILED, `TRANSCRIPTION_UNAVAILABLE`. |
+| Safe detail | Transcription timed out or could not be reached. No automatic retry was made. |
+| Upstream HTTP status | Not exposed/unknown. The application's 503 is not a provider status. |
+| Provider request ID | None captured. |
+| Provider error type/code/message | No provider rejection diagnostics captured; safe detail above is application-authored. |
+| Transcript segments/timestamps | No completion returned; count unavailable and parsing/timestamp verification not reached. |
+| Usage / billed cost | Unavailable/unknown, not claimed zero. |
+| Dispatches / Astra calls | One adapter dispatch invocation, no retries; zero Astra calls. Provider receipt cannot be confirmed. |
+
+**Classification: INSUFFICIENT_EVIDENCE.** Unlike the original recorded non-2xx
+rejection, this result is the adapter's unavailable branch. It does not establish
+an upstream rejection, account restriction, successful transport, parser defect or
+transient provider failure. No network exception cause is exposed by this branch;
+the 423 ms elapsed time alone cannot diagnose its cause. Do not label this a proven
+120-second timeout, infer a 401/403/429, or invent a provider request ID.
+
+The new permanent lock and sanitized result are
+`.local/pr8-corrective-transcription-87b0d170-3387-4959-8711-a2ef647f20ca.lock` and
+the same basename with `.json`. Original attempt/result/lock SHA-256 values were
+recorded before dispatch and verified unchanged afterward. No database writes or
+original run mutations were made. The temporary extracted WAV was deleted; no
+transcript was persisted. The authorization is consumed even though provider receipt
+is unconfirmed; do not execute the harness again or allocate another identity.
+
+No application code, API, model, configuration or architecture changed. Deterministic
+tests/builds were not rerun for this local validation and documentation follow-up;
+the preceding 32 focused/115 full backend tests, build and OpenAPI passes remain
+historical verified gates for the same application code. Documentation diff check passes.
+
+**Merge impact:** the acceptance gap is not closed. Real transcription transport,
+successful response parsing/timestamps and real Astra Film Understanding remain
+unverified. Stop for Patrick's review; no further provider request is authorized.

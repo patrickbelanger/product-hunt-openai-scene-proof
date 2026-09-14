@@ -183,7 +183,8 @@ PR8; there is no separate progress branch. General UX remains PR9.
 - [x] Initial deterministic backend/frontend tests, Chromium, builds and generated OpenAPI checks: 102 / 78 / 19.
 - [x] Capped real validation: one transcription request rejected; zero Astra calls. Failure/unknown cost recorded, no reroll.
 - [x] Focused rejection review: INSUFFICIENT_EVIDENCE; bounded sanitized diagnostics fixed, 32 focused / 115 full backend tests and build/OpenAPI checks pass. No new live call.
-- [ ] Successful real multimodal provider acceptance remains unverified; an isolated corrective transcription validation requires Patrick's separate explicit authorization after this offline diagnostic review.
+- [x] Patrick's separately authorized single corrective transcription-only invocation: TRANSCRIPTION_UNAVAILABLE in 423 ms; no upstream status/request ID, no retry/Astra, original history preserved. No application code changes or suite rerun; see PR8-TRANSCRIPTION-REVIEW.
+- [ ] Successful real transcription transport/parsing and real Astra multimodal provider acceptance remain unverified. The corrective authorization is consumed; stop for Patrick's review.
 - [x] Synchronized product/technical docs, ADR and PR8-REVIEW for the final commit/push handoff; stop for review.
 
 Implemented stages (ADR-0008): PREPARING_SOURCE, DETECTING_STRUCTURE,

@@ -64,6 +64,12 @@ metadata/hash snapshots and archive; eight active references share analysis budg
   live reroll. Existing failure detail/request-ID fields suffice; no request/provider
   architecture change. Original rejection remains INSUFFICIENT_EVIDENCE, while the
   observability defect is fixed and tested. See [focused review](PR8-TRANSCRIPTION-REVIEW.md).
+- Patrick subsequently authorized exactly one isolated corrective transcription-only
+  dispatch on corrected HEAD `3900996`, explicitly prohibiting Astra, original-run
+  mutation and retry. Validation `87b0d170-3387-4959-8711-a2ef647f20ca` returned
+  TRANSCRIPTION_UNAVAILABLE without upstream status/request ID; INSUFFICIENT_EVIDENCE.
+  Authorization is consumed, original history preserved, no application code change.
+  Real acceptance remains unverified; stop for review, not another request or merge.
 
 ## DECISION REQUIRED format (for future decisions)
 
