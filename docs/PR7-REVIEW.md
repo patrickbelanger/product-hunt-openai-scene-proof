@@ -3,8 +3,10 @@
 Date: 2026-09-13 (Toronto; live validation on September 14 UTC).
 Branch: `feat/p1-demo-project`.
 Exact base: `1e3f28fb162bcdc9d608c40d61d7fcfbcad97909`, the verified PR6 merge.
-Implementation and review travel in the same commit; the final handoff reports the
-exact pushed HEAD. No merge or PR8 work is authorized by this handoff.
+Verified implementation HEAD: `5eac0b9ba3fc9b2a91b0e9467102eb8e11c781ac`, committed
+and pushed to origin. This documentation-only follow-up records that immutable review
+point; the final handoff reports the exact pushed tip including this follow-up.
+No merge or PR8 work is authorized by this handoff.
 
 ## Recovery and scope
 

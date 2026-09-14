@@ -3,7 +3,7 @@
 Last updated: 2026-09-13
 Current branch: `feat/p1-demo-project`
 Current milestone: PR6 merged; PR7 implemented and verified, awaiting review.
-Current task: Commit/push the verified PR7 handoff, then stop. Do not merge or start PR8.
+Current task: Review PR7. Do not merge or start PR8 without Patrick's approval.
 
 ## PR7 recovery and current behavior
 
@@ -36,7 +36,8 @@ UI. This does not prove the film error-free or establish a finding showcase.
 Run `9b30f01d-54e6-4586-b7ac-63c0f2eb6880`: 16,861 input / 1,176 output tokens,
 28.709 seconds, estimated USD **$0.26956** (not a billing receipt). GET-only verification
 passed; no reroll, targeted paid call or recorded baseline was added.
-Implementation and review are committed together; final handoff reports pushed HEAD.
+Implementation `5eac0b9ba3fc9b2a91b0e9467102eb8e11c781ac` is committed/pushed.
+This documentation-only follow-up records the review point; final handoff reports tip HEAD.
 Remote CI is not checked. Final evidence: [PR7 review](PR7-REVIEW.md).
 Run/setup remains in README. ADR-0007 records transaction/disk-retention limitations.
 

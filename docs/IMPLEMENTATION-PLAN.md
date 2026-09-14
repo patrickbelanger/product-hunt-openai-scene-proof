@@ -157,4 +157,4 @@ failure-safe UI refresh. Test state transitions and preservation of prior eviden
 - [x] Backend/frontend deterministic tests and builds: 83 backend / 68 frontend; OpenAPI drift.
 - [x] Complete Chromium (17 tests) and 1280/820/390 visual, keyboard and no-overflow verification.
 - [x] Exactly one real full-sequence Astra validation: succeeded, zero findings; independent results/usage in PR7-REVIEW. No reroll.
-- [ ] Final synchronized PR7 review, commit/push and stop without merge or PR8.
+- [x] Final synchronized PR7 review; implementation `5eac0b9` committed/pushed. Documentation-only handoff follow-up; stop without merge or PR8.
