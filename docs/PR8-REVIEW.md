@@ -2,6 +2,13 @@
 
 ## Final review state — supersedes earlier live-acceptance limitations
 
+Latest CI follow-up fixes a proven guided-tour autofocus race: a late redundant
+animation-frame callback stole focus from Skip after Mantine had focused the heading.
+Controlled regression fails before the fix and passes afterward. Opening focus stays
+with Mantine; existing-step navigation focuses the heading without a deferred callback.
+16 tour / 79 full frontend tests (two workers), five Chromium tour tests, frontend
+build and OpenAPI drift pass. No backend/provider change; remote CI remains pending.
+
 Subsequent CI correction: demo reset tests await accessible confirmation buttons
 instead of synchronously racing Mantine's modal transition. Runtime code is unchanged.
 Nine focused tests and all 78 frontend tests with two workers pass; frontend build

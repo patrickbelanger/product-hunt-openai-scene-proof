@@ -2,6 +2,8 @@
 
 ## Final PR8 handoff checkpoint
 
+- [x] Reproduce/fix late guided-tour autofocus stealing Tab focus; 16 tour / 79 frontend tests, five Chromium tour tests, frontend build and OpenAPI drift pass. No PR9 expansion.
+
 - [x] Correct the CI reset-modal test race with async role queries; 9 focused / 78 frontend tests (two workers) and frontend build pass. Runtime unchanged; remote CI recheck pending.
 
 - [x] Recover successful persisted master-source transcription → timed validation → Astra run; preserve all prior failures.

@@ -154,6 +154,8 @@ actions as appearing on an open finding, and never manufacture findings or contr
 Editing the Bible does not start analysis; creator intent does not force agreement.
 
 Mantine supplies modal semantics, labelled heading/body, focus trapping and Escape.
+Mantine alone owns opening autofocus. Navigation between already-open steps focuses
+the updated heading without scheduling a later callback that could steal Tab focus.
 Every step focuses its heading (“Step N of 4” plus title), then Tab reaches Skip,
 Back when applicable, and Next/Done. Closing restores the initiating Quick tour
 button; if the invitation's Start control disappeared, Quick tour is the fallback.

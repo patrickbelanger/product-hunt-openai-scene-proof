@@ -5,9 +5,24 @@ Current branch: `feat/p1-ai-film-understanding`
 Current milestone: PR7 merged; PR8 complete for merge review with disclosed source-validation/UX limits.
 Recovered exact HEAD: `f1024fb2c686d82b3e471af4c44e267840598afe`; finalization is documentation-only.
 Verified implementation HEAD: `8f3c689925b537e7678d1f356900df877cb95445`. Final pushed documentation SHA is in the handoff (this file cannot contain its own commit hash).
-Current task: PR8 reset-modal test timing correction verified locally; awaiting CI/merge review.
+Current task: PR8 guided-tour focus race reproduced and fixed; awaiting CI/merge review.
 Next milestone: PR9 UX polish — not started.
 Do not merge. Do not start PR9.
+
+## CI guided-tour focus follow-up
+
+The next CI failure exposed a runtime race, not an assertion to weaken: Mantine
+autofocused the heading, then the tour's separate animation-frame callback could
+steal focus back after Tab reached Skip. A controlled delayed-frame regression
+reproduces that exact failure before the fix. Mantine now owns opening autofocus;
+the tour focuses headings synchronously only when an already-open step changes.
+Tab order, Back, Escape and opener restoration remain covered with real focus assertions.
+No sleeps, longer timeouts or disabled assertions. Verified: 16 guided-tour tests,
+79 full frontend tests with two workers, five Chromium tour tests (desktop/tablet/mobile),
+TypeScript/Vite build, OpenAPI drift and diff checks. Existing 519 kB chunk warning
+remains. Backend tests are unchanged and were not rerun. Browser tests used the
+isolated deterministic server/schema, never OpenAI. No PR9 work or merge; CI must
+confirm the pushed fix. Earlier implementation HEAD/test counts below are historical.
 
 ## CI reset-test follow-up
 
