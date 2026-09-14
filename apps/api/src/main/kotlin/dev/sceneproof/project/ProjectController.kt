@@ -35,14 +35,18 @@ data class ProjectView(
     val rules: String,
     val createdAt: Instant,
     val updatedAt: Instant,
+    val demo: DemoIdentity? = null,
 ) {
     companion object {
         fun from(project: Project) = ProjectView(
             project.id, project.name, project.description, project.rules,
             project.createdAt, project.updatedAt,
+            project.demoInstanceId?.let { DemoIdentity(it, requireNotNull(project.demoTemplateVersion), project.demoRetired) },
         )
     }
 }
+
+data class DemoIdentity(val instanceId: UUID, val templateVersion: String, val retired: Boolean)
 
 data class ProjectPage(val items: List<ProjectView>, val page: Int, val hasNext: Boolean)
 

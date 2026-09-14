@@ -23,4 +23,8 @@ class Project(
     val createdAt: Instant = Instant.now().truncatedTo(ChronoUnit.MICROS),
     @Column(nullable = false)
     var updatedAt: Instant = createdAt,
+    val demoInstanceId: UUID? = null,
+    @Column(length = 80)
+    val demoTemplateVersion: String? = null,
+    var demoRetired: Boolean = false,
 )

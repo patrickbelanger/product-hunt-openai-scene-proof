@@ -41,8 +41,13 @@ is remembered in this browser, and Quick tour always restarts it. Empty projects
 supported without invented findings or actions. The tour never edits or analyzes.
 Creator intent adds context; it does not force Astra to agree.
 
-Later P1 slices add curated demo, progress and polished
-failure states. The final first-run page will expose both Try the demo film and
-Create a project; the demo action is deliberately absent until it works.
+PR7 adds Try the demo film beside Create a project. It opens the real product with
+eight authored video clips, five references and rules from the approved Between the
+Line film by Laurie and Patrick. Preparation is explicit and recoverable; no upload
+or form is required. A restrained Demo project indicator and confirmed Reset demo
+identify working copies. Reset returns a fresh authored copy and retains old history.
+The initial findings state is empty: no model result is staged or preloaded.
+The real optional tour behaves as in ordinary projects. Later P1 slices add progress
+and public-demo protections; this slice remains local and unauthenticated.
 Future collaboration, export and generation integrations are not built this sprint.
 See [BRD](BRD.md) for acceptance and [STATUS](STATUS.md) for actual delivery state.

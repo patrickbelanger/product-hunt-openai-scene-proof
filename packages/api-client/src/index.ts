@@ -15,6 +15,18 @@ export type Reference = components['schemas']['Reference'];
 export type ReferenceMetadata = components['schemas']['ReferenceMetadata'];
 export type UpdateRules = components['schemas']['UpdateRules'];
 
+export async function openDemo(requestId: string): Promise<Project> {
+  const { data, error, response } = await api.POST('/api/v1/demo', { body: { requestId } });
+  if (!data) throw new ApiError(response.status, error);
+  return data;
+}
+
+export async function resetDemo(projectId: string): Promise<Project> {
+  const { data, error, response } = await api.POST('/api/v1/projects/{projectId}/demo/reset', { params: { path: { projectId } } });
+  if (!data) throw new ApiError(response.status, error);
+  return data;
+}
+
 export async function updateProjectRules(id: string, body: UpdateRules): Promise<Project> {
   const { data, error, response } = await api.PUT('/api/v1/projects/{id}/rules', { params: { path: { id } }, body });
   if (!data) throw new ApiError(response.status, error);

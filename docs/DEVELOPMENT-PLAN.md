@@ -8,7 +8,7 @@ in the initial context; no change to product scope. Deadline: September 18.
 | Sep 12 — Day 1 | P0 foundation; start media ingestion after review | Runnable API/web, real PostgreSQL project flow, green checks |
 | Sep 13 — Day 2 | P0 media, Astra and findings | Video → bounded frames → live Astra → persisted finding → visual inspection |
 | Sep 14 — Day 3 | P0 intentional-change steering; Reference Bible | Context persisted, affected analysis repeated, auditable updated finding |
-| Sep 15 — Day 4 | P1 demo, guided tour, real progress | Curated film with ~5 issues and intentional differences; bounded live use |
+| Sep 15 — Day 4 | P1 demo, guided tour, real progress | Curated film and independent continuity evaluation; bounded live use |
 | Sep 16 — Day 5 | P1 polish, deployment rehearsal, recording | Laptop/tablet QA; launch candidate and recording rehearsal |
 | Sep 17 | Buffer and demo freeze | Fix launch blockers only, record 60–75s demo, prepare submission |
 | Sep 18 | Submit and monitor | Public URL, screenshots, video, tested first-run experience |
@@ -42,8 +42,16 @@ through PR #4 as `0901f4b`; Patrick authorizes PR5 Reference Bible from that bas
 PR5 is merged through PR #5 as `3184af6`; PR6 recovery verified the exact main SHA
 `3184af6cf0119be1fa2949ca1fb60a2584483a56`. Patrick authorizes only
 `feat/p1-guided-tour`: optional four-step onboarding, no model/backend changes.
-PR6 must be verified, committed and pushed, then stop for review before PR7.
-No dates or
+PR6 is merged through PR #6 at `1e3f28fb162bcdc9d608c40d61d7fcfbcad97909`.
+Patrick authorizes PR7 on `feat/p1-demo-project`: approved original film, up to eight
+clips, five references, deterministic creation/reset, evaluation separation and
+honest empty baseline. Current curation supersedes the unsupported blazer candidate.
+No analysis-limit change, public isolation/deployment or later scene-management work.
+PR7 verification passes: 83 backend, 68 frontend and 17 Chromium tests. The one real
+film analysis succeeded with zero findings and contextualized the apartment transition;
+the historical ~five-issue target is not a promise of detections. A finding-focused
+launch recording remains a curation/review question, not grounds for a paid reroll.
+Commit/push PR7, then stop for review; do not start PR8. No dates or
 priorities have been changed. The dates are delivery targets, not assertions of completed work; actual progress
 lives in [STATUS](STATUS.md) and [Implementation Plan](IMPLEMENTATION-PLAN.md).
 

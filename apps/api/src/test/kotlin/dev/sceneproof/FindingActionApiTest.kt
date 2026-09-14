@@ -78,7 +78,7 @@ class FindingActionApiTest @Autowired constructor(private val mvc: MockMvc, priv
     @AfterEach
     fun finishInterruptedFixtures() {
         check(jdbc.queryForObject("SELECT current_schema()", String::class.java) == "sceneproof_steering_test")
-        jdbc.execute("TRUNCATE finding_references, analysis_references, visual_references, targeted_results, finding_action_shots, finding_actions, finding_frames, finding_shots, findings, analysis_runs, frames, shots, projects")
+        jdbc.execute("TRUNCATE demo_replacements, finding_references, analysis_references, visual_references, targeted_results, finding_action_shots, finding_actions, finding_frames, finding_shots, findings, analysis_runs, frames, shots, projects")
     }
 
     private fun project(): UUID = mvc.post("/api/v1/projects") {

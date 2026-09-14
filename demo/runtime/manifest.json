@@ -1,0 +1,90 @@
+{
+  "version": "between-the-line-v1",
+  "project": {
+    "name": "Between the Line — Continuity Study",
+    "description": "A journey through the metro and into an apartment, told through Patrick and the screens around him. Original film by Laurie and Patrick.",
+    "rules": "Patrick is the principal character throughout the sequence. The metro and apartment are separate scenes in his journey. Use the Reference Bible as visual context for the character, locations and devices."
+  },
+  "references": [
+    {
+      "file": "reference-01.png",
+      "sha256": "35a51b45157b3f6dbdbdad2369355c9fb7ac9506672428299f6ffc52726d8475",
+      "title": "Patrick — metro appearance",
+      "guidance": "Principal character in the metro scene."
+    },
+    {
+      "file": "reference-02.png",
+      "sha256": "ec71891769491bd6dab1a64f38d0c517ba77e6a4f02c834a5e13fc773b029954",
+      "title": "Metro platform",
+      "guidance": "Location reference for the opening scene."
+    },
+    {
+      "file": "reference-03.png",
+      "sha256": "1421e9175ec15846f4dcb102b635c16637a643d5671f177b3868232f2506ffe3",
+      "title": "Handheld phone",
+      "guidance": "Device and visible screen in the metro scene."
+    },
+    {
+      "file": "reference-04.png",
+      "sha256": "411cc581a0ea62faa70b899d69a9cd6a3a2a7713dc06e0a4978b33575ef3250d",
+      "title": "Apartment sitting area",
+      "guidance": "Location and character reference for the apartment scene."
+    },
+    {
+      "file": "reference-05.png",
+      "sha256": "491506cd416dc8a754ee89bf153fb92e6acc4491eacfa9748a85297c63253cff",
+      "title": "Apartment workstation",
+      "guidance": "Workstation and screens in the apartment."
+    }
+  ],
+  "shots": [
+    {
+      "file": "shot-01.mp4",
+      "sha256": "a7324bd36391a72f15658c17ee896c3d31f88e6880e682634aefc96f5efd85a0",
+      "title": "Metro platform",
+      "guidance": ""
+    },
+    {
+      "file": "shot-02.mp4",
+      "sha256": "d77be99d36a33cf61928ed71d73084dabe7a751dc8e0a8342a1dd8eb42ce9688",
+      "title": "Inside the carriage",
+      "guidance": ""
+    },
+    {
+      "file": "shot-03.mp4",
+      "sha256": "d6c196b49268b03a836f1c2c4ed3b676f2a6449c56085becc33418800c0da27c",
+      "title": "Phone and passenger intercut",
+      "guidance": ""
+    },
+    {
+      "file": "shot-04.mp4",
+      "sha256": "79967236060631b50cd1c469644d915dcc86b4f18c7ab6a51583ea69c0dda965",
+      "title": "Patrick with his phone",
+      "guidance": ""
+    },
+    {
+      "file": "shot-05.mp4",
+      "sha256": "832e6abac7b5d7ebaf905181e81978882370a34885ae25417f0f2005812c37d9",
+      "title": "City transition",
+      "guidance": ""
+    },
+    {
+      "file": "shot-06.mp4",
+      "sha256": "bfa7de06b952e8e84a053f0604ec7a1cf14cb17ea01fdb73fc8e6526f6b8ee2a",
+      "title": "At home",
+      "guidance": ""
+    },
+    {
+      "file": "shot-07.mp4",
+      "sha256": "56268ac31e44e435b1156dc00c05537e849371aae05abc1861889bea373a38a0",
+      "title": "Device on the sofa",
+      "guidance": ""
+    },
+    {
+      "file": "shot-08.mp4",
+      "sha256": "2f9d11c4132ec12a1daae42ce377ed1e791bf2115b1cfda469207066cf59bd6d",
+      "title": "At the workstation",
+      "guidance": ""
+    }
+  ]
+}

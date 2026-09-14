@@ -127,13 +127,13 @@ failure-safe UI refresh. Test state transitions and preservation of prior eviden
 
 - [x] Reference Bible editor, rules and reference-image association (PR5).
 - [x] Optional four-step tour with Skip and Restart (PR6; verified below).
-- [ ] Original demo media, five expected issues, intentional differences and reset.
+- [x] Original demo media, evidence-based evaluation questions, intentional transition and reset (PR7; no guaranteed finding count).
 - [ ] Bounded live demo, hosting/isolation decision and rate/cost protection.
 - [ ] Real progress transport, retries and failure visibility.
 - [ ] Responsive/accessibility polish and launch rehearsal.
 - [ ] Optional micro-interactions and Product Hunt presentation refinements.
 
-### PR6 — Guided tour, exact base `3184af6cf0119be1fa2949ca1fb60a2584483a56`
+### PR6 — Guided tour, base `3184af6cf0119be1fa2949ca1fb60a2584483a56`, merged as `1e3f28f`
 
 - [x] Recover clean main/origin at the PR5 merge; reconcile historical PR5 review state.
 - [x] Create only `feat/p1-guided-tour` from the exact verified base.
@@ -144,3 +144,17 @@ failure-safe UI refresh. Test state transitions and preservation of prior eviden
 - [x] Deterministic RTL coverage: 15 tour tests; complete frontend suite 59 passing.
 - [x] Final Chromium desktop/tablet/mobile and existing regression checks: 59 frontend / 15 browser / 71 backend; builds, OpenAPI drift and diff pass.
 - [x] Synchronize final verification/review docs for the PR6 commit and push; stop without merge or PR7.
+
+### PR7 — Populated demo, exact base `1e3f28fb162bcdc9d608c40d61d7fcfbcad97909`
+
+- [x] Recover exact merged PR6 main; preserve supplied staged film; create only PR7 branch.
+- [x] Confirm Patrick's original/generated source authorization and Laurie/Patrick attribution.
+- [x] Inspect actual film; approve up to eight clips and supersede unsupported blazer assumption.
+- [x] Versioned runtime input manifest, eight clips, five derived references and provenance/curation record.
+- [x] Evaluation-only continuity questions and historical unsupported candidates outside runtime resources.
+- [x] V6 explicit demo identity, atomic seed/recovery, safe replacement reset with retained history.
+- [x] Typed API/OpenAPI regeneration, landing entry, demo indicator and confirmed reset.
+- [x] Backend/frontend deterministic tests and builds: 83 backend / 68 frontend; OpenAPI drift.
+- [x] Complete Chromium (17 tests) and 1280/820/390 visual, keyboard and no-overflow verification.
+- [x] Exactly one real full-sequence Astra validation: succeeded, zero findings; independent results/usage in PR7-REVIEW. No reroll.
+- [ ] Final synchronized PR7 review, commit/push and stop without merge or PR8.

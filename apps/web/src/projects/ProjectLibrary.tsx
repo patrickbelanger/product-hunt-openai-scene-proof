@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { listProjects } from '@sceneproof/api-client';
+import { DemoLaunch } from './DemoControls';
 
 export function ProjectLibrary() {
   const [page, setPage] = useState(0);
@@ -13,7 +14,7 @@ export function ProjectLibrary() {
         <Text className="eyebrow" c="teal.3">YOUR AI CONTINUITY SUPERVISOR</Text>
         <Title order={1}>Make your film<br /><span>remember itself.</span></Title>
         <Text c="gray.4" className="hero-copy">Your characters. Your world. Every detail.<br />Give your next sequence a place to stay consistent.</Text>
-        <Button component={Link} to="/projects/new" size="md" color="teal.3" c="dark.9">Create a project <span aria-hidden="true" className="button-arrow">↗</span></Button>
+        <Group align="flex-start"><DemoLaunch /><Button component={Link} to="/projects/new" size="md" variant="default">Create a project <span aria-hidden="true" className="button-arrow">↗</span></Button></Group>
       </div>
       <div className="film-diagram" aria-label="Reference, sequence, review">
         <div className="diagram-label">THE CONTINUITY PROCESS</div>

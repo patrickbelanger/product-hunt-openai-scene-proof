@@ -36,7 +36,7 @@ class FfmpegAdapter(
         }
         val interval = String.format(Locale.ROOT, "%.6f", duration / 24)
         val spacing = String.format(Locale.ROOT, "%.6f", duration / 32)
-        val filter = "setpts=PTS-STARTPTS,select='isnan(prev_selected_t)+gte(t-prev_selected_t,$spacing)*(gt(scene,0.3)+gte(t-prev_selected_t,$interval))',scale=1600:1600:force_original_aspect_ratio=decrease,showinfo"
+        val filter = "setpts=PTS-STARTPTS,select='isnan(prev_selected_t)+gte(t-prev_selected_t,$spacing)*(gt(scene,0.3)+gte(t-prev_selected_t,$interval))',scale='min(1600,iw)':'min(1600,ih)':force_original_aspect_ratio=decrease,showinfo"
         val result = process.run(listOf(ffmpeg, "-nostdin", "-hide_banner", "-loglevel", "info", "-xerror", "-threads", "2") + inputOptions + listOf(
             "-i", input.toString(), "-map", "0:v:0", "-an", "-sn", "-dn", "-t", "120", "-vf", filter,
             "-filter_threads", "1", "-fps_mode", "vfr", "-frames:v", "32", "-threads", "2", "-start_number", "0", input.parent.resolve("%02d.png").toString(),

@@ -42,6 +42,9 @@ dependencies {
 }
 
 tasks.processResources {
+    from(rootProject.file("demo/runtime")) {
+        into("demo")
+    }
     from(rootProject.file("packages/api-client/openapi.json")) {
         into("static")
     }

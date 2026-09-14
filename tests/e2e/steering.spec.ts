@@ -32,6 +32,7 @@ for (const remains of [false, true]) test(`intent → ${remains ? 'issue remains
   const writes: string[] = [];
   page.on('request', outgoing => { if (outgoing.method() !== 'GET' && outgoing.url().includes('/api/')) writes.push(outgoing.url()); });
   const intent = page.getByRole('button', { name: 'This change is intentional' });
+  await expect(intent).toBeEnabled();
   await intent.focus(); await page.keyboard.press('Enter');
   const explanation = remains ? 'The issue remains because the repaint occurs after this sequence.' : 'The square is repainted after the character arrives home between shots.';
   await page.getByLabel('Why is this change intentional?').fill(explanation);

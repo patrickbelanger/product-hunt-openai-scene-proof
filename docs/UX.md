@@ -4,7 +4,8 @@
 
 Dark, restrained visual workspace. The header shows SceneProof and local workspace
 status. Landing explains the continuity workflow with a simple geometric illustration,
-offers Create a project and lists saved projects. No external imagery or fake findings.
+offers Try the demo film and Create a project and lists saved projects. The demo uses
+the approved original film; no external stock imagery or fabricated findings.
 
 Creation asks for name, description and textual rules. Blank-name validation is
 immediate; submit shows pending state and prevents duplicate submission. Failure
@@ -15,7 +16,7 @@ findings on the right, scrolling timeline below the inspector. Import takes one
 still or short video and shows real pending work. Errors retain the selected file
 for retry; completed failures remain visible after reload. Timeline buttons select
 actual PNG frames, showing video elapsed seconds or "Still image". Empty states
-remain truthful; no Analyze/Demo controls imply unimplemented behavior.
+remain truthful; sequence analysis remains explicitly API-started.
 Project names and rules wrap, including long unbroken content.
 
 Loading is announced through status roles; errors offer retry/navigation. Forms have
@@ -113,13 +114,36 @@ image failure are explicit and never substituted with current references.
 
 ## Planned later slices
 
-Demo entry opens a populated film without upload.
+Demo entry is implemented in PR7 and opens a populated film without upload.
 Progress stages must originate in backend work; no fake percentages.
 
 Before launch verify normal laptop/tablet, keyboard-only flow, empty/loading/error
 states, readable evidence images, contrast and an under-one-minute demo journey.
 
-## Optional guided tour (PR6)
+## Populated demo (PR7)
+
+Try the demo film is a primary landing button alongside Create a project. Real
+preparation has an announced pending state; repeated clicks cannot launch duplicate
+work. Session storage records the request before POST, preserving retry after network
+loss/reload. Storage failure sends no request. Server failure remains actionable.
+
+The demo's import panel starts collapsed so the film comes first; users can open it
+to add footage. Launch/reset focuses the populated workspace heading for keyboard
+orientation without starting the tour.
+The workspace displays Demo project from typed identity and a compact description
+with film attribution. Five real Bible images and eight video imports are immediately
+inspectable once preparation completes. Findings start empty and are never invented.
+Optional first-workspace tour invitation remains independent and does not auto-open.
+
+Reset demo appears only on current demo copies. Its modal explains removal of edits
+from the working copy and retention of history with the old copy. Keep my changes is
+the initial focus; Escape cancels before submission. During reset, dismissal and
+duplicate submission are disabled; success navigates to the ready new project.
+Failure keeps the current workspace and allows retry for the same source project.
+Cancel restores opener focus through Mantine. Old URLs show Previous demo copy and
+no reset control. No fake React project/media DTOs are used in runtime paths.
+
+## Optional guided tour (PR6, unchanged)
 
 The first successfully opened workspace offers a compact “Take the quick tour”
 invitation with Start tour / Skip. There is no automatic modal or focus movement.

@@ -28,7 +28,22 @@ PR5: [ADR-0006](adr/ADR-0006-reference-bible-history.md) records the explicitly
 delegated model choice: immutable reference images, editable current text, submitted
 metadata/hash snapshots and archive; eight active references share analysis budgets.
 
-## DECISION REQUIRED format
+## PR7 accepted decisions — September 13
+
+- Patrick supplied `demo/between the lines - demo.mp4` and confirmed it is his
+  original/generated work using his generated references, authorized for SceneProof
+  and the public Product Hunt demo. Required attribution: **Laurie and Patrick**.
+  Actual source SHA-256 and its alternate conversational name are in `demo/curation.json`.
+- The original specification's black blazer is superseded by the film's dark/navy
+  metro polo. Apartment clothing is a deliberate scene/time transition. Patrick
+  approved up to eight useful real clips, retaining the existing analysis bounds.
+  Unsupported historical cases are not expected detections. Current evaluation is
+  grounded in visible character/device/UI/spatial questions, outside model context.
+- [ADR-0007](adr/ADR-0007-demo-template-and-replacement.md): packaged immutable
+  authored inputs, local working instance identity, atomic creation and replacement
+  reset with historical copies retained. No recorded findings baseline is shipped.
+
+## DECISION REQUIRED format (for future decisions)
 
 Current technology/choice; problem; proposed alternative; alternatives considered;
 recommendation; implementation impact; deadline impact. Record the response and
