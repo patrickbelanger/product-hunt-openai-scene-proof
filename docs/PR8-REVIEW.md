@@ -1,5 +1,17 @@
 # PR8 review — AI Film Understanding / Multimodal Continuity Discovery
 
+## Final review state — supersedes earlier live-acceptance limitations
+
+Recovered SUCCEEDED run `104fed03-5210-4269-a6e8-169ced53f2ce` used the historical
+92.458667-second master, not the 36.291667-second derivative. Six timed transcript
+segments reached Astra medium: three entities, three narrative cues, three pending
+anchors and two potential concerns. The screen-opening relationship was naturally
+discussed, not declared a continuity error. All prior failure evidence remains distinct.
+[Final validation recovery](PR8-FINAL-VALIDATION.md) contains exact IDs, timing, usage,
+summary, warnings, cost qualifications, source distinction and reviewer focus.
+PR8 is ready for merge review with disclosed limits; PR9 is next, not started.
+Earlier sections below are chronological implementation/validation evidence.
+
 Date: September 14, 2026 (Toronto). Branch: `feat/p1-ai-film-understanding`.
 Exact base: `ed6066283d27da97484425f900b6bccb447b0911`, verified PR7 merge #7.
 Final pushed HEAD is reported in the review handoff rather than embedding a

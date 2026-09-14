@@ -1,5 +1,13 @@
 # Demo film
 
+## Final PR8 evidence
+
+New/reset Film Intelligence sources use the 36.291667-second derivative. The successful
+UI run used an existing historical master-source project (92.458667 seconds); its
+six transcript segments extend to 47.366 seconds legitimately on that source.
+Do not relabel it as a derivative validation or preload its results into new demos.
+[Final recovery](PR8-FINAL-VALIDATION.md) preserves the live result and prior failures.
+
 PR7 implements **Between the Line — Continuity Study**, template **between-the-line-v1**.
 Try the demo film opens a real populated project without upload, forms or authentication.
 First preparation uses the actual ingestion services; subsequent launch recovers the

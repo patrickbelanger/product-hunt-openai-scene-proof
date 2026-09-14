@@ -1,5 +1,16 @@
 # Decisions
 
+## PR8 finalization clarification — September 14
+
+Patrick requests read-only recovery of the subsequent successful UI flow, no paid
+request. Persisted source identity proves it used the 92.458667-second master, not
+the derivative. Preserve it as successful provider-path evidence and keep derivative
+deterministic verification separate. This evidence distinction is a disclosed review
+limitation, not a reason to reroll or rewrite old sources. Historical authentication
+and insufficient-evidence classifications remain unchanged. No architecture change.
+[Final validation](PR8-FINAL-VALIDATION.md) records all recovered events and PR9-only
+UX follow-up; no merge, new branch or provider dispatch is authorized here.
+
 | ID / date | Status | Decision |
 | --- | --- | --- |
 | D-001 / Sep 12 | Accepted by Patrick | Initial `Spring Boot 4.11` means **4.1.1**. Java 25 and Kotlin 2.3+ remain mandatory. |

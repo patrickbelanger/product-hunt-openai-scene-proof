@@ -53,6 +53,12 @@ may support new claims; do not stage the screen-opening evaluation answer.
 General UX is PR9, optional Product Hunt cosmetics are P2 and must not delay release.
 Public hosting/auth/isolation/billing remain out of this branch.
 
-PR8's one live attempt failed at transcription before Astra. It supplies real failure
-visibility, not a successful multimodal-discovery recording. Use neither deterministic
-test screenshots nor invented screen-opening findings as live-provider launch evidence.
+PR8 now has a recovered successful master-source Film Intelligence run: timed audio
+context, visual/narrative discovery and pending anchors. The earlier failures remain
+distinct. This supports a truthful discovery recording, not a confirmed-error claim
+or successful live validation of the shorter derivative. Exact summary, warnings,
+source distinction and screen-opening discussion: [final validation](PR8-FINAL-VALIDATION.md).
+Use neither deterministic fixtures nor invented findings as live-provider evidence.
+Reported refresh flashing, progress hierarchy, cluttered/tall evidence cards,
+master-vs-analysis labels and missing project deletion remain PR9 follow-up, not
+cosmetic additions to PR8. Public launch prerequisites remain unchanged.

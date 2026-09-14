@@ -1,5 +1,13 @@
 # Development Plan
 
+## Current handoff — September 14
+
+PR7 is merged. PR8 is implemented and ready for merge review, with successful
+master-source provider processing and separately verified derived-source generation.
+No live derivative success is claimed. [Final evidence](PR8-FINAL-VALIDATION.md)
+records remaining limits and PR9-only UX issues. Next: PR9 `feat/p1-ux-polish`, only
+after approval; optional P2 follows. No standalone analysis-progress branch exists.
+
 Historical delivery baseline: September 12, 2026. The initial schedule below is
 preserved; Patrick's authorized post-PR7 branch/scope reconciliation follows it.
 Deadline: September 18; this planning update does not revise the delivery date.

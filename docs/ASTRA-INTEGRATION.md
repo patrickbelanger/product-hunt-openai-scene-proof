@@ -1,5 +1,14 @@
 # Astra integration
 
+## PR8 final live evidence
+
+The recovered master-source run completed purpose-built Audio Transcriptions, validated
+six timed segments, then `gpt-6-astra`/medium visual-narrative understanding. Neither
+Chat nor Responses performs transcription. Success is persisted for the 92.458667-second
+master only; the 36.291667-second derivative has deterministic verification, not live
+success. [Final validation](PR8-FINAL-VALIDATION.md) records request IDs, usage, stage
+latencies and limitations. Earlier failure/no-success notes below are historical.
+
 ## PR5 declared visual references
 
 The [Astra model card](https://developers.openai.com/api/docs/models/gpt-6-astra),

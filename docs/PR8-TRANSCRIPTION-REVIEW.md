@@ -1,5 +1,15 @@
 # PR8 transcription rejection review
 
+## Final recovery — successful master flow
+
+The subsequent UI run `104fed03-5210-4269-a6e8-169ced53f2ce` successfully transcribed
+the 92.458667-second master using `gpt-4o-transcribe-diarize`, with six validated
+source-relative segments (13.050–47.366 s), then completed Astra Film Understanding.
+It does not validate the derived source live or reconstruct earlier errors.
+[Final validation](PR8-FINAL-VALIDATION.md) records the exact IDs, additional historical
+UI failures, unknown transcription billing and unretained exact success HTTP status.
+Historical classifications/locks below remain unchanged. No finalization provider call.
+
 Date: September 14, 2026. Branch: `feat/p1-ai-film-understanding`.
 Reviewed implementation: `af42338d90934a9fdb6d304e43d0e418ae8d6484`.
 The initial diagnostic review authorized/performed no new OpenAI inference/API request.

@@ -1,5 +1,14 @@
 # Product
 
+## PR8 final checkpoint
+
+The visual-plus-transcript provider flow is validated end to end on the historical
+92.458667-second master. Three discovered anchors remain pending creator confirmation;
+concerns are questions, not confirmed errors. New/reset demos use the separately
+verified 36.291667-second derivative, without a claimed live success on that asset.
+See [final evidence and PR9-only UX backlog](PR8-FINAL-VALIDATION.md). PR8 awaits merge
+review; PR9 UX polish is next and is not implemented by this handoff.
+
 SceneProof: your AI continuity supervisor for generative film.
 Primary line: **Keep every shot in character.** Landing: **Make your film remember itself.**
 

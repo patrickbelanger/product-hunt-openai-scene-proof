@@ -2,11 +2,37 @@
 
 Last updated: 2026-09-14
 Current branch: `feat/p1-ai-film-understanding`
-Current milestone: PR7 merged; PR8 ready for review with a real-provider validation limitation.
-Current task: Derived source verified; the single authorized live transcription failed HTTP 401 invalid_api_key. Zero Astra calls; stop for review.
+Current milestone: PR7 merged; PR8 complete for merge review with disclosed source-validation/UX limits.
+Recovered exact HEAD: `f1024fb2c686d82b3e471af4c44e267840598afe`; finalization is documentation-only.
+Verified implementation HEAD: `8f3c689925b537e7678d1f356900df877cb95445`. Final pushed documentation SHA is in the handoff (this file cannot contain its own commit hash).
+Current task: Successful live master-source Film Intelligence recovered; finalize evidence and stop for review.
+Next milestone: PR9 UX polish — not started.
 Do not merge. Do not start PR9.
 
-## Derived source gate — current
+## Final live validation — authoritative current state
+
+Run `104fed03-5210-4269-a6e8-169ced53f2ce` is SUCCEEDED: `gpt-4o-transcribe-diarize`
+Audio Transcriptions → six validated timed segments → `gpt-6-astra` medium → three
+entities, three narrative cues, three PENDING anchors and two concerns. It used the
+historical **92.458667-second master**, proven by saved source UUID/hash/duration.
+The **36.291667-second derivative** remains deterministically verified and used by
+new/reset demos, but has no successful live validation. Earlier 401 and unknown
+failures are historical, distinct and unchanged; the sections below record them.
+No remaining demonstrated functional blocker. Merge review must accept sparse-sample,
+timestamp/completeness, transcription billing and untested-live-derivative limitations.
+PR9 owns refresh flashing, stage hierarchy, result/evidence density, master/source
+clarity and missing deletion; no UX implementation is added here.
+
+Retained gates: 39 focused / 122 backend tests; 78 frontend / 19 Chromium earlier
+passes; Gradle/frontend builds and OpenAPI drift pass. Unchanged code means no suite
+rerun in finalization; documentation links/diff and fresh OpenAPI drift checks pass.
+Normal tests use no OpenAI.
+Read-only API/web health checks pass; user services remain untouched. Exact IDs,
+usage/cost estimate, summary/warnings and historical evidence: [final validation](PR8-FINAL-VALIDATION.md).
+No provider request was made during finalization. Earlier unvalidated statements
+below apply at their historical checkpoint, not to the recovered master success.
+
+## Derived source gate and historical authorized 401
 
 The immutable master remains 92.458667 seconds / `ac9b29c47eeb399dbd1ac5cdfcde19273e0e4e68f5df8fd67fedbef3d284a7a7`.
 New/reset demo Film Intelligence uses the 0–36.291667-second derivative, SHA-256

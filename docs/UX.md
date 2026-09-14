@@ -201,3 +201,15 @@ finding evidence labels transcript versus uncertain narrative interpretation.
 
 The PR8 surface is tested at desktop/tablet/mobile widths; this does not claim the
 PR9 workspace-wide accessibility/responsive sweep is complete.
+
+## Reported PR9 follow-up — not implemented in PR8
+
+- Polling/manual refresh flashes and feels like a page refresh.
+- No polished visible active-run progress bar; loading/current-stage hierarchy needs improvement.
+- Results are clogged; summary, warnings, concerns and evidence compete for attention.
+- Evidence cards take too much vertical space.
+- Clarify historical master (92.46 s) versus new/reset analysis source (36.29 s), without relabelling old evidence.
+- Project deletion is missing; define history/media retention before implementing it.
+
+PR9 may improve stage presentation, never invent percentages or model activity.
+These are Patrick's reported UX observations, not new finalization screenshot tests.

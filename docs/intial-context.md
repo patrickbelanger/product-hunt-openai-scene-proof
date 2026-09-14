@@ -2694,6 +2694,14 @@ understanding needs visual + narrative/audio context, not isolated image compari
 alone. PR8 owns Film Understanding and its essential truthful processing stages;
 PR9 owns general UX polish. Other historical context remains preserved.
 
+September 14 final PR8 checkpoint: successful Film Intelligence provider processing
+is recovered on the historical 92.458667-second master, not the 36.291667-second
+derivative. Derived generation/new-reset behavior is deterministically verified.
+PR8 awaits merge review; next milestone is PR9 UX polish, not started. Refresh
+flashing, active-stage presentation, result/evidence density, master-vs-analysis
+clarity and missing project deletion are PR9 follow-up, never fake progress.
+Exact evidence and qualifications: docs/PR8-FINAL-VALIDATION.md.
+
 Branches may be reordered when dependencies or delivery risk justify it.
 
 If the merge order changes materially, update DEVELOPMENT-PLAN.md and

@@ -1,5 +1,15 @@
 # PR8 derived Film Intelligence source and authorized validation
 
+## Final source-validation distinction
+
+The later successful UI run `104fed03-5210-4269-a6e8-169ced53f2ce` used the immutable
+92.458667-second master (persisted SHA `ac9b29c47eeb399dbd1ac5cdfcde19273e0e4e68f5df8fd67fedbef3d284a7a7`).
+It validates the provider path, **not live acceptance of this derivative**. The
+36.291667-second derivative remains deterministically verified; its earlier 401 is
+unchanged. New/reset copies use the derivative; old copies retain the master.
+[Final recovery](PR8-FINAL-VALIDATION.md) supersedes only the earlier claim that no
+successful provider flow exists. All historical evidence below remains intact.
+
 Date: September 14, 2026. Branch: `feat/p1-ai-film-understanding`.
 
 ## Explicit immutable provenance

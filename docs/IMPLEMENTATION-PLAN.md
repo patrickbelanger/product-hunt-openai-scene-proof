@@ -1,5 +1,15 @@
 # Implementation Plan
 
+## Final PR8 handoff checkpoint
+
+- [x] Recover successful persisted master-source transcription → timed validation → Astra run; preserve all prior failures.
+- [x] Distinguish live 92.458667-second master success from deterministic 36.291667-second derivative verification.
+- [x] Preserve 122 backend / 78 frontend / 19 Chromium passing evidence and builds/OpenAPI; documentation-only finalization does not rerun unchanged suites.
+- [x] Record exact provider IDs, actual usage, qualified cost, output, limitations and PR9-only UX backlog in [final validation](PR8-FINAL-VALIDATION.md).
+- [ ] Patrick's merge review/approval; no merge performed.
+
+Next milestone: PR9 UX polish, not started. Historical checkpoints below are retained.
+
 ## P0 foundation — merged into main as `fefb7db` (PR0)
 
 - [x] Recover actual repository state; preserve existing work.

@@ -94,6 +94,11 @@ September 18 scope is unchanged; no PR9, merge, extra provider step or fake prog
 
 ## Sources checked September 14
 
+Finalization evidence update: a subsequent historical-master run successfully
+completed this transcription contract and Astra; the shorter derivative remains
+deterministically verified only. This does not alter the decision, request bounds
+or earlier failure classifications. See [final validation recovery](../PR8-FINAL-VALIDATION.md).
+
 - [File transcription and diarization](https://developers.openai.com/api/docs/guides/speech-to-text#speaker-diarization)
 - [Whisper timestamp-only parameter](https://developers.openai.com/api/docs/guides/speech-to-text#timestamps)
 - [GPT-Transcribe migration](https://developers.openai.com/cookbook/examples/migrating_from_whisper_to_gpt_transcribe)
