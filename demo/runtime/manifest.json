@@ -1,5 +1,18 @@
 {
   "version": "between-the-line-v1",
+  "sourceFilm": {
+    "file": "analysis-source.mp4",
+    "sha256": "2205c5c0a9ddc98fe7de897bc960775539095f75ee30e567f31ccca8570de835",
+    "title": "Between the Line — Film Intelligence source"
+  },
+  "sourceProvenance": {
+    "masterPath": "demo/between the lines - demo.mp4",
+    "masterFile": "source-film.mp4",
+    "masterSha256": "ac9b29c47eeb399dbd1ac5cdfcde19273e0e4e68f5df8fd67fedbef3d284a7a7",
+    "masterDurationUs": 92458667,
+    "sourceStartUs": 0,
+    "sourceEndUs": 36291667
+  },
   "project": {
     "name": "Between the Line — Continuity Study",
     "description": "A journey through the metro and into an apartment, told through Patrick and the screens around him. Original film by Laurie and Patrick.",

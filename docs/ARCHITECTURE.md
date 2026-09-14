@@ -150,8 +150,10 @@ OpenAPI, provider or dependency changes are introduced. See UX for focus/fallbac
 ## Implemented demo lifecycle (PR7)
 
 DemoController → DemoService → packaged DemoTemplateSource → existing ProjectService,
-ReferenceService and MediaService. Gradle copies only `demo/runtime`; the original
-source, authoring notes and evaluation manifest are not application resources.
+ReferenceService and MediaService. PR7 copied only `demo/runtime`; PR8 additionally
+packages the immutable original as `demo/source-film.mp4` for provenance and the
+derived 0–36.291667-second `demo/analysis-source.mp4` for new/reset SourceFilm ingestion.
+Authoring notes and evaluation manifests remain excluded from application resources.
 V6 adds explicit instance/version/retirement identity and replacement mapping.
 An instance advisory lock and bounded seed transaction publish a complete project
 or roll back. Reset creates new domain data and retains historical copies unchanged.
@@ -167,7 +169,7 @@ remain existing components reading real persisted API data. No analysis is start
 
 ## Boundaries reserved for later slices (unchanged)
 
-Analysis jobs/progress transport remain planned.
+General job orchestration remains deferred; PR8's bounded durable worker is below.
 Raw media stays outside PostgreSQL.
 Spring AI is not loaded: the verified Responses transport uses JDK HTTP (ADR-0004).
 
@@ -176,3 +178,38 @@ limits need a separate deployment decision. This baseline is local development.
 
 Concrete versions and run commands: [README](../README.md). Decisions:
 [ADR-0001](adr/ADR-0001-foundation-stack.md), [ADR-0002](adr/ADR-0002-openapi-client.md).
+
+## PR8 bounded Film Understanding
+
+FilmController → SourceFilmService / FilmUnderstandingService → FilmRepository,
+AudioTranscriptionPort and FilmUnderstandingPort. The two concrete OpenAI adapters
+are separate from ContinuityAnalysisPort. Responses transport is shared plumbing,
+not a shared interpretation/provider interface. No Spring AI or queue dependency.
+
+POST reserves a durable run/stage in a short transaction, then starts one virtual
+thread. Source verification, real FFmpeg extraction, transcription, multimodal
+understanding and candidate validation each have a committed stage before work.
+Success plus candidates is atomic; database conditional updates reject late writes.
+Provider operations occur outside transactions and are never automatically retried.
+
+The database advisory admission lock is shared with sequence/targeted runs; a unique
+index also enforces one active Film Understanding run. GET/start lazily marks runs
+older than ten minutes FAILED with FILM_INTERRUPTED. Restart does not replay workers
+or paid calls; the saved stage remains visible until that recovery deadline. This is
+durable observation/recovery, not guaranteed background execution after process loss.
+
+The frontend polls GET every 1.5 seconds while active or reconciling a submitted UUID.
+SSE adds unnecessary connection/event recovery work for this bounded local flow.
+Session storage records the paid request before POST; recovery reuses its exact UUID
+and source, while a new attempt requires new consent. Backend timestamps/stages are
+authoritative. No percentages, timers predicting completion or model-thought display.
+
+V7 adds six normalized film tables, including candidate decisions,
+and finding evidence JSON; bounded nested discovery stays a strict JSON document.
+V8 adds decision/result integrity and same-project reference provenance constraints.
+V9 changes only new transcription model/time-origin defaults to the one-call diarized
+Audio Transcriptions contract. No local multi-call chunking, speaker domain or
+Chat/Responses transcription is introduced; see [ADR-0009](adr/ADR-0009-timed-audio-transcription.md).
+Media remains outside PostgreSQL. Staged frame directories may remain after failures;
+there is no new disk GC. Transcript API reads are no-store; generic exception logs
+exclude messages/causes that could contain SQL row data. This is not public tenancy.

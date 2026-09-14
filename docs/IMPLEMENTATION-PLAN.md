@@ -1,5 +1,19 @@
 # Implementation Plan
 
+## Final PR8 handoff checkpoint
+
+- [x] Reproduce/fix late guided-tour autofocus stealing Tab focus; 16 tour / 79 frontend tests, five Chromium tour tests, frontend build and OpenAPI drift pass. No PR9 expansion.
+
+- [x] Correct the CI reset-modal test race with async role queries; 9 focused / 78 frontend tests (two workers) and frontend build pass. Runtime unchanged; remote CI recheck pending.
+
+- [x] Recover successful persisted master-source transcription → timed validation → Astra run; preserve all prior failures.
+- [x] Distinguish live 92.458667-second master success from deterministic 36.291667-second derivative verification.
+- [x] Preserve 122 backend / 78 frontend / 19 Chromium passing evidence and builds/OpenAPI; documentation-only finalization does not rerun unchanged suites.
+- [x] Record exact provider IDs, actual usage, qualified cost, output, limitations and PR9-only UX backlog in [final validation](PR8-FINAL-VALIDATION.md).
+- [ ] Patrick's merge review/approval; no merge performed.
+
+Next milestone: PR9 UX polish, not started. Historical checkpoints below are retained.
+
 ## P0 foundation — merged into main as `fefb7db` (PR0)
 
 - [x] Recover actual repository state; preserve existing work.
@@ -159,24 +173,45 @@ failure-safe UI refresh. Test state transitions and preservation of prior eviden
 - [x] Exactly one real full-sequence Astra validation: succeeded, zero findings; independent results/usage in PR7-REVIEW. No reroll.
 - [x] Final synchronized PR7 review; implementation `5eac0b9` committed/pushed. Documentation-only handoff follow-up; stop without merge or PR8.
 
-### PR8 — AI Film Understanding / Multimodal Continuity Discovery (planned)
+### PR8 — AI Film Understanding / Multimodal Continuity Discovery (review handoff)
 
-Next authorized branch: `feat/p1-ai-film-understanding`. **Do not start until PR7
-is merged.** This replaces the previously planned standalone next branch
-`feat/p1-analysis-progress`; it absorbs only progress needed by this vertical slice.
+Active branch: `feat/p1-ai-film-understanding`, exact base
+`ed6066283d27da97484425f900b6bccb447b0911` (verified PR7 merge).
+The historical/superseded standalone `feat/p1-analysis-progress` is absorbed into
+PR8; there is no separate progress branch. General UX remains PR9.
 
-- [ ] Recover merged PR7 and create only the authorized PR8 branch.
-- [ ] Full-film understanding using audio/transcript plus visual context.
-- [ ] Propose candidate Reference Bible entries and continuity anchors grounded in the film.
-- [ ] Creator confirmation of candidates before adopting them as declared project context.
-- [ ] Persist truthful backend processing stages and expose authoritative stage state in the UI.
-- [ ] Reload/recover an active Film Understanding run and expose its actual failures; no fake percentages or invented progress.
+- [x] Recover merged PR7 and create only the authorized PR8 branch.
+- [x] Reconcile initial context priorities/branch plan/merge order with Patrick's explicit decision.
+- [x] SourceFilm, bounded upload and deterministic segments/frame provenance.
+- [x] FFmpeg audio extraction and verified AudioTranscriptionPort implementation.
+- [x] FilmUnderstandingPort, Astra MEDIUM strict schema and ID/evidence validation.
+- [x] Full-film understanding using audio/transcript plus visual context.
+- [x] Propose candidate Reference Bible entries and continuity anchors grounded in the film.
+- [x] Creator confirmation of candidates before adopting them as declared project context.
+- [x] Accept/Edit/Reject, confirmed memory and normal ReferenceService visual promotion.
+- [x] Later continuity context integration and transcript/narrative finding evidence.
+- [x] Explicit paid consent, durable deduplication, bounded cost and safe new attempts.
+- [x] Persist truthful backend processing stages and expose authoritative stage state in the UI.
+- [x] Reload/recover an active Film Understanding run and expose its actual failures; no fake percentages or invented progress.
+- [x] Between the Line source integration, isolated reset/history and evaluation exclusion.
+- [x] Initial deterministic backend/frontend tests, Chromium, builds and generated OpenAPI checks: 102 / 78 / 19.
+- [x] Capped real validation: one transcription request rejected; zero Astra calls. Failure/unknown cost recorded, no reroll.
+- [x] Focused rejection review: INSUFFICIENT_EVIDENCE; bounded sanitized diagnostics fixed, 32 focused / 115 full backend tests and build/OpenAPI checks pass. No new live call.
+- [x] Patrick's separately authorized single corrective transcription-only invocation: TRANSCRIPTION_UNAVAILABLE in 423 ms; no upstream status/request ID, no retry/Astra, original history preserved. No application code changes or suite rerun; see PR8-TRANSCRIPTION-REVIEW.
+- [ ] Successful real transcription transport/parsing and real Astra multimodal provider acceptance remain unverified. The corrective authorization is consumed; stop for Patrick's review.
+- [x] Verify and select one-call `gpt-4o-transcribe-diarize` timed segments after comparing `gpt-transcribe`; V9 preserves historical defaults/records, no local four-call orchestration or speaker authority.
+- [x] Safe transport categories and production-path HTTP capture/endpoint guards: 38 focused / 121 full backend tests, Gradle/frontend builds and OpenAPI drift pass. No new live request; details in PR8-TRANSCRIPTION-REVIEW.
+- [x] Prepare separate deterministic master-range 0–36.291667-second Film Intelligence source with matching audio, explicit manifest provenance and new/reset source-history tests. Master unchanged; see PR8-DERIVED-SOURCE.
+- [x] Derived-source gate: 39 focused / 122 full backend tests, repeat hash, picture/audio/structure preflight, Gradle/frontend builds and OpenAPI checks pass before the authorized live attempt.
+- [x] Execute the separately authorized derived-source validation once: HTTP 401 invalid_api_key, zero Astra; durable failure, request ID and original history preserved. Authorization consumed, successful live acceptance still unverified.
+- [x] Synchronized product/technical docs, ADR and PR8-REVIEW for the final commit/push handoff; stop for review.
 
-Possible stages, subject to final architecture: PREPARING_SOURCE, DETECTING_STRUCTURE,
+Implemented stages (ADR-0008): PREPARING_SOURCE, DETECTING_STRUCTURE,
 TRANSCRIBING_AUDIO, UNDERSTANDING_FILM, BUILDING_CANDIDATES, SUCCEEDED, FAILED.
-These are planning examples, not an implemented schema or transport decision.
+V7 persists actual stage transitions; frontend active-state polling is authoritative,
+not SSE or synthetic progress. V8 protects decisions/results and reference provenance.
 
 Residual generalized retries, unrelated failure polish, public hosting/anonymous
 isolation, production spend/rate protection and final launch hardening remain separate.
 Later `feat/p1-ux-polish` and optional `feat/p2-product-hunt-polish` remain planned;
-this reconciliation assigns no new PR numbers to residual work.
+PR9 owns general UX polish; optional P2 must not delay September 18. Do not start PR9 here.

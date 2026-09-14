@@ -2,13 +2,22 @@
 
 **Keep every shot in character.** Your AI continuity supervisor for generative film.
 
-Current slice: PR7 populated demo film, following merged PR6 optional guided tour.
+Current slice: PR8 AI Film Understanding, based on merged PR7 populated demo.
 Choose **Try the demo film** to open **Between the Line — Continuity Study** with
 eight real video clips and five persisted visual references. Original film by Laurie
 and Patrick, explicitly authorized by Patrick. **Create a project** remains available.
 Reset demo confirms replacement of only the current copy; original analysis history
 is retained. The demo starts with no recorded findings. Initial analysis is explicitly
 started through the backend API; opening, refreshing and resetting never call OpenAI.
+
+**Film Intelligence** accepts one primary MP4/H.264 film (120 seconds/100 MiB).
+New/reset demo copies use the derived 0–36.291667-second analysis source; the immutable
+92.458667-second master and historical evidence remain unchanged. **Understand film** explicitly
+consents to at most one transcription plus one Astra discovery call per attempt.
+Real persisted stages survive reload; candidates require Accept/Edit/Reject before
+becoming continuity memory. Visual promotion uses the ordinary Reference Bible.
+No fake progress, automatic truth, benchmark hints or paid retries. General UX is
+PR9, not this branch. See [PR8 review](docs/PR8-REVIEW.md) for verified evidence/limits.
 
 Start a new session with [STATUS](docs/STATUS.md), then follow the recovery protocol
 in [AGENTS.md](AGENTS.md). Product requirements: [BRD](docs/BRD.md). Delivery:
@@ -363,5 +372,15 @@ Vite and Vitest patch/minor updates during foundation address actual npm advisor
 [Demo](docs/DEMO.md) · [Launch](docs/PRODUCT-HUNT.md) · [ADRs](docs/adr/README.md).
 
 Use short-lived feature branches; keep main runnable and review before integration.
-The source context remains intact in `docs/intial-context.md`; accepted clarifications
-live in the decision records. SceneProof is independent of other commercial projects.
+The source context keeps its original filename/history in `docs/intial-context.md`;
+PR8's scoped planning reconciliation and decision records agree. SceneProof is
+independent of other commercial projects.
+
+PR8 deterministic checks: `./gradlew build`,
+`npm run test --workspace @sceneproof/web -- --maxWorkers=2`, `npm run build`,
+`npm run api:check`, and Chromium against `:apps:api:browserTestServer` with an empty
+key (see existing E2E setup). Do not run normal automated tests against a paid provider.
+The one real PR8 transcription was rejected; no Astra discovery call followed.
+Successful live multimodal acceptance remains unverified. Recover that recorded
+failure with `node scripts/astra-film-validation.mjs --verify` and the same local
+database/API on `SCENEPROOF_API_URL`; never remove its local lock/manifest to reroll.

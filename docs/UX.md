@@ -115,7 +115,7 @@ image failure are explicit and never substituted with current references.
 ## Planned later slices
 
 Demo entry is implemented in PR7 and opens a populated film without upload.
-Progress stages must originate in backend work; no fake percentages.
+PR8 implements real Film Understanding stages below; generalized UX remains PR9.
 
 Before launch verify normal laptop/tablet, keyboard-only flow, empty/loading/error
 states, readable evidence images, contrast and an under-one-minute demo journey.
@@ -154,6 +154,8 @@ actions as appearing on an open finding, and never manufacture findings or contr
 Editing the Bible does not start analysis; creator intent does not force agreement.
 
 Mantine supplies modal semantics, labelled heading/body, focus trapping and Escape.
+Mantine alone owns opening autofocus. Navigation between already-open steps focuses
+the updated heading without scheduling a later callback that could steal Tab focus.
 Every step focuses its heading (“Step N of 4” plus title), then Tab reaches Skip,
 Back when applicable, and Next/Done. Closing restores the initiating Quick tour
 button; if the invitation's Start control disappeared, Quick tour is the fallback.
@@ -176,3 +178,40 @@ invitation in the mounted workspace even if writes fail. If reading storage fail
 only manual Quick tour is offered; if saving fails, dismissal cannot survive reload.
 Restart ignores the preference. Clearing storage offers onboarding again. Tour
 navigation has no API dependency, backend writes, request UUIDs or provider calls.
+
+## PR8 Film Intelligence
+
+The workspace adds a source-film panel with bounded upload, explicit paid-action
+confirmation and saved understanding history. Only backend stage records are shown:
+verifying source, preparing visual structure, extracting/transcribing audio,
+understanding visual/narrative context, validating/saving candidates, complete/failed.
+Stage timestamps are actual recorded times, never predicted progress or private thought.
+
+Refresh/reload recovers durable state. Connection loss retains last-known content
+with an explicit stale-state error. Unacknowledged POSTs offer **Recover same film
+request**; new attempts remain disabled until reconciled. A failed run stays in
+history and requires fresh confirmation to try again. Browser storage write failure
+prevents sending a paid request. Polling stops for terminal runs.
+
+Dynamic summary counts reflect actual output. Entity/cue/concern disclosures show
+decoded frames at source times and original approximate transcript passages.
+Potential concerns are review questions, not findings. Candidate cards distinguish
+proposals from confirmed memory and preserve original evidence after edits/rejection.
+Accept/Edit/Reject and confirmed-frame promotion are free local operations. Normal
+Reference Bible inspection links back to the originating discovery. Cross-modal
+finding evidence labels transcript versus uncertain narrative interpretation.
+
+The PR8 surface is tested at desktop/tablet/mobile widths; this does not claim the
+PR9 workspace-wide accessibility/responsive sweep is complete.
+
+## Reported PR9 follow-up — not implemented in PR8
+
+- Polling/manual refresh flashes and feels like a page refresh.
+- No polished visible active-run progress bar; loading/current-stage hierarchy needs improvement.
+- Results are clogged; summary, warnings, concerns and evidence compete for attention.
+- Evidence cards take too much vertical space.
+- Clarify historical master (92.46 s) versus new/reset analysis source (36.29 s), without relabelling old evidence.
+- Project deletion is missing; define history/media retention before implementing it.
+
+PR9 may improve stage presentation, never invent percentages or model activity.
+These are Patrick's reported UX observations, not new finalization screenshot tests.

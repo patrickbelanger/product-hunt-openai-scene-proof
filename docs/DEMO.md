@@ -1,5 +1,13 @@
 # Demo film
 
+## Final PR8 evidence
+
+New/reset Film Intelligence sources use the 36.291667-second derivative. The successful
+UI run used an existing historical master-source project (92.458667 seconds); its
+six transcript segments extend to 47.366 seconds legitimately on that source.
+Do not relabel it as a derivative validation or preload its results into new demos.
+[Final recovery](PR8-FINAL-VALIDATION.md) preserves the live result and prior failures.
+
 PR7 implements **Between the Line — Continuity Study**, template **between-the-line-v1**.
 Try the demo film opens a real populated project without upload, forms or authentication.
 First preparation uses the actual ingestion services; subsequent launch recovers the
@@ -20,7 +28,8 @@ Picture ends at 36.291667; the remaining tail is black. The original file is pre
 The authored clips exclude that tail, retain source order and use full-frame 432×768
 derivatives; references use 540×960. This fits existing image budgets without
 manufacturing objects/text/drift.
-Audio is omitted because current analysis and media inspection use extracted pictures.
+Audio was omitted from PR7's curated clips. PR8 additionally ingests the complete
+original source and its audio without changing those clips; see below.
 
 | Order | Persisted clip title | Source seconds |
 | --- | --- | --- |
@@ -86,6 +95,43 @@ library but accessible at its old URL. Repeated requests recover the current cop
 failed creation/reset cannot publish partial state. No ordinary/other demo is touched.
 The template has no mutation route. See ADR-0007 for transaction and retention limits.
 
-No public deployment, anonymous production isolation, spend quota or progress transport
-is added. Those remain prerequisites for a public launch. PR7 baseline is empty;
+No public deployment, anonymous production isolation or spend quota is added.
+Those remain prerequisites for a public launch. PR7 baseline is empty;
 a future recorded baseline must originate from a validated real run and be labelled.
+
+## PR8 derived-source understanding
+
+The `between-the-line-v1` authored clips/references/rules remain unchanged. An additive
+manifest sourceFilm entry now references `analysis-source.mp4`, derived from master
+range 0–36.291667 seconds. `sourceProvenance` records the immutable master path/hash,
+92.458667-second duration and exact range in microseconds. Gradle still packages the
+unchanged master as `demo/source-film.mp4`, alongside the derived runtime asset, not
+evaluation/curation notes. New/reset copies ingest the derivative through SourceFilmService.
+Existing PR7/PR8 source records and analyses are not mutated; resetting creates a
+new project, preserving the retired copy's original source and historical evidence.
+
+No understanding, transcription, candidate or finding is seeded on launch/reset.
+Only explicit **Understand film** consent starts the two bounded provider stages.
+Reset gives independent source/shot/reference IDs and no film runs/anchors; the old
+copy retains its discoveries, decisions, transcripts and findings for historical reads.
+
+Historical PR8 attempts used all 92.459 seconds, including the black tail and original
+audio. Patrick now authorizes only the already-documented meaningful picture interval
+0–36.291667 seconds for Film Intelligence, with corresponding audio and zero-based
+timestamps. This does not splice in a desired answer or tailor sampling to a lyric. The
+screen-opening relationship is an evaluation question only, never prompt input.
+Actual observations, uncertainty, costs and missed relationships are recorded in
+[PR8 review](PR8-REVIEW.md). Test-only synthetic discovery is never runtime demo data.
+
+The initial real PR8 attempt prepared eight segments/24 frames, then OpenAI rejected
+transcription. No Astra discovery call or transcript/candidate result exists. The
+screen-opening question is unassessed, not a claimed detection or miss. The failed
+run remains inspectable; no reroll or recorded demo baseline was added.
+
+Derivation command: `node scripts/prepare-analysis-source.mjs`. Full demo regeneration
+also derives this file through `scripts/prepare-demo.mjs`; curated PR7 clips/references
+are unchanged. [Derived-source verification](PR8-DERIVED-SOURCE.md) records the hash,
+frame/sample cut, determinism/preflight and separately authorized live result.
+The authorized derived-source run also prepared eight segments/24 frames, then
+received HTTP 401 invalid_api_key. No transcript or Astra discovery followed; this
+authentication failure is not a film-quality result. No retry or recorded baseline.

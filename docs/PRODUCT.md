@@ -1,5 +1,14 @@
 # Product
 
+## PR8 final checkpoint
+
+The visual-plus-transcript provider flow is validated end to end on the historical
+92.458667-second master. Three discovered anchors remain pending creator confirmation;
+concerns are questions, not confirmed errors. New/reset demos use the separately
+verified 36.291667-second derivative, without a claimed live success on that asset.
+See [final evidence and PR9-only UX backlog](PR8-FINAL-VALIDATION.md). PR8 awaits merge
+review; PR9 UX polish is next and is not implemented by this handoff.
+
 SceneProof: your AI continuity supervisor for generative film.
 Primary line: **Keep every shot in character.** Landing: **Make your film remember itself.**
 
@@ -47,7 +56,31 @@ Line film by Laurie and Patrick. Preparation is explicit and recoverable; no upl
 or form is required. A restrained Demo project indicator and confirmed Reset demo
 identify working copies. Reset returns a fresh authored copy and retains old history.
 The initial findings state is empty: no model result is staged or preloaded.
-The real optional tour behaves as in ordinary projects. Later P1 slices add progress
-and public-demo protections; this slice remains local and unauthenticated.
+The real optional tour behaves as in ordinary projects. PR8 adds Film Understanding
+stages; public-demo protections remain separate. The app is local and unauthenticated.
 Future collaboration, export and generation integrations are not built this sprint.
 See [BRD](BRD.md) for acceptance and [STATUS](STATUS.md) for actual delivery state.
+
+## PR8: Film Understanding
+
+Create project → upload a primary source film → explicitly confirm **Understand film**
+→ inspect visual + transcript/narrative discovery → Accept / Edit / Reject proposed
+anchors → run continuity review using creator-confirmed memory. Uploading, reading,
+candidate decisions and Reference Bible promotion never call a model.
+
+Observation → candidate invariant → creator confirmation → continuity enforcement.
+AI-discovered entities, narrative interpretations and potential concerns are not
+declared truth or findings. Lyrics/dialogue are fallible context; difference is not
+automatically an error. Zero supported candidates or concerns is a valid outcome.
+
+The source is immutable per project, at most 120 seconds/100 MiB, MP4/H.264. Up to
+24 sampled frames in eight deterministic analysis segments bound discovery, not an
+NLE or exhaustive scene detector. Separate imported clips remain available; once
+source segments exist, new sequence reviews use those segments rather than mixing
+two versions of the film. A different source requires a new project.
+
+Film Intelligence presents actual saved stages, counts, evidence, history and
+failures. Polling/reload recovers the durable run; a failed attempt is never silently
+replayed. Each new attempt requires fresh paid consent. General loading/error/empty,
+responsive/accessibility and workspace polish remain PR9; optional P2 cannot delay
+release. See [ADR-0008](adr/ADR-0008-film-understanding.md) and [PR8 review](PR8-REVIEW.md).

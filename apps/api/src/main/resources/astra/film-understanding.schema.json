@@ -1,0 +1,323 @@
+{
+  "type": "object",
+  "properties": {
+    "projectId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "sourceFilmId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "enum": [
+        "1"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 3000
+    },
+    "inspectedSegmentIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "minItems": 1,
+      "maxItems": 8
+    },
+    "inspectedFrameIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "minItems": 1,
+      "maxItems": 24
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "localId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "evidence": {
+            "type": "object",
+            "properties": {
+              "frameIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "minItems": 0,
+                "maxItems": 24
+              },
+              "transcriptSegmentIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "minItems": 0,
+                "maxItems": 30
+              }
+            },
+            "required": [
+              "frameIds",
+              "transcriptSegmentIds"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "localId",
+          "name",
+          "description",
+          "evidence"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0,
+      "maxItems": 12
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "rule": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "entityIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            "minItems": 0,
+            "maxItems": 12
+          },
+          "evidence": {
+            "type": "object",
+            "properties": {
+              "frameIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "minItems": 0,
+                "maxItems": 24
+              },
+              "transcriptSegmentIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "minItems": 0,
+                "maxItems": 30
+              }
+            },
+            "required": [
+              "frameIds",
+              "transcriptSegmentIds"
+            ],
+            "additionalProperties": false
+          },
+          "uncertainty": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "title",
+          "rule",
+          "scope",
+          "entityIds",
+          "evidence",
+          "uncertainty"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0,
+      "maxItems": 12
+    },
+    "narrativeCues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "interpretation": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "evidence": {
+            "type": "object",
+            "properties": {
+              "frameIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "minItems": 0,
+                "maxItems": 24
+              },
+              "transcriptSegmentIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "minItems": 0,
+                "maxItems": 30
+              }
+            },
+            "required": [
+              "frameIds",
+              "transcriptSegmentIds"
+            ],
+            "additionalProperties": false
+          },
+          "uncertainty": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "title",
+          "interpretation",
+          "evidence",
+          "uncertainty"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0,
+      "maxItems": 12
+    },
+    "potentialConcerns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "explanation": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "evidence": {
+            "type": "object",
+            "properties": {
+              "frameIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "minItems": 0,
+                "maxItems": 24
+              },
+              "transcriptSegmentIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "minItems": 0,
+                "maxItems": 30
+              }
+            },
+            "required": [
+              "frameIds",
+              "transcriptSegmentIds"
+            ],
+            "additionalProperties": false
+          },
+          "uncertainty": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "title",
+          "explanation",
+          "evidence",
+          "uncertainty"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0,
+      "maxItems": 12
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "minItems": 0,
+      "maxItems": 12
+    }
+  },
+  "required": [
+    "projectId",
+    "sourceFilmId",
+    "schemaVersion",
+    "summary",
+    "inspectedSegmentIds",
+    "inspectedFrameIds",
+    "entities",
+    "candidates",
+    "narrativeCues",
+    "potentialConcerns",
+    "warnings"
+  ],
+  "additionalProperties": false
+}

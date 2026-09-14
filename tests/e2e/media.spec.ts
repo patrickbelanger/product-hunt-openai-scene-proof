@@ -8,7 +8,7 @@ test('import actual pixels, validate contract, reload and retain failed import h
   const project = await created.json();
   await page.goto(`/projects/${project.id}`);
   const png = await page.evaluate(() => { const canvas = document.createElement('canvas'); canvas.width = 160; canvas.height = 90; const context = canvas.getContext('2d')!; context.fillStyle = '#ce5449'; context.fillRect(0, 0, 160, 90); return canvas.toDataURL('image/png').split(',')[1]; });
-  await page.locator('input[type=file]').setInputFiles({ name: 'original-fixture.png', mimeType: 'image/png', buffer: Buffer.from(png, 'base64') });
+  await page.getByRole('region', { name: 'Media workspace' }).locator('input[type=file]').setInputFiles({ name: 'original-fixture.png', mimeType: 'image/png', buffer: Buffer.from(png, 'base64') });
   await page.getByRole('button', { name: 'Import shot' }).click();
   const frame = page.getByRole('img', { name: 'Frame from original-fixture.png' });
   await expect(frame).toBeVisible();
@@ -24,7 +24,7 @@ test('import actual pixels, validate contract, reload and retain failed import h
   expect(check(shots[0]), JSON.stringify(check.errors)).toBe(true);
   const foreign = await request.get(shots[0].frames[0].url.replace(project.id, '00000000-0000-0000-0000-000000000000'));
   expect(foreign.status()).toBe(404);
-  await page.locator('input[type=file]').setInputFiles({ name: 'corrupt.png', mimeType: 'image/png', buffer: Buffer.from('not an image') });
+  await page.getByRole('region', { name: 'Media workspace' }).locator('input[type=file]').setInputFiles({ name: 'corrupt.png', mimeType: 'image/png', buffer: Buffer.from('not an image') });
   await page.getByRole('button', { name: 'Import shot' }).click();
   await expect(page.getByRole('alert')).toContainText('Import failed');
   await page.reload();

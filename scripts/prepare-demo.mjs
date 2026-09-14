@@ -3,6 +3,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
+import { prepareAnalysisSource, sourceProvenance } from './prepare-analysis-source.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const curation = JSON.parse(readFileSync(resolve(root, 'demo/curation.json'), 'utf8'));
@@ -22,6 +23,8 @@ function prepare(asset, reference) {
 }
 const manifest = {
   version: curation.version,
+  sourceFilm: prepareAnalysisSource(),
+  sourceProvenance,
   project: curation.project,
   references: curation.references.map(asset => prepare(asset, true)),
   shots: curation.shots.map(asset => prepare(asset, false)),

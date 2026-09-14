@@ -17,7 +17,7 @@ class FindingActionService(private val actions: FindingActionRepository, private
         var completion: TargetedCompletion? = null
         try {
             val original = analyses.finding(projectId, findingId)
-            val sequence = assembler.assemble(projectId, original)
+            val sequence = assembler.assemble(projectId, original).copy(filmMemory = analyses.originalFilmMemory(projectId, original.analysisRunId))
             require(sequence.shots.flatMap { it.frames.map { frame -> frame.id } }.containsAll(original.relevantFrameIds))
             val previous = action.supersedesActionId?.let { actions.get(projectId, findingId, it).result }
             val originalRules = analyses.originalRules(projectId, original.analysisRunId)

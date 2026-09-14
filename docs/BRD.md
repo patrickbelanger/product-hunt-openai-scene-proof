@@ -73,3 +73,18 @@ with small early live analysis, explicit intentional-change examples, bounded
 frames/requests and a freeze buffer. Ship only when the first two vertical slices
 work on the curated sequence, critical tests/builds pass, setup is reproducible,
 public deployment safeguards are verified and the recording matches actual behavior.
+
+## Accepted PR8 product evolution — September 14
+
+The primary creator path adds bounded source-film upload and explicit paid Film
+Understanding before manual rule setup: visual samples plus audio/transcript context
+propose recurring entities, narrative cues and candidate continuity anchors. Creator
+Accept/Edit/Reject separates discovery from declared continuity expectations. Later
+reviews use confirmed memory and retain cross-modal evidence/history.
+
+Durable backend stages, reload/recovery and visible failures are part of this vertical
+slice, not simulated progress. The historical standalone progress branch is absorbed
+into PR8. General UX remains PR9; Product Hunt cosmetics are optional P2. No NLE,
+public tenancy, increased source limits or delivery-date change is authorized.
+See PRODUCT, ADR-0008 and PR8-REVIEW for implemented limits and actual verification;
+the live transcription rejection is a limitation, not successful provider acceptance.

@@ -1,5 +1,14 @@
 # Astra integration
 
+## PR8 final live evidence
+
+The recovered master-source run completed purpose-built Audio Transcriptions, validated
+six timed segments, then `gpt-6-astra`/medium visual-narrative understanding. Neither
+Chat nor Responses performs transcription. Success is persisted for the 92.458667-second
+master only; the 36.291667-second derivative has deterministic verification, not live
+success. [Final validation](PR8-FINAL-VALIDATION.md) records request IDs, usage, stage
+latencies and limitations. Earlier failure/no-success notes below are historical.
+
 ## PR5 declared visual references
 
 The [Astra model card](https://developers.openai.com/api/docs/models/gpt-6-astra),
@@ -236,3 +245,81 @@ Usage: 16,861 input, 1,176 output, 18,037 total; zero cache hits, 16,858 cache-w
 26 reasoning tokens already included in output. Duration 28.709 seconds; standard-rate
 estimate USD $0.269555, not a billing receipt. Exact provenance and evaluation are in
 [PR7 review](PR7-REVIEW.md); this run is not installed as a recorded demo baseline.
+
+## PR8 separate transcription and Film Understanding
+
+AudioTranscriptionPort uses OpenAI `/v1/audio/transcriptions`:
+`gpt-4o-transcribe-diarize`, `response_format=diarized_json`, `chunking_strategy=auto`.
+The [documented diarized response](https://developers.openai.com/api/docs/guides/speech-to-text#speaker-diarization)
+provides timed text segments in one request, including inputs longer than 30 seconds.
+Patrick prefers this over four local `gpt-transcribe` chunk calls. Do not send Whisper's
+`verbose_json`/`timestamp_granularities[]`, or use Chat/Responses for transcription.
+Speaker/provider segment identity is discarded, never creator-confirmed truth.
+V9 changes new-record model/provenance defaults only; historical Whisper records stay
+unchanged. Full contract, alternatives, limits and pricing: [ADR-0009](adr/ADR-0009-timed-audio-transcription.md).
+
+JDK HTTP sends one bounded WAV, generic filename, no prompt or lyric hint; fixed
+endpoint, 10-second connection and 120-second request timeout, no retries/redirects,
+256 KiB response cap, strict JSON and finite/ordered/duration-bounded segment checks.
+At most 200 transcript segments, 2,000 characters each and 24,000 total characters.
+No-audio sources make zero transcription calls. A failed transcription never silently
+degrades to a claimed multimodal success.
+
+FilmUnderstandingPort / AstraFilmUnderstandingAdapter send sampled images plus
+server-identified transcript segments and source-time metadata via Responses.
+`gpt-6-astra`, reasoning **medium**, 6,000 output tokens, `store=false`, no tools,
+no automatic retry. Existing continuity **low** and targeted **high** remain unchanged.
+The shared OpenAiResponsesTransport is separate from the interpretation adapters.
+
+`film-understanding.schema.json` is strict, all fields required, extra properties
+forbidden: project/source/schema identity, summary, exact inspected segment/frame
+coverage, recurring entities, candidate anchors, narrative cues, potential concerns
+and warnings. Up to 12 entries per discovery category; 24 frames/eight segments,
+16 MiB PNG aggregate and 24 MiB request. Results are schema/size/duplicate/trailing
+JSON checked; all evidence/entity IDs must exist in that exact submitted context.
+Recurring entities need repeated visual support; concerns require visual evidence.
+
+All visible text, lyrics, dialogue and transcript instructions are untrusted data.
+The generic prompt requires uncertainty and separates observations from candidate
+invariants. No demo filename, authored rules, curation/evaluation question or expected
+answer enters discovery. Potential concerns do not directly create findings.
+
+Later continuity receives confirmed anchor rules/scopes, latest successful transcript
+and explicitly uncertain narrative interpretations. The extended strict continuity
+schema requires `relevantFilmEvidenceIds`; only supplied IDs are accepted. Findings
+and run context retain immutable cross-modal snapshots. Targeted review restores
+the original film memory rather than substituting a newer run.
+
+Normal automated tests use mocked/test-only ports with empty API keys, never OpenAI.
+The separately invoked PR8 validation is capped at one transcription and one discovery
+request, only after deterministic gates. Results/usage/costs and any missed benchmark
+relationship belong in [PR8 review](PR8-REVIEW.md), without reroll or installed baseline.
+Transcript reads are no-store; content is not logged, and temporary PCM is deleted.
+`store=false` is not a promise of zero provider retention: normal OpenAI API data
+controls still apply. Local unauthenticated storage is not public privacy isolation.
+
+Actual PR8 validation: one transcription attempt returned a provider rejection;
+TRANSCRIPTION_REJECTED was persisted and prevented Astra. Zero Astra calls; successful
+live multimodal acceptance remains unverified. GET-only recovery succeeds in reading
+the failure. The request ID, absent usage, unknown transcription charge and unassessed
+benchmark relationship are recorded in PR8-REVIEW; no reroll is authorized.
+
+PR8 rejection-review correction: future non-2xx transcription failures retain actual
+HTTP status, allowlisted type/code and exact safe-message literals in the existing
+≤500-character failure detail, plus sanitized `x-request-id`. Error JSON is parsed
+only up to 8 KiB within the 256 KiB body cap; received rejection headers survive
+body timeout/oversize/interruption. Unknown/free-form text is withheld to prevent
+echoed credentials/audio/transcript from reaching persistence or logs. Successful
+parsing/request/model were unchanged in that historical diagnostic-only correction.
+The subsequent diarized migration retains no-retry semantics and adds safe transport
+categories, loopback request capture and V9 defaults, with no API field change.
+Both historical attempts remain INSUFFICIENT_EVIDENCE; the single corrective live
+authorization was consumed by TRANSCRIPTION_UNAVAILABLE. No further live request
+is authorized. See the [focused review](PR8-TRANSCRIPTION-REVIEW.md).
+
+The subsequently authorized 36.291667-second derived-source validation reached the
+Audio Transcriptions API and received HTTP 401 / invalid_api_key. It stopped before
+Astra, with no retry. This establishes credential rejection for that request, not
+successful audio decoding or the cause of either historical unknown failure. The
+[derived-source review](PR8-DERIVED-SOURCE.md) preserves exact safe evidence and the
+consumed authorization. No new live request is authorized.

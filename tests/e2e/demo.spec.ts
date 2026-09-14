@@ -10,7 +10,7 @@ test('approved film opens without upload, persists real references and frames, a
   expect(await (await request.get('/__test/provider')).json()).toEqual({ provider: 'deterministic-test-only' });
   const ordinary: Project = await (await request.post('/api/v1/projects', { data: { name: `PR7 ordinary ${Date.now()}`, rules: 'Preserve this ordinary project.' } })).json();
   const paidWrites: string[] = [];
-  page.on('request', outgoing => { if (outgoing.method() === 'POST' && /\/(analyses|actions)(\?|$)/.test(outgoing.url())) paidWrites.push(outgoing.url()); });
+  page.on('request', outgoing => { if (outgoing.method() === 'POST' && /\/(analyses|actions|film\/runs)(\?|$)/.test(outgoing.url())) paidWrites.push(outgoing.url()); });
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('/');
   await expect(page.getByRole('link', { name: /create a project/i })).toBeVisible();
@@ -86,6 +86,11 @@ test('approved film opens without upload, persists real references and frames, a
   await expect(page.getByLabel('Continuity rules', { exact: true })).toHaveValue(original.rules);
   await expect(page.getByText('No saved findings here.')).toBeVisible();
   const freshShots: Shot[] = await (await request.get(`/api/v1/projects/${fresh.id}/shots`)).json();
+  const originalFilm = await (await request.get(`/api/v1/projects/${original.id}/film`)).json();
+  const freshFilm = await (await request.get(`/api/v1/projects/${fresh.id}/film`)).json();
+  expect(freshFilm.source.sha256).toBe(originalFilm.source.sha256);
+  expect(freshFilm.source.id).not.toBe(originalFilm.source.id);
+  expect(freshFilm.runs).toEqual([]); expect(freshFilm.confirmedAnchors).toEqual([]);
   expect(freshShots.map(shot => shot.name)).toEqual(shots.map(shot => shot.name));
   expect(freshShots[0]!.frames[0]!.id).not.toBe(shots[0]!.frames[0]!.id);
   expect((await (await request.get(`/api/v1/projects/${ordinary.id}`)).json()).rules).toBe(ordinary.rules);

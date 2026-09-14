@@ -26,6 +26,7 @@ export function GuidedTour() {
   const restart = useRef<HTMLButtonElement>(null);
   const opener = useRef<HTMLButtonElement | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
+  const previousStep = useRef<number | null>(null);
   const current = step === null ? undefined : steps[step];
 
   function close(preference: 'completed' | 'skipped') {
@@ -41,6 +42,8 @@ export function GuidedTour() {
   }
 
   useEffect(() => {
+    const changedStep = previousStep.current !== null && previousStep.current !== step;
+    previousStep.current = step;
     if (!current) return;
     const target = document.querySelector<HTMLElement>(`[data-tour="${current.target}"]`);
     function updateTarget() {
@@ -54,10 +57,9 @@ export function GuidedTour() {
       const bounds = target.getBoundingClientRect();
       if (bounds.top < 24 || bounds.top > window.innerHeight / 2) target.scrollIntoView({ block: 'start', behavior: 'instant' });
     }
-    const focusFrame = requestAnimationFrame(() => heading.current?.focus({ preventScroll: true }));
+    if (changedStep) heading.current?.focus({ preventScroll: true });
     window.addEventListener('resize', updateTarget);
     return () => {
-      cancelAnimationFrame(focusFrame);
       target?.removeAttribute('data-tour-active');
       window.removeEventListener('resize', updateTarget);
     };

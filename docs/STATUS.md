@@ -1,12 +1,185 @@
 # SceneProof Status
 
-Last updated: 2026-09-13
-Current branch: `feat/p1-demo-project`
-Current milestone: PR6 merged; PR7 complete and verified, awaiting merge review.
-Current task: Documentation-only post-PR7 planning reconciliation; then stop for review.
-Do not merge. PR8 must not start until PR7 is merged.
+Last updated: 2026-09-14
+Current branch: `feat/p1-ai-film-understanding`
+Current milestone: PR7 merged; PR8 complete for merge review with disclosed source-validation/UX limits.
+Recovered exact HEAD: `f1024fb2c686d82b3e471af4c44e267840598afe`; finalization is documentation-only.
+Verified implementation HEAD: `8f3c689925b537e7678d1f356900df877cb95445`. Final pushed documentation SHA is in the handoff (this file cannot contain its own commit hash).
+Current task: PR8 guided-tour focus race reproduced and fixed; awaiting CI/merge review.
+Next milestone: PR9 UX polish — not started.
+Do not merge. Do not start PR9.
 
-## Authorized next slice (planning only)
+## CI guided-tour focus follow-up
+
+The next CI failure exposed a runtime race, not an assertion to weaken: Mantine
+autofocused the heading, then the tour's separate animation-frame callback could
+steal focus back after Tab reached Skip. A controlled delayed-frame regression
+reproduces that exact failure before the fix. Mantine now owns opening autofocus;
+the tour focuses headings synchronously only when an already-open step changes.
+Tab order, Back, Escape and opener restoration remain covered with real focus assertions.
+No sleeps, longer timeouts or disabled assertions. Verified: 16 guided-tour tests,
+79 full frontend tests with two workers, five Chromium tour tests (desktop/tablet/mobile),
+TypeScript/Vite build, OpenAPI drift and diff checks. Existing 519 kB chunk warning
+remains. Backend tests are unchanged and were not rerun. Browser tests used the
+isolated deterministic server/schema, never OpenAI. No PR9 work or merge; CI must
+confirm the pushed fix. Earlier implementation HEAD/test counts below are historical.
+
+## CI reset-test follow-up
+
+CI reported 77/78 frontend tests passing: a synchronous `getByRole` queried
+"Reset this copy" before Mantine's animation-frame-driven modal became accessible.
+Reset interactions now await `findByRole`; no sleeps, disabled animations or runtime
+changes. Existing confirmation, pending/double-click and same-source retry assertions
+remain. Focused demo tests: 9/9 pass; full suite with `--maxWorkers=2`: 78/78 pass;
+TypeScript/Vite build passes with the existing 519 kB chunk warning. The initial
+uncapped local full run had three failures in unchanged project/steering tests,
+including two 5-second timeouts; it is not counted as a pass. No timeout/config change
+was made. Backend/OpenAPI/Chromium were not rerun for this test-only correction.
+No provider call or PR9 work; remote CI must confirm the pushed correction.
+
+## Final live validation — authoritative current state
+
+Run `104fed03-5210-4269-a6e8-169ced53f2ce` is SUCCEEDED: `gpt-4o-transcribe-diarize`
+Audio Transcriptions → six validated timed segments → `gpt-6-astra` medium → three
+entities, three narrative cues, three PENDING anchors and two concerns. It used the
+historical **92.458667-second master**, proven by saved source UUID/hash/duration.
+The **36.291667-second derivative** remains deterministically verified and used by
+new/reset demos, but has no successful live validation. Earlier 401 and unknown
+failures are historical, distinct and unchanged; the sections below record them.
+No remaining demonstrated functional blocker. Merge review must accept sparse-sample,
+timestamp/completeness, transcription billing and untested-live-derivative limitations.
+PR9 owns refresh flashing, stage hierarchy, result/evidence density, master/source
+clarity and missing deletion; no UX implementation is added here.
+
+Retained gates: 39 focused / 122 backend tests; 78 frontend / 19 Chromium earlier
+passes; Gradle/frontend builds and OpenAPI drift pass. Unchanged code means no suite
+rerun in finalization; documentation links/diff and fresh OpenAPI drift checks pass.
+Normal tests use no OpenAI.
+Read-only API/web health checks pass; user services remain untouched. Exact IDs,
+usage/cost estimate, summary/warnings and historical evidence: [final validation](PR8-FINAL-VALIDATION.md).
+No provider request was made during finalization. Earlier unvalidated statements
+below apply at their historical checkpoint, not to the recovered master success.
+
+## Derived source gate and historical authorized 401
+
+The immutable master remains 92.458667 seconds / `ac9b29c47eeb399dbd1ac5cdfcde19273e0e4e68f5df8fd67fedbef3d284a7a7`.
+New/reset demo Film Intelligence uses the 0–36.291667-second derivative, SHA-256
+`2205c5c0a9ddc98fe7de897bc960775539095f75ee30e567f31ccca8570de835`, with explicit
+master/range provenance. Repeated generation matches exactly; matching audio and
+last picture frame are verified. 39 focused / 122 full backend tests, Gradle/frontend
+builds, OpenAPI drift, script syntax and diff checks pass. Prior attempt locks/history
+remain intact. The one authorized validation ran at clean HEAD `8f3c689925b537e7678d1f356900df877cb95445`.
+Run `87e8fdfb-7abd-4d21-ba10-4a5975a47038` prepared eight segments/24 frames, then
+failed TRANSCRIPTION_REJECTED: **HTTP 401**, `invalid_request_error`, `invalid_api_key`,
+request ID `req_c02bddf06cbb41a789eece448c0f6f25`. No retry, transcript or Astra call.
+Classification: PROVIDER_OR_ACCOUNT_RESTRICTION (credential authentication rejection);
+no inference about why that credential is invalid. Earlier unknown failures remain
+unchanged. Authorization is consumed; successful live transcription/Astra remain
+unverified. Correct server credentials before any separately authorized future request.
+See [derived-source verification](PR8-DERIVED-SOURCE.md) for complete evidence/cost limits.
+
+## PR8 recovery — current
+
+Recovery began with a clean worktree; fetched origin and verified PR #7 merge with parents `1e3f28f` /
+`dfc4adc`. Local main fast-forwarded to exactly
+`ed6066283d27da97484425f900b6bccb447b0911`, equal to origin/main; created only the
+authorized PR8 branch from that SHA. V6 and PR7 demo/reset are present. Required
+recovery/product/architecture documents and existing implementation inspected.
+Implemented V7/V8 source-film/run/stage/segment/transcript/candidate persistence,
+FFmpeg audio/video provenance, separate purpose-built transcription/Astra discovery ports, strict schema,
+creator-confirmed memory and normal Reference Bible promotion/provenance. The UI
+exposes only durable real stages using polling, recovery, failures and explicit consent.
+Cross-modal findings/history preserve original context. New/reset demos include the
+derived analysis source with immutable master provenance, never preloaded model results.
+
+Verified at the initial PR8 handoff: **102 backend tests**, **78 frontend tests**, **19 Chromium tests**, full
+Gradle and TypeScript/Vite builds, OpenAPI generation/drift, production jar boundaries
+and diff checks. Desktop/tablet/mobile PR8 screenshots inspected. Normal tests made
+zero OpenAI calls. The concurrent reference-read connection-pool issue is fixed and
+regression tested. The ~519 kB Vite entry chunk warning remains visible.
+
+One real transcription attempt was rejected by OpenAI. Durable run
+`f8a8960c-a396-4524-b810-5b38661ed176` failed with TRANSCRIPTION_REJECTED after source
+verification and eight segments/24 frames. **Zero Astra Film Understanding calls**,
+zero transcript/candidates/AI film observations. No reroll, fabricated fallback or
+claimed screen-opening discovery. GET-only recovery verifies the saved failure.
+The rejection's specific cause/charged amount are not established; usage is absent.
+Successful real multimodal provider acceptance remains unverified. Full evidence,
+cost qualifications and review focus: [PR8 review](PR8-REVIEW.md).
+
+Patrick explicitly reconciles `docs/intial-context.md`: PR7 merged → PR8 Film
+Understanding + required truthful stages → PR9 UX polish → optional P2 launch polish.
+Historical/superseded `feat/p1-analysis-progress` is absorbed into PR8, never a separate
+next branch. The pre-merge handoff below is historical, not a blocker.
+
+## Historical transcription rejection review
+
+Classification: **INSUFFICIENT_EVIDENCE**. Local PostgreSQL, saved artifacts and logs
+retain only the generic rejection/request ID, not the original HTTP status/error.
+Offline request-contract inspection and original-source PCM/WAV re-extraction found
+no proven rejection-causing defect. Whisper availability is verified by official
+documentation and Patrick's Playground, not considered a likely cause.
+
+The confirmed observability defect is fixed: future non-2xx failures preserve actual
+HTTP status, allowlisted type/code/safe message and sanitized request ID in existing
+durable fields, including header metadata when body reading fails. Unknown/free-form
+content is withheld; no secrets/audio/transcript or raw error body is retained.
+No migration, API change, request-shape/model/reasoning/retry change or new live call.
+
+Verified follow-up: **32 focused tests**, **115 full backend tests**, Gradle build,
+OpenAPI drift and diff checks pass. Frontend/Chromium are unchanged and were not
+rerun in this backend-only review; their prior 78/19 passes remain historical checks.
+Original failed run and attempt lock are unchanged. The separately authorized
+corrective attempt is recorded below. Real provider acceptance remains a merge risk;
+see [focused review](PR8-TRANSCRIPTION-REVIEW.md).
+
+## Historical authorized corrective transcription validation
+
+Patrick authorized exactly one isolated transcription-only dispatch using corrected
+HEAD `39009964927604cfe0a7e15e3dae99d2f4c2c909`. Clean branch/worktree, server key
+presence, built adapter and bounded original-source WAV were verified before dispatch.
+Validation identity: `87b0d170-3387-4959-8711-a2ef647f20ca` (not a FilmUnderstandingRun).
+At `2026-09-14T11:24:13.284144300Z`, the single adapter invocation returned
+**TRANSCRIPTION_UNAVAILABLE** in **423 ms**. No upstream HTTP status/request ID/error
+fields were exposed; local 503 is not an OpenAI HTTP status. Receipt by OpenAI is
+unconfirmed. Classification: **INSUFFICIENT_EVIDENCE**, not a proven provider rejection,
+account restriction or implementation defect. No retry; authorization is consumed.
+
+No transcript completion, segment count or timestamp validation; usage/billed cost
+unknown. **Zero Astra calls**. Original failed artifacts/lock hashes are unchanged;
+no database/application run was created or mutated. New isolated lock and safe
+metadata-only result remain under ignored `.local/`; temporary WAV deleted.
+No application code changed. No deterministic suites/builds were rerun for this
+validation/documentation-only follow-up; the prior 115 backend tests/build/OpenAPI
+passes remain the last applicable checks. Real transcription transport and real
+Astra Film Understanding acceptance both remain unverified. Do not merge or start PR9.
+
+## One-call timed transcription migration — current
+
+Patrick's follow-up prefers the verified `gpt-4o-transcribe-diarize` timed-segment
+contract over a proposed four-call `gpt-transcribe` fallback. Production remains
+POST `/v1/audio/transcriptions`, now with `diarized_json` and `chunking_strategy=auto`.
+One bounded WAV/request per film, unchanged source limits and no application retry.
+No Responses/Chat transcription, local four-call orchestration or speaker authority.
+V9 changes new-record defaults only; historical Whisper records/attempts stay intact.
+
+Safe transport classification and production-path loopback capture cover request
+delivery, endpoint restrictions and no-redirect behavior. The discarded historical
+exception cannot be reconstructed; neither the dashboard's reported zero Audio
+Transcription usage nor unrelated Astra usage establishes a specific network cause.
+The historical failure classifications remain INSUFFICIENT_EVIDENCE. No new live
+OpenAI request is made. [ADR-0009](adr/ADR-0009-timed-audio-transcription.md) records
+the exact contract, source-time semantics, alternatives, pricing and remaining limits.
+Verified: **38 focused / 121 full backend tests**, zero failures/errors/skips;
+full Gradle build, frontend TypeScript/Vite build, OpenAPI drift and diff checks pass.
+Frontend/Chromium test suites were not rerun because UI/API shape did not change;
+their prior results remain historical. The existing ~519 kB Vite warning remains.
+Public DB readback confirms the original FAILED Whisper run and V8 state unchanged;
+V9 is verified in isolated tests, not applied to the real-run schema. Both locks and
+original evidence hashes are preserved. One isolated Audio Transcriptions validation
+is justified only after fresh explicit authorization; real acceptance remains unverified.
+
+## Historical post-PR7 planning (superseded by PR8 authorization)
 
 After PR7 merge, the next authorized branch is `feat/p1-ai-film-understanding`:
 **PR8 — AI Film Understanding / Multimodal Continuity Discovery**. This supersedes

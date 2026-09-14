@@ -129,9 +129,45 @@ from the library but retain direct historical reads. No ordinary project can res
 Version mismatch refuses reset rather than silently adopting new authored content.
 Expected evaluation outcomes are not domain fields. See ADR-0007 for failure/locking.
 
-## Planned for successive slices (unchanged)
+## PR8 Film Understanding domain (V7 / V8)
 
-Future queued/progress stages require explicit worker/recovery design.
+SourceFilm is a project-owned immutable original identity/hash/size/duration, distinct
+from uploaded Shot. FilmSegment links immutable source start/end and position to an
+ordinary Shot with decoded Frame evidence. At most eight segments/24 frames are
+created once; later understanding attempts reuse their IDs and bytes.
+
+FilmUnderstandingRun records request/source/project identity, stage history, audio
+status/hash/duration, transcription request ID, Astra IDs/usage and bounded structured
+result. For new/reset demos the SourceFilm is the derived 0–36.291667-second asset;
+the manifest links its hash to the immutable master and range. Since the source
+start is zero, its times map directly to master time. Historical sources keep their
+own recorded bytes/hash/duration and are never retroactively relabelled.
+One global active run shares admission with continuity analysis; ten lifetime
+attempts per project. Terminal failure/success is durable. V8 protects completed
+runs and creator decisions; V7 protects source/segment/transcript evidence.
+
+TranscriptSegment has server UUID, run/project, ordinal, text and approximate source
+start/end with `OPENAI_DIARIZED_SEGMENT_ESTIMATE_SOURCE_START` provenance for new runs;
+historical `WHISPER_SEGMENT_ESTIMATE_SOURCE_START` records are unchanged. No word alignment,
+speaker identity or literal-event guarantee is inferred. Narrative cue IDs are stable
+server-derived UUIDs within a saved run and explicitly denote model interpretation.
+
+FilmCandidate retains the original structured proposal/evidence and a one-way
+PENDING → ACCEPTED / EDITED / REJECTED creator decision. Same decision replay is
+idempotent; changing a recorded decision is refused. Confirmed title/rule/scope are
+separate from the proposal. Only accepted/edited candidates enter confirmed memory
+(24 lifetime anchors/project); pending/rejected candidates never become rules.
+
+Visual promotion requires confirmation and a cited frame, creates an ordinary
+Reference via ReferenceService and links immutable candidate/run/source provenance.
+The normal eight-active/100-lifetime reference limits apply. Metadata may later be
+edited/archived without rewriting the original candidate decision. Promotion is
+optional and makes no provider call.
+
+Continuity AnalysisRun snapshots confirmed anchors and latest successful transcript/
+narrative context. Findings retain selected cross-modal evidence snapshots, source/
+run IDs and timestamp origins. Targeted review uses the original memory snapshot,
+not later discovery. Creator context does not erase prior analysis.
 Creator context does not erase prior analysis.
 
 A recognized difference is not automatically a finding; the analysis prompt uses

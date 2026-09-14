@@ -117,3 +117,15 @@ button, a, input, textarea { -webkit-tap-highlight-color: transparent; }
 .tour-modal-content { flex: 0 1 400px; max-width: 100%; max-height: calc(100dvh - 32px); overflow-wrap: anywhere; }
 .tour-modal-content .mantine-Modal-title { font-size: 18px; }
 @media (max-width: 700px) { .tour-modal-inner { padding: 8px; } .tour-modal-content { flex-basis: 100%; max-height: calc(100dvh - 16px); } }
+.film-intelligence { margin: 0 16px 20px; padding: 18px; border: 1px solid var(--mantine-color-dark-4); border-radius: 8px; overflow-wrap: anywhere; }
+.film-intelligence details { padding: 10px 0; }
+.film-intelligence summary { cursor: pointer; font-size: 14px; font-weight: 600; }
+.film-intelligence summary:focus-visible { outline: 2px solid var(--mantine-color-teal-4); outline-offset: 4px; }
+.film-frame-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 190px)); gap: 12px; margin-top: 12px; }
+.film-frame-grid figure { margin: 0; }
+.film-frame-grid img { width: 100%; height: 180px; object-fit: contain; background: #101114; }
+.film-frame-grid figcaption, .film-stages { font-size: 12px; color: var(--mantine-color-dimmed); }
+.film-stages li { padding: 3px 0; }
+.film-stages time { margin-left: 8px; }
+.film-candidate { overflow-wrap: anywhere; }
+.film-intelligence blockquote { margin: 12px 0; padding-left: 12px; border-left: 2px solid var(--mantine-color-teal-8); }

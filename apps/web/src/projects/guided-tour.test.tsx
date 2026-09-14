@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -9,6 +9,7 @@ import { GuidedTour, TOUR_PREFERENCE_KEY } from './GuidedTour';
 
 vi.mock('@sceneproof/api-client', async importOriginal => ({
   ...await importOriginal<typeof import('@sceneproof/api-client')>(),
+  getFilmIntelligence: vi.fn().mockResolvedValue({ source: null, runs: [], segments: [], confirmedAnchors: [] }),
   getProject: vi.fn(), listShots: vi.fn(), listFindings: vi.fn(), listReferences: vi.fn(),
   createProject: vi.fn(), updateProjectRules: vi.fn(), uploadReference: vi.fn(), updateReference: vi.fn(), archiveReference: vi.fn(),
   uploadShot: vi.fn(), createAnalysis: vi.fn(), createFindingAction: vi.fn(),
@@ -102,6 +103,27 @@ describe('optional guided tour', () => {
     expect(localStorage.getItem(TOUR_PREFERENCE_KEY)).toBe('skipped');
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     await waitFor(() => expect(screen.getByRole('button', { name: 'Quick tour' })).toHaveFocus());
+  });
+
+  it('does not steal keyboard focus when an opening animation frame arrives late', async () => {
+    const frames = new Map<number, FrameRequestCallback>();
+    let nextFrame = 0;
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation(callback => {
+      frames.set(++nextFrame, callback);
+      return nextFrame;
+    });
+    vi.spyOn(window, 'cancelAnimationFrame').mockImplementation(frame => { frames.delete(frame); });
+    const user = userEvent.setup(); open();
+    await user.click(screen.getByRole('button', { name: 'Quick tour' }));
+    await waitFor(() => expect(dialog().getByRole('heading')).toHaveFocus());
+    await user.tab();
+    expect(dialog().getByRole('button', { name: 'Skip' })).toHaveFocus();
+    await act(async () => {
+      const pending = [...frames.values()];
+      frames.clear();
+      pending.forEach(callback => callback(0));
+    });
+    expect(dialog().getByRole('button', { name: 'Skip' })).toHaveFocus();
   });
 
   it('supports keyboard navigation and Escape from any step', async () => {

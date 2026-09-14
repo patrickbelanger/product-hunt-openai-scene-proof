@@ -23,6 +23,7 @@ data class FindingView(
     val confidence: Double, val title: String, val summary: String, val expectedState: String, val observedState: String,
     val explanation: String, val affectedShotIds: List<UUID>, val relevantFrameIds: List<UUID>,
     val relevantReferenceIds: List<UUID>, val suggestedCorrectionPrompt: String, val status: String,
+    val filmEvidence: List<dev.sceneproof.film.FilmContextEvidence> = emptyList(),
 )
 
 @Repository
@@ -33,6 +34,9 @@ class AnalysisRepository(private val jdbc: JdbcTemplate, private val mapper: Obj
         jdbc.execute("SELECT pg_advisory_xact_lock(731204)")
         expireInterrupted()
         findRequest(projectId, requestId)?.let { return it to false }
+        if (jdbc.queryForObject("SELECT count(*) FROM film_understanding_runs WHERE completed_at IS NULL AND started_at > CURRENT_TIMESTAMP - INTERVAL '10 minutes'", Long::class.java) != 0L) {
+            throw AnalysisFailure("ANALYSIS_BUSY", "Film Understanding is running. Wait for it to finish before continuity analysis.", 429)
+        }
         if (jdbc.queryForObject("SELECT count(*) FROM analysis_runs WHERE status = 'RUNNING'", Long::class.java) != 0L) {
             throw AnalysisFailure("ANALYSIS_BUSY", "Another analysis is running. Retry this request later with the same requestId.", 429)
         }
@@ -62,6 +66,7 @@ class AnalysisRepository(private val jdbc: JdbcTemplate, private val mapper: Obj
             "schemaVersion" to "1", "strategy" to strategy, "projectId" to context.projectId,
             "name" to context.name, "description" to context.description, "rules" to context.rules,
             "originalRules" to originalRules,
+            "filmMemory" to context.filmMemory,
             "references" to context.references.map { reference -> mapOf(
                 "id" to reference.id, "projectId" to reference.projectId, "title" to reference.title, "guidance" to reference.guidance,
                 "width" to reference.width, "height" to reference.height, "sha256" to reference.sha256,
@@ -94,12 +99,18 @@ class AnalysisRepository(private val jdbc: JdbcTemplate, private val mapper: Obj
             finding.affectedShotIds.forEach { jdbc.update("INSERT INTO finding_shots (finding_id, shot_id, project_id) VALUES (?, ?, ?)", findingId, it, context.projectId) }
             finding.relevantFrameIds.forEach { jdbc.update("INSERT INTO finding_frames (finding_id, frame_id, shot_id) VALUES (?, ?, ?)", findingId, it, frameOwners.getValue(it)) }
             finding.relevantReferenceIds.forEach { jdbc.update("INSERT INTO finding_references (finding_id, analysis_run_id, reference_id, project_id) VALUES (?, ?, ?, ?)", findingId, id, it, context.projectId) }
+            val filmEvidence = context.filmMemory.evidence.filter { it.id in finding.relevantFilmEvidenceIds }
+            jdbc.update("UPDATE findings SET film_evidence = ?::jsonb WHERE id = ?", mapper.writeValueAsString(filmEvidence), findingId)
         }
     }
 
     fun originalRules(projectId: UUID, runId: UUID): String? = jdbc.queryForObject(
         "SELECT context->>'rules' FROM analysis_runs WHERE project_id = ? AND id = ?", String::class.java, projectId, runId,
     )
+
+    fun originalFilmMemory(projectId: UUID, runId: UUID): dev.sceneproof.film.ContinuityFilmMemory = jdbc.queryForObject(
+        "SELECT context->>'filmMemory' FROM analysis_runs WHERE project_id = ? AND id = ?", String::class.java, projectId, runId,
+    )?.let { mapper.readValue(it, dev.sceneproof.film.ContinuityFilmMemory::class.java) } ?: dev.sceneproof.film.ContinuityFilmMemory()
 
     @Transactional
     fun succeedTargeted(id: UUID, context: AnalysisContext, completion: TargetedCompletion) {
@@ -136,7 +147,8 @@ class AnalysisRepository(private val jdbc: JdbcTemplate, private val mapper: Obj
             return FindingView(id, row.getObject("analysis_run_id", UUID::class.java), FindingCategory.valueOf(row.getString("category")), FindingSeverity.valueOf(row.getString("severity")), row.getDouble("confidence"), row.getString("title"), row.getString("summary"), row.getString("expected_state"), row.getString("observed_state"), row.getString("explanation"),
                 jdbc.query("SELECT shot_id FROM finding_shots JOIN shots ON shots.id = finding_shots.shot_id WHERE finding_id = ? ORDER BY shots.position", { shot, _ -> shot.getObject("shot_id", UUID::class.java) }, id),
                 jdbc.query("SELECT frame_id FROM finding_frames JOIN frames ON frames.id = finding_frames.frame_id JOIN shots ON shots.id = frames.shot_id WHERE finding_id = ? ORDER BY shots.position, frames.position", { frame, _ -> frame.getObject("frame_id", UUID::class.java) }, id),
-                jdbc.query("SELECT reference_id FROM finding_references JOIN analysis_references USING (analysis_run_id, reference_id, project_id) WHERE finding_id = ? ORDER BY position", { reference, _ -> reference.getObject("reference_id", UUID::class.java) }, id), row.getString("suggested_correction_prompt"), row.getString("effective_status"))
+                jdbc.query("SELECT reference_id FROM finding_references JOIN analysis_references USING (analysis_run_id, reference_id, project_id) WHERE finding_id = ? ORDER BY position", { reference, _ -> reference.getObject("reference_id", UUID::class.java) }, id), row.getString("suggested_correction_prompt"), row.getString("effective_status"),
+                mapper.readTree(row.getString("film_evidence")).asSequence().map { mapper.treeToValue(it, dev.sceneproof.film.FilmContextEvidence::class.java) }.toList())
     }
 
     private fun expireInterrupted() {

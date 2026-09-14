@@ -19,6 +19,7 @@ class DemoService(
     private val source: DemoTemplateSource, private val projects: ProjectService,
     private val repository: ProjectRepository, private val references: ReferenceService,
     private val media: MediaService, private val storage: MediaStorage,
+    private val films: dev.sceneproof.film.SourceFilmService,
     private val jdbc: JdbcTemplate, transactionManager: PlatformTransactionManager,
 ) {
     private val transaction = TransactionTemplate(transactionManager).apply { timeout = 180 }
@@ -53,6 +54,10 @@ class DemoService(
                     repository.saveAndFlush(current)
                 }
                 val project = projects.createDemo(template.project, instanceId, template.version)
+                template.sourceFilm?.let { asset ->
+                    val film = films.upload(project.id, source.upload(asset))
+                    createdAssets.add(project.id to film.id)
+                }
                 template.references.forEach { asset ->
                     val reference = references.create(project.id, source.upload(asset), asset.title, asset.guidance)
                     createdAssets.add(project.id to reference.id)
