@@ -8,6 +8,24 @@ and pushed to origin. This documentation-only follow-up records that immutable r
 point; the final handoff reports the exact pushed tip including this follow-up.
 No merge or PR8 work is authorized by this handoff.
 
+## Post-review planning reconciliation
+
+Starting from pushed HEAD `9659236fd9dc8cf62c46cb899d7742018a4e5462`, Patrick accepts
+the honest zero-finding validation as PR7 evidence of independent analysis alongside
+the populated-demo/reset behavior. PR7 runtime, assets, results, acceptance and
+recorded verification are unchanged; this is not an accuracy claim or a finding
+showcase, and it triggers no provider call or reroll.
+
+After PR7 merge, the next planned slice is **PR8 — AI Film Understanding / Multimodal
+Continuity Discovery**, branch `feat/p1-ai-film-understanding`. It absorbs minimal
+real analysis-stage visibility previously assigned to `feat/p1-analysis-progress`:
+durable backend stages, truthful UI state, active-run reload/recovery and pipeline
+failure visibility. No fake percentages; backend state stays authoritative.
+The old standalone progress slice is superseded, not silently retained as next.
+Generalized retries, unrelated failure polish and public/launch hardening do not
+automatically move into PR8. This follow-up changes planning only, not PR7 scope.
+PR8 must not start until PR7 is merged; this handoff does not merge PR7.
+
 ## Recovery and scope
 
 Recovered actual Git state, fetched origin, inspected recent commits, required docs,

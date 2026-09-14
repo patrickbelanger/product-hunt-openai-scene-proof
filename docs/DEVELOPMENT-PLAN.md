@@ -1,7 +1,8 @@
 # Development Plan
 
-Baseline: September 12, 2026. Implements the priorities and branch order authorized
-in the initial context; no change to product scope. Deadline: September 18.
+Historical delivery baseline: September 12, 2026. The initial schedule below is
+preserved; Patrick's authorized post-PR7 branch/scope reconciliation follows it.
+Deadline: September 18; this planning update does not revise the delivery date.
 
 | Day | Goal | Exit evidence |
 | --- | --- | --- |
@@ -24,8 +25,26 @@ early on Day 2. No P2 animations or launch cosmetics may delay P0.
 Use, in order: `feat/p0-foundation`, `feat/p0-media-ingestion`,
 `feat/p0-astra-analysis`, `feat/p0-findings-workspace`,
 `feat/p0-intentional-change-steering`, `feat/p1-reference-bible`,
-`feat/p1-guided-tour`, `feat/p1-demo-project`, `feat/p1-analysis-progress`,
+`feat/p1-guided-tour`, `feat/p1-demo-project`, `feat/p1-ai-film-understanding`,
 `feat/p1-ux-polish`, optional `feat/p2-product-hunt-polish`.
+
+The earlier plan placed standalone `feat/p1-analysis-progress` immediately after
+PR7. Patrick supersedes that next slice with **PR8 — AI Film Understanding /
+Multimodal Continuity Discovery** on `feat/p1-ai-film-understanding`, only after
+PR7 is merged. PR8 absorbs the minimal truthful progress needed by that vertical
+slice: durable backend processing stages, real UI stage visibility, reload/recovery
+of an active run and pipeline failure visibility. Backend state is authoritative;
+no fake percentages or invented progress. Exact stages/transport await architecture.
+
+Full-film understanding combines audio/transcript and visual context to propose
+candidate Reference Bible entries/continuity anchors for creator confirmation.
+Generalized retry UX, unrelated failure polish, public hosting/anonymous isolation,
+production spend/rate protection and broader responsive/accessibility/launch polish
+remain separate subsequent hardening unless required by PR8-touched surfaces.
+The earlier ADR-0007 suggestion that PR8 could bind public sessions is a future
+architectural possibility, not authorization to include public isolation in PR8.
+The standalone progress branch is no longer a separate next delivery slice; later
+`feat/p1-ux-polish` and optional Product Hunt polish remain in the plan.
 
 Create each branch when work begins, after prerequisites are integrated into main.
 Keep main runnable, no permanent develop branch. Feature documentation travels
@@ -51,8 +70,11 @@ PR7 verification passes: 83 backend, 68 frontend and 17 Chromium tests. The one 
 film analysis succeeded with zero findings and contextualized the apartment transition;
 the historical ~five-issue target is not a promise of detections. A finding-focused
 launch recording remains a curation/review question, not grounds for a paid reroll.
-Commit/push PR7, then stop for review; do not start PR8. No dates or
-priorities have been changed. The dates are delivery targets, not assertions of completed work; actual progress
+PR7 is committed/pushed and awaiting merge review. Patrick accepts its honest
+zero-finding validation as evidence of independent analysis, not accuracy or a
+finding showcase. This documentation-only reconciliation does not reopen PR7 work
+or authorize another provider call. Do not start PR8 until PR7 is merged.
+The dates are delivery targets, not assertions of completed work; actual progress
 lives in [STATUS](STATUS.md) and [Implementation Plan](IMPLEMENTATION-PLAN.md).
 
 ## Risk buffer and launch dependencies

@@ -2,8 +2,25 @@
 
 Last updated: 2026-09-13
 Current branch: `feat/p1-demo-project`
-Current milestone: PR6 merged; PR7 implemented and verified, awaiting review.
-Current task: Review PR7. Do not merge or start PR8 without Patrick's approval.
+Current milestone: PR6 merged; PR7 complete and verified, awaiting merge review.
+Current task: Documentation-only post-PR7 planning reconciliation; then stop for review.
+Do not merge. PR8 must not start until PR7 is merged.
+
+## Authorized next slice (planning only)
+
+After PR7 merge, the next authorized branch is `feat/p1-ai-film-understanding`:
+**PR8 — AI Film Understanding / Multimodal Continuity Discovery**. This supersedes
+`feat/p1-analysis-progress` as the next standalone branch. PR8 absorbs necessary
+durable backend stages, truthful UI visibility, active-run reload/recovery and
+Film Understanding failure visibility; backend state remains authoritative, with
+no fake percentages or invented progress. General/transversal launch hardening is
+not automatically included; see the development and implementation plans.
+
+Patrick accepts PR7's honest zero-finding validation on populated-demo/reset and
+independent-validation merits. No runtime, assets or provider evidence change, no
+accuracy claim and no new provider call. The current result alone still cannot
+support a finding-focused recording. Previously recorded green checks remain valid;
+this follow-up runs only documentation/scope/diff checks, not the full suites.
 
 ## PR7 recovery and current behavior
 

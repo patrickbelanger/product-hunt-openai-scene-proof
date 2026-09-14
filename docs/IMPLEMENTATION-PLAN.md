@@ -129,8 +129,8 @@ failure-safe UI refresh. Test state transitions and preservation of prior eviden
 - [x] Optional four-step tour with Skip and Restart (PR6; verified below).
 - [x] Original demo media, evidence-based evaluation questions, intentional transition and reset (PR7; no guaranteed finding count).
 - [ ] Bounded live demo, hosting/isolation decision and rate/cost protection.
-- [ ] Real progress transport, retries and failure visibility.
-- [ ] Responsive/accessibility polish and launch rehearsal.
+- [ ] Generalized retry UX and unrelated failure-state polish; essential Film Understanding stage visibility/recovery moves to PR8 below.
+- [ ] Responsive/accessibility polish outside PR8-touched surfaces and launch rehearsal.
 - [ ] Optional micro-interactions and Product Hunt presentation refinements.
 
 ### PR6 — Guided tour, base `3184af6cf0119be1fa2949ca1fb60a2584483a56`, merged as `1e3f28f`
@@ -158,3 +158,25 @@ failure-safe UI refresh. Test state transitions and preservation of prior eviden
 - [x] Complete Chromium (17 tests) and 1280/820/390 visual, keyboard and no-overflow verification.
 - [x] Exactly one real full-sequence Astra validation: succeeded, zero findings; independent results/usage in PR7-REVIEW. No reroll.
 - [x] Final synchronized PR7 review; implementation `5eac0b9` committed/pushed. Documentation-only handoff follow-up; stop without merge or PR8.
+
+### PR8 — AI Film Understanding / Multimodal Continuity Discovery (planned)
+
+Next authorized branch: `feat/p1-ai-film-understanding`. **Do not start until PR7
+is merged.** This replaces the previously planned standalone next branch
+`feat/p1-analysis-progress`; it absorbs only progress needed by this vertical slice.
+
+- [ ] Recover merged PR7 and create only the authorized PR8 branch.
+- [ ] Full-film understanding using audio/transcript plus visual context.
+- [ ] Propose candidate Reference Bible entries and continuity anchors grounded in the film.
+- [ ] Creator confirmation of candidates before adopting them as declared project context.
+- [ ] Persist truthful backend processing stages and expose authoritative stage state in the UI.
+- [ ] Reload/recover an active Film Understanding run and expose its actual failures; no fake percentages or invented progress.
+
+Possible stages, subject to final architecture: PREPARING_SOURCE, DETECTING_STRUCTURE,
+TRANSCRIBING_AUDIO, UNDERSTANDING_FILM, BUILDING_CANDIDATES, SUCCEEDED, FAILED.
+These are planning examples, not an implemented schema or transport decision.
+
+Residual generalized retries, unrelated failure polish, public hosting/anonymous
+isolation, production spend/rate protection and final launch hardening remain separate.
+Later `feat/p1-ux-polish` and optional `feat/p2-product-hunt-polish` remain planned;
+this reconciliation assigns no new PR numbers to residual work.
