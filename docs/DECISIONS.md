@@ -60,6 +60,10 @@ metadata/hash snapshots and archive; eight active references share analysis budg
   bounded to 24 and one-way decisions; editing an already confirmed anchor is a later
   lifecycle feature, not silent mutation. Ten film attempts/project, one globally active.
 - September 18 is unchanged. No NLE, public tenancy, deployment or PR9 work is added.
+- Patrick's focused rejection review authorizes bounded sanitized diagnostics, not a
+  live reroll. Existing failure detail/request-ID fields suffice; no request/provider
+  architecture change. Original rejection remains INSUFFICIENT_EVIDENCE, while the
+  observability defect is fixed and tested. See [focused review](PR8-TRANSCRIPTION-REVIEW.md).
 
 ## DECISION REQUIRED format (for future decisions)
 

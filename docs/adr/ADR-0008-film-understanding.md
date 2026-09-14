@@ -70,6 +70,16 @@ as FAILED at ten minutes through GET/start, not automatically resumed or replaye
 Source picture samples and transcript use a verified common container origin, with
 decoded picture versus approximate transcription provenance retained separately.
 
+## Rejection diagnostics clarification — September 14
+
+Patrick explicitly authorizes a diagnostic-only review of the original transcription
+rejection, not another live request or architecture change. Existing failure detail
+and request-ID fields retain bounded sanitized non-2xx metadata; no migration is
+needed. Conservative allowlists withhold unknown provider text rather than risking
+credential/audio/transcript persistence. Original failed history remains immutable.
+The [focused review](../PR8-TRANSCRIPTION-REVIEW.md) records INSUFFICIENT_EVIDENCE and
+the remaining live-acceptance risk. The September 18 deadline is unchanged.
+
 ## References
 
 - [File transcription and timestamps](https://developers.openai.com/api/docs/guides/speech-to-text#timestamps)

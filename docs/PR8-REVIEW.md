@@ -171,7 +171,7 @@ provider identifiers and usage where available, not a staged answer.
   deliberately because provider validation did not succeed. No second POST, reroll,
   synthetic transcript, hard-coded finding or visual-only bypass was attempted.
 
-The adapter deliberately does not log/retain raw error bodies; it did not persist the
+The original `af42338` adapter did not log/retain raw error bodies or persist the
 rejection's HTTP status separately. This evidence cannot distinguish access, credit,
 format or another provider rejection reason. Do not claim a diagnosed cause.
 Successful real transcription and real Astra multimodal schema acceptance therefore
@@ -216,3 +216,13 @@ Review especially: audio/video timestamp origin, finite evidence bounds and stri
 output coverage; candidate versus confirmed authority and immutable reference/history
 provenance; stage transaction boundaries and no-reroll recovery; transcript privacy;
 sampling limitations versus the honest Between the Line observation; PR9 separation.
+
+## Rejection-review follow-up
+
+[Focused transcription review](PR8-TRANSCRIPTION-REVIEW.md) classifies the original
+failure as **INSUFFICIENT_EVIDENCE**. Request/audio contract review identifies no
+proven rejection-causing defect; availability is verified, not presumed absent.
+The confirmed observability defect is corrected with bounded allowlisted rejection
+details using existing durable fields and deterministic coverage. No original
+failure is rewritten and no new live request is made. One isolated transcription-only
+corrective validation is recommended only after explicit authorization, before merge.

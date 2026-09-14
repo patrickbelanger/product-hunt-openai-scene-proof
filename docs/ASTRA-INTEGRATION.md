@@ -291,3 +291,13 @@ TRANSCRIPTION_REJECTED was persisted and prevented Astra. Zero Astra calls; succ
 live multimodal acceptance remains unverified. GET-only recovery succeeds in reading
 the failure. The request ID, absent usage, unknown transcription charge and unassessed
 benchmark relationship are recorded in PR8-REVIEW; no reroll is authorized.
+
+PR8 rejection-review correction: future non-2xx transcription failures retain actual
+HTTP status, allowlisted type/code and exact safe-message literals in the existing
+≤500-character failure detail, plus sanitized `x-request-id`. Error JSON is parsed
+only up to 8 KiB within the 256 KiB body cap; received rejection headers survive
+body timeout/oversize/interruption. Unknown/free-form text is withheld to prevent
+echoed credentials/audio/transcript from reaching persistence or logs. Successful
+parsing, request shape, model and no-retry semantics are unchanged. No new schema/API
+field is added. The original rejection remains INSUFFICIENT_EVIDENCE; see the
+[focused review](PR8-TRANSCRIPTION-REVIEW.md). No corrective live request is yet authorized.

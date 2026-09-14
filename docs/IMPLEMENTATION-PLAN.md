@@ -180,9 +180,10 @@ PR8; there is no separate progress branch. General UX remains PR9.
 - [x] Persist truthful backend processing stages and expose authoritative stage state in the UI.
 - [x] Reload/recover an active Film Understanding run and expose its actual failures; no fake percentages or invented progress.
 - [x] Between the Line source integration, isolated reset/history and evaluation exclusion.
-- [x] Deterministic backend/frontend tests, Chromium, builds and generated OpenAPI checks: 102 / 78 / 19.
+- [x] Initial deterministic backend/frontend tests, Chromium, builds and generated OpenAPI checks: 102 / 78 / 19.
 - [x] Capped real validation: one transcription request rejected; zero Astra calls. Failure/unknown cost recorded, no reroll.
-- [ ] Successful real multimodal provider acceptance remains unverified; a new attempt requires Patrick's separate authorization after diagnosing the rejection.
+- [x] Focused rejection review: INSUFFICIENT_EVIDENCE; bounded sanitized diagnostics fixed, 32 focused / 115 full backend tests and build/OpenAPI checks pass. No new live call.
+- [ ] Successful real multimodal provider acceptance remains unverified; an isolated corrective transcription validation requires Patrick's separate explicit authorization after this offline diagnostic review.
 - [x] Synchronized product/technical docs, ADR and PR8-REVIEW for the final commit/push handoff; stop for review.
 
 Implemented stages (ADR-0008): PREPARING_SOURCE, DETECTING_STRUCTURE,

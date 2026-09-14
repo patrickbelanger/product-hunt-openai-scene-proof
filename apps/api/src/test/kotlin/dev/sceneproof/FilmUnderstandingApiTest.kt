@@ -153,6 +153,20 @@ class FilmUnderstandingApiTest @Autowired constructor(
         verify(audioPort, times(1)).transcribe(anyAudio())
     }
 
+    @Test fun `sanitized provider rejection survives worker persistence and read replay`() {
+        val failure = OpenAiAudioTranscriptionAdapter("").rejection(400, """{"error":{"type":"invalid_request_error","code":"invalid_value","message":"Invalid file format."}}""".toByteArray(), "req_saved_rejection")
+        doThrow(failure).`when`(audioPort).transcribe(anyAudio())
+        val run = await(start())
+        assertThat(run.stage).isEqualTo(FilmStage.FAILED)
+        assertThat(repository.get(source.projectId, run.id).failureMessage).isEqualTo(failure.detail)
+        assertThat(start(run.requestId).providerRequestId).isEqualTo("req_saved_rejection")
+        assertThat(run.failureMessage).contains("HTTP 400", "type=invalid_request_error", "code=invalid_value", "Invalid file format.")
+        mvc.get("/api/v1/projects/${source.projectId}/film/runs/${run.id}").andExpect {
+            status { isOk() }; jsonPath("$.failureMessage") { value(failure.detail) }; jsonPath("$.providerRequestId") { value("req_saved_rejection") }
+        }
+        verify(audioPort, times(1)).transcribe(anyAudio()); verifyNoInteractions(filmPort)
+    }
+
     @Test fun `invalid provider identifiers fail atomically after transcription without candidates`() {
         doAnswer { FilmFixtures.completion(it.getArgument(0)).let { value -> value.copy(result = value.result.copy(sourceFilmId = UUID.randomUUID())) } }.`when`(filmPort).understand(anyFilm())
         val run = await(start())

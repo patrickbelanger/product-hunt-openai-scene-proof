@@ -3,7 +3,7 @@
 Last updated: 2026-09-14
 Current branch: `feat/p1-ai-film-understanding`
 Current milestone: PR7 merged; PR8 ready for review with a real-provider validation limitation.
-Current task: Review the completed implementation and the preserved transcription rejection; no reroll.
+Current task: Rejection review complete; sanitized diagnostics verified. Await explicit corrective-validation authorization; no reroll.
 Do not merge. Do not start PR9.
 
 ## PR8 recovery — current
@@ -20,7 +20,7 @@ exposes only durable real stages using polling, recovery, failures and explicit 
 Cross-modal findings/history preserve original context. New/reset demos include the
 complete original source, never preloaded model results.
 
-Verified: **102 backend tests**, **78 frontend tests**, **19 Chromium tests**, full
+Verified at the initial PR8 handoff: **102 backend tests**, **78 frontend tests**, **19 Chromium tests**, full
 Gradle and TypeScript/Vite builds, OpenAPI generation/drift, production jar boundaries
 and diff checks. Desktop/tablet/mobile PR8 screenshots inspected. Normal tests made
 zero OpenAI calls. The concurrent reference-read connection-pool issue is fixed and
@@ -39,6 +39,27 @@ Patrick explicitly reconciles `docs/intial-context.md`: PR7 merged → PR8 Film
 Understanding + required truthful stages → PR9 UX polish → optional P2 launch polish.
 Historical/superseded `feat/p1-analysis-progress` is absorbed into PR8, never a separate
 next branch. The pre-merge handoff below is historical, not a blocker.
+
+## Transcription rejection review — current
+
+Classification: **INSUFFICIENT_EVIDENCE**. Local PostgreSQL, saved artifacts and logs
+retain only the generic rejection/request ID, not the original HTTP status/error.
+Offline request-contract inspection and original-source PCM/WAV re-extraction found
+no proven rejection-causing defect. Whisper availability is verified by official
+documentation and Patrick's Playground, not considered a likely cause.
+
+The confirmed observability defect is fixed: future non-2xx failures preserve actual
+HTTP status, allowlisted type/code/safe message and sanitized request ID in existing
+durable fields, including header metadata when body reading fails. Unknown/free-form
+content is withheld; no secrets/audio/transcript or raw error body is retained.
+No migration, API change, request-shape/model/reasoning/retry change or new live call.
+
+Verified follow-up: **32 focused tests**, **115 full backend tests**, Gradle build,
+OpenAPI drift and diff checks pass. Frontend/Chromium are unchanged and were not
+rerun in this backend-only review; their prior 78/19 passes remain historical checks.
+Original failed run and attempt lock are unchanged. One isolated transcription-only
+corrective validation is justified only after explicit authorization. Real provider
+acceptance remains a merge risk; see [focused review](PR8-TRANSCRIPTION-REVIEW.md).
 
 ## Historical post-PR7 planning (superseded by PR8 authorization)
 
