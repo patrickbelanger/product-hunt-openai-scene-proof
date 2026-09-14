@@ -11,7 +11,8 @@ import java.io.File
 import java.io.InputStream
 
 data class DemoAsset(val file: String, val sha256: String, val title: String, val guidance: String = "")
-data class DemoTemplate(val version: String, val project: CreateProjectRequest, val references: List<DemoAsset>, val shots: List<DemoAsset>, val sourceFilm: DemoAsset? = null)
+data class DemoSourceProvenance(val masterPath: String, val masterFile: String, val masterSha256: String, val masterDurationUs: Long, val sourceStartUs: Long, val sourceEndUs: Long)
+data class DemoTemplate(val version: String, val project: CreateProjectRequest, val references: List<DemoAsset>, val shots: List<DemoAsset>, val sourceFilm: DemoAsset? = null, val sourceProvenance: DemoSourceProvenance? = null)
 
 interface DemoTemplateSource {
     fun template(): DemoTemplate
@@ -30,6 +31,12 @@ class PackagedDemoTemplate(private val mapper: ObjectMapper) : DemoTemplateSourc
             require(template.references.size in 1..8 && template.shots.size in 1..8)
             (template.references + template.shots).forEach { asset -> upload(asset) }
             template.sourceFilm?.let { upload(it) }
+            template.sourceProvenance?.let { provenance ->
+                require(template.sourceFilm != null && template.sourceFilm.sha256 != provenance.masterSha256)
+                require(provenance.masterPath == "demo/between the lines - demo.mp4" && provenance.masterDurationUs == 92458667L)
+                require(provenance.sourceStartUs == 0L && provenance.sourceEndUs == 36291667L)
+                upload(DemoAsset(provenance.masterFile, provenance.masterSha256, "Immutable master"))
+            }
         }
     }
 

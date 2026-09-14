@@ -3,8 +3,20 @@
 Last updated: 2026-09-14
 Current branch: `feat/p1-ai-film-understanding`
 Current milestone: PR7 merged; PR8 ready for review with a real-provider validation limitation.
-Current task: One-call diarized transcription migration and offline transport diagnostics verified; stop for review, no live request authorized.
+Current task: Derived 0–36.291667-second source preparation and deterministic gates; one conditional transcription/Astra validation explicitly authorized afterward.
 Do not merge. Do not start PR9.
+
+## Derived source gate — current
+
+The immutable master remains 92.458667 seconds / `ac9b29c47eeb399dbd1ac5cdfcde19273e0e4e68f5df8fd67fedbef3d284a7a7`.
+New/reset demo Film Intelligence uses the 0–36.291667-second derivative, SHA-256
+`2205c5c0a9ddc98fe7de897bc960775539095f75ee30e567f31ccca8570de835`, with explicit
+master/range provenance. Repeated generation matches exactly; matching audio and
+last picture frame are verified. 39 focused / 122 full backend tests, Gradle/frontend
+builds, OpenAPI drift, script syntax and diff checks pass. Prior attempt locks/history
+remain intact. One new transcription, followed only on valid timed text by one Astra
+request, is explicitly authorized by Patrick after this gate. See [derived-source
+verification](PR8-DERIVED-SOURCE.md) for the new validation outcome.
 
 ## PR8 recovery — current
 
@@ -18,7 +30,7 @@ FFmpeg audio/video provenance, separate purpose-built transcription/Astra discov
 creator-confirmed memory and normal Reference Bible promotion/provenance. The UI
 exposes only durable real stages using polling, recovery, failures and explicit consent.
 Cross-modal findings/history preserve original context. New/reset demos include the
-complete original source, never preloaded model results.
+derived analysis source with immutable master provenance, never preloaded model results.
 
 Verified at the initial PR8 handoff: **102 backend tests**, **78 frontend tests**, **19 Chromium tests**, full
 Gradle and TypeScript/Vite builds, OpenAPI generation/drift, production jar boundaries

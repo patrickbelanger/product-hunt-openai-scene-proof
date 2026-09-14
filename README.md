@@ -11,7 +11,8 @@ is retained. The demo starts with no recorded findings. Initial analysis is expl
 started through the backend API; opening, refreshing and resetting never call OpenAI.
 
 **Film Intelligence** accepts one primary MP4/H.264 film (120 seconds/100 MiB).
-New/reset demo copies include the complete original. **Understand film** explicitly
+New/reset demo copies use the derived 0–36.291667-second analysis source; the immutable
+92.458667-second master and historical evidence remain unchanged. **Understand film** explicitly
 consents to at most one transcription plus one Astra discovery call per attempt.
 Real persisted stages survive reload; candidates require Accept/Edit/Reject before
 becoming continuity memory. Visual promotion uses the ordinary Reference Bible.

@@ -138,7 +138,11 @@ created once; later understanding attempts reuse their IDs and bytes.
 
 FilmUnderstandingRun records request/source/project identity, stage history, audio
 status/hash/duration, transcription request ID, Astra IDs/usage and bounded structured
-result. One global active run shares admission with continuity analysis; ten lifetime
+result. For new/reset demos the SourceFilm is the derived 0–36.291667-second asset;
+the manifest links its hash to the immutable master and range. Since the source
+start is zero, its times map directly to master time. Historical sources keep their
+own recorded bytes/hash/duration and are never retroactively relabelled.
+One global active run shares admission with continuity analysis; ten lifetime
 attempts per project. Terminal failure/success is durable. V8 protects completed
 runs and creator decisions; V7 protects source/segment/transcript evidence.
 

@@ -91,21 +91,26 @@ No public deployment, anonymous production isolation or spend quota is added.
 Those remain prerequisites for a public launch. PR7 baseline is empty;
 a future recorded baseline must originate from a validated real run and be labelled.
 
-## PR8 original-film understanding
+## PR8 derived-source understanding
 
 The `between-the-line-v1` authored clips/references/rules remain unchanged. An additive
-manifest sourceFilm entry references the approved original hash; Gradle packages the
-original as `demo/source-film.mp4`, not evaluation/curation notes. New and reset demo
-copies ingest that primary source through SourceFilmService. Existing PR7 copies
-are not silently mutated: reset or upload the same original to add the new capability.
+manifest sourceFilm entry now references `analysis-source.mp4`, derived from master
+range 0–36.291667 seconds. `sourceProvenance` records the immutable master path/hash,
+92.458667-second duration and exact range in microseconds. Gradle still packages the
+unchanged master as `demo/source-film.mp4`, alongside the derived runtime asset, not
+evaluation/curation notes. New/reset copies ingest the derivative through SourceFilmService.
+Existing PR7/PR8 source records and analyses are not mutated; resetting creates a
+new project, preserving the retired copy's original source and historical evidence.
 
 No understanding, transcription, candidate or finding is seeded on launch/reset.
 Only explicit **Understand film** consent starts the two bounded provider stages.
 Reset gives independent source/shot/reference IDs and no film runs/anchors; the old
 copy retains its discoveries, decisions, transcripts and findings for historical reads.
 
-The real PR8 benchmark uses all 92.459 seconds, including the black tail and original
-audio. It does not splice in a desired answer or tailor sampling to a lyric. The
+Historical PR8 attempts used all 92.459 seconds, including the black tail and original
+audio. Patrick now authorizes only the already-documented meaningful picture interval
+0–36.291667 seconds for Film Intelligence, with corresponding audio and zero-based
+timestamps. This does not splice in a desired answer or tailor sampling to a lyric. The
 screen-opening relationship is an evaluation question only, never prompt input.
 Actual observations, uncertainty, costs and missed relationships are recorded in
 [PR8 review](PR8-REVIEW.md). Test-only synthetic discovery is never runtime demo data.
@@ -114,3 +119,8 @@ The one real PR8 attempt prepared eight segments/24 frames, then OpenAI rejected
 transcription. No Astra discovery call or transcript/candidate result exists. The
 screen-opening question is unassessed, not a claimed detection or miss. The failed
 run remains inspectable; no reroll or recorded demo baseline was added.
+
+Derivation command: `node scripts/prepare-analysis-source.mjs`. Full demo regeneration
+also derives this file through `scripts/prepare-demo.mjs`; curated PR7 clips/references
+are unchanged. [Derived-source verification](PR8-DERIVED-SOURCE.md) records the hash,
+frame/sample cut, determinism/preflight and separately authorized live result.

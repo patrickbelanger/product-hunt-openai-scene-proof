@@ -151,7 +151,8 @@ OpenAPI, provider or dependency changes are introduced. See UX for focus/fallbac
 
 DemoController → DemoService → packaged DemoTemplateSource → existing ProjectService,
 ReferenceService and MediaService. PR7 copied only `demo/runtime`; PR8 additionally
-packages the approved original as `demo/source-film.mp4` for SourceFilm ingestion.
+packages the immutable original as `demo/source-film.mp4` for provenance and the
+derived 0–36.291667-second `demo/analysis-source.mp4` for new/reset SourceFilm ingestion.
 Authoring notes and evaluation manifests remain excluded from application resources.
 V6 adds explicit instance/version/retirement identity and replacement mapping.
 An instance advisory lock and bounded seed transaction publish a complete project

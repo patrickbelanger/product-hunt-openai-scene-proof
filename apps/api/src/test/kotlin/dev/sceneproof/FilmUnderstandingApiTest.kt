@@ -45,6 +45,7 @@ class FilmUnderstandingApiTest @Autowired constructor(
     private val assembler: AnalysisContextAssembler, private val storage: MediaStorage, private val process: MediaProcess,
     private val analyses: AnalysisRepository, private val resultValidator: ContinuityResultValidator,
     private val references: dev.sceneproof.reference.ReferenceRepository,
+    private val demos: dev.sceneproof.demo.DemoService,
 ) {
     @MockitoBean lateinit var filmPort: FilmUnderstandingPort
     @MockitoBean lateinit var audioPort: AudioTranscriptionPort
@@ -282,5 +283,46 @@ class FilmUnderstandingApiTest @Autowired constructor(
         listOf("runs/${run.id}", "runs/${run.id}/transcript", "runs/${run.id}/candidates").forEach { path -> mvc.get("/api/v1/projects/${other.id}/film/$path").andExpect { status { isNotFound() } } }
         assertThatThrownBy { decisions.decide(other.id, candidate.id, DecideCandidateRequest(CandidateStatus.ACCEPTED)) }.isInstanceOf(AnalysisFailure::class.java)
         assertThatThrownBy { repository.start(source.projectId, UUID.randomUUID(), run.requestId) }.isInstanceOfSatisfying(AnalysisFailure::class.java) { assertThat(it.code).isEqualTo("REQUEST_CONFLICT") }
+    }
+
+    @Test fun `derived demo source and reset preserve master history and deterministic bounded media`() {
+        val packaged = dev.sceneproof.demo.PackagedDemoTemplate(mapper)
+        val template = packaged.template()
+        val provenance = requireNotNull(template.sourceProvenance)
+        val masterProject = projects.create(CreateProjectRequest("Historical master fixture"))
+        val master = sources.upload(masterProject.id, packaged.upload(dev.sceneproof.demo.DemoAsset(provenance.masterFile, provenance.masterSha256, "Master")))
+        assertThat(master.durationMs).isEqualTo(92459)
+        val original = demos.open(UUID.randomUUID())
+        val derived = requireNotNull(repository.source(original.id))
+        assertThat(derived.sha256).isEqualTo(template.sourceFilm!!.sha256).isNotEqualTo(master.sha256)
+        assertThat(derived.durationMs).isBetween(36291, 36293)
+
+        fun preflight(film: SourceFilm): Pair<List<Pair<Long?, String>>, AudioInput> {
+            val run = repository.start(film.projectId, film.id, UUID.randomUUID()).first
+            val segments = sources.structure(film, run.id)
+            val frames = sources.frames(film, segments)
+            assertThat(segments).hasSizeBetween(1, 8)
+            assertThat(segments).allMatch { it.startMs >= 0 && it.endMs <= film.durationMs }
+            assertThat(frames).hasSizeBetween(1, 24).allMatch { it.timestampMs!! in 0 until film.durationMs }
+            val audio = requireNotNull(sources.audio(film, run.id))
+            assertThat(audio.durationMs).isBetween(36290, 36293)
+            assertThat(audio.wav.size).isLessThan(4_000_000)
+            assertThat(Files.exists(storage.directory(film.projectId, run.id).resolve("audio.wav"))).isFalse()
+            repository.fail(run.id, AnalysisFailure("PREFLIGHT_ONLY", "Deterministic test; no provider calls."))
+            return frames.map { it.timestampMs to dev.sceneproof.media.ImageContent.sha256(it.png) } to audio
+        }
+
+        val first = preflight(derived)
+        val replacement = demos.reset(original.id)
+        val replacementSource = requireNotNull(repository.source(replacement.id))
+        val repeated = preflight(replacementSource)
+        assertThat(repeated.first).isEqualTo(first.first)
+        assertThat(repeated.second.wav).isEqualTo(first.second.wav)
+        assertThat(repository.source(original.id)).isEqualTo(derived)
+        assertThat(repository.source(masterProject.id)).isEqualTo(master)
+        assertThat(provenance.masterPath).isEqualTo("demo/between the lines - demo.mp4")
+        assertThat(provenance.sourceStartUs).isZero()
+        assertThat(provenance.sourceEndUs).isEqualTo(36291667)
+        verifyNoInteractions(filmPort, audioPort, continuityPort)
     }
 }

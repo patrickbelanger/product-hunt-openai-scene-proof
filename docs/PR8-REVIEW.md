@@ -117,11 +117,13 @@ automatically Findings and zero candidates/concerns is a valid result.
 
 ## Demo and deterministic evidence
 
-New/reset `between-the-line-v1` copies include the complete approved source in
-addition to unchanged authored clips/references/rules. Old PR7 copies are not silently
-mutated: reset or upload the original. Reset allocates fresh identities without runs,
+New/reset `between-the-line-v1` copies include the derived 0–36.291667-second source in
+addition to unchanged authored clips/references/rules. The 92.458667-second master is
+unchanged and explicitly linked by manifest provenance. Old copies are not silently
+mutated. Reset allocates fresh identities without runs,
 transcripts, anchors or findings; retired copies keep history. No model baseline is
-installed. The original black tail and complete audio are not trimmed for evaluation.
+installed. Patrick explicitly selects the documented picture interval for new Film
+Intelligence sources; historical black-tail/master attempts retain their old evidence.
 
 Backend: **102 tests**, zero failures/errors/skips; full Gradle build passes, including
 V7/V8 migration and concurrent reference-provenance reads. Frontend: **78 tests**;
@@ -207,7 +209,8 @@ No transcript is committed or logged. Do not delete the lock to create another r
 ## Known limits and reviewer focus
 
 Sampled images can miss short actions, small UI text and brief transitions; a long
-black tail consumes part of the unchanged sample budget. Transcript may hallucinate,
+black tail consumed part of the original attempts' sample budget. New/reset copies
+use the documented picture-range derivative instead. Transcript may hallucinate,
 mishear lyrics or misalign estimates. No claim of perfect film understanding/accuracy.
 Creator decisions cannot yet be revoked/edited after confirmation. Source replacement,
 NLE editing, multi-hour orchestration and public auth/tenancy/billing are out of scope.

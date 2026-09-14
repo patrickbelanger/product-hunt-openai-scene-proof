@@ -162,6 +162,11 @@ No audio stream skips transcription honestly; no transcribed speech is separate
 from missing audio. Transcription failure fails the run before Astra. No fabricated
 silent fallback, song/lyric prompt or benchmark-specific audio trimming is used.
 
-The original demo's black tail and complete audio remain in the bounded source;
-legacy curated silent clips are unchanged. Failure-staged PNG directories may remain
+The immutable master retains its black tail and complete audio; new/reset demo Film
+Intelligence uses the separate frame/sample-bounded 0–36.291667-second derivative.
+Both video and lossless ALAC audio start at zero; runtime extraction still produces
+mono 16 kHz WAV. Master time equals derived time plus zero. Manifest master path/hash,
+duration and range preserve explicit provenance; old source evidence is not rewritten.
+See [derived-source verification](PR8-DERIVED-SOURCE.md). Legacy curated silent clips
+are unchanged. Failure-staged PNG directories may remain
 on disk; local retention/GC and public storage protections are still limitations.

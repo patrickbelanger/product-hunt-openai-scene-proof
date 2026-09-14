@@ -79,6 +79,16 @@ metadata/hash snapshots and archive; eight active references share analysis budg
   Authorization is consumed, original history preserved, no application code change.
   Real acceptance remains unverified; stop for review, not another request or merge.
 
+Patrick explicitly authorizes a separate deterministic Film Intelligence derivative
+of master range 0–36.291667 seconds, retaining the 92.458667-second master unchanged.
+Use frame/sample-accurate cuts, zero-based H.264/MP4 and lossless ALAC audio to avoid
+encoder-padding ambiguity; the existing transcription pipeline still receives WAV.
+Manifest provenance and source hashes distinguish new/reset copies from immutable
+historical evidence. No source-limit, API or PR9 expansion. After new deterministic
+gates, the previously unconsumed authorization permits one transcription and only
+then one Astra call if timed transcription validates. No fallback/retry/reroll.
+See [derived-source verification](PR8-DERIVED-SOURCE.md); September 18 scope is unchanged.
+
 ## DECISION REQUIRED format (for future decisions)
 
 Current technology/choice; problem; proposed alternative; alternatives considered;
