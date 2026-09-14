@@ -102,7 +102,7 @@ it('reset remains pending until the fresh API project is ready and prevents dupl
   vi.mocked(resetDemo).mockReturnValue(new Promise(done => { resolve = done; }));
   const user = userEvent.setup(); open(`/projects/${project.id}`);
   await user.click(await screen.findByRole('button', { name: 'Reset demo' }));
-  await user.dblClick(screen.getByRole('button', { name: 'Reset this copy' }));
+  await user.dblClick(await screen.findByRole('button', { name: 'Reset this copy' }));
   expect(screen.getByText('Restoring the authored demo…')).toHaveAttribute('role', 'status');
   expect(resetDemo).toHaveBeenCalledTimes(1);
   await user.keyboard('{Escape}'); expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -114,9 +114,9 @@ it('reset failure preserves the current workspace and retry targets the same sou
   vi.mocked(resetDemo).mockRejectedValueOnce(new ApiError(503));
   const user = userEvent.setup(); open(`/projects/${project.id}`);
   await user.click(await screen.findByRole('button', { name: 'Reset demo' }));
-  await user.click(screen.getByRole('button', { name: 'Reset this copy' }));
+  await user.click(await screen.findByRole('button', { name: 'Reset this copy' }));
   expect(await screen.findByRole('alert')).toHaveTextContent('Demo reset failed');
-  await user.click(screen.getByRole('button', { name: 'Reset this copy' }));
+  await user.click(await screen.findByRole('button', { name: 'Reset this copy' }));
   expect(await screen.findByRole('heading', { name: fresh.name })).toBeInTheDocument();
   expect(vi.mocked(resetDemo).mock.calls).toEqual([[project.id], [project.id]]);
 });

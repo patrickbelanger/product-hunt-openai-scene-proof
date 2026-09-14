@@ -5,9 +5,22 @@ Current branch: `feat/p1-ai-film-understanding`
 Current milestone: PR7 merged; PR8 complete for merge review with disclosed source-validation/UX limits.
 Recovered exact HEAD: `f1024fb2c686d82b3e471af4c44e267840598afe`; finalization is documentation-only.
 Verified implementation HEAD: `8f3c689925b537e7678d1f356900df877cb95445`. Final pushed documentation SHA is in the handoff (this file cannot contain its own commit hash).
-Current task: Successful live master-source Film Intelligence recovered; finalize evidence and stop for review.
+Current task: PR8 reset-modal test timing correction verified locally; awaiting CI/merge review.
 Next milestone: PR9 UX polish — not started.
 Do not merge. Do not start PR9.
+
+## CI reset-test follow-up
+
+CI reported 77/78 frontend tests passing: a synchronous `getByRole` queried
+"Reset this copy" before Mantine's animation-frame-driven modal became accessible.
+Reset interactions now await `findByRole`; no sleeps, disabled animations or runtime
+changes. Existing confirmation, pending/double-click and same-source retry assertions
+remain. Focused demo tests: 9/9 pass; full suite with `--maxWorkers=2`: 78/78 pass;
+TypeScript/Vite build passes with the existing 519 kB chunk warning. The initial
+uncapped local full run had three failures in unchanged project/steering tests,
+including two 5-second timeouts; it is not counted as a pass. No timeout/config change
+was made. Backend/OpenAPI/Chromium were not rerun for this test-only correction.
+No provider call or PR9 work; remote CI must confirm the pushed correction.
 
 ## Final live validation — authoritative current state
 

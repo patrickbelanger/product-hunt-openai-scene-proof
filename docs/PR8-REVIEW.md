@@ -2,6 +2,13 @@
 
 ## Final review state — supersedes earlier live-acceptance limitations
 
+Subsequent CI correction: demo reset tests await accessible confirmation buttons
+instead of synchronously racing Mantine's modal transition. Runtime code is unchanged.
+Nine focused tests and all 78 frontend tests with two workers pass; frontend build
+passes. An uncapped local run failed three unchanged project/steering tests (including
+two timeouts), so no default-worker full-suite pass is claimed. See STATUS for the
+verification distinction; remote CI confirmation remains pending.
+
 Recovered SUCCEEDED run `104fed03-5210-4269-a6e8-169ced53f2ce` used the historical
 92.458667-second master, not the 36.291667-second derivative. Six timed transcript
 segments reached Astra medium: three entities, three narrative cues, three pending

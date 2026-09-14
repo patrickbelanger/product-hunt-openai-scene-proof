@@ -2,6 +2,8 @@
 
 ## Final PR8 handoff checkpoint
 
+- [x] Correct the CI reset-modal test race with async role queries; 9 focused / 78 frontend tests (two workers) and frontend build pass. Runtime unchanged; remote CI recheck pending.
+
 - [x] Recover successful persisted master-source transcription → timed validation → Astra run; preserve all prior failures.
 - [x] Distinguish live 92.458667-second master success from deterministic 36.291667-second derivative verification.
 - [x] Preserve 122 backend / 78 frontend / 19 Chromium passing evidence and builds/OpenAPI; documentation-only finalization does not rerun unchanged suites.
