@@ -1,5 +1,15 @@
 # Development Plan
 
+## Current roadmap — PR9 authorization
+
+PR8 AI Film Understanding / Multimodal Continuity Discovery is COMPLETE and merged
+at `ba7076fef8a2b70083ca434214a4c92d08ba0dc7`. PR9 UX Polish + Project Lifecycle
+Usability is CURRENT on `feat/p1-ux-polish`. PR10 Security Hardening is NEXT (HIGH
+reasoning), with [preparation inventory](PR10-SECURITY-PLAN.md) only in PR9.
+Selected-range Film Understanding/Analyze Selection follows PR10 unless separately
+reprioritized. September 18 is unchanged. Earlier handoff/ordering statements below
+are historical and superseded by this approved sequence; no standalone progress PR.
+
 ## Current handoff — September 14
 
 PR7 is merged. PR8 is implemented and ready for merge review, with successful

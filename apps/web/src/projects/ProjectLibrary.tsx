@@ -1,18 +1,23 @@
 import { Alert, Badge, Button, Group, Loader, Paper, Stack, Text, Title } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { listProjects } from '@sceneproof/api-client';
 import { DemoLaunch } from './DemoControls';
 
 export function ProjectLibrary() {
+  const location = useLocation();
+  const heading = useRef<HTMLHeadingElement>(null);
+  const deletedProject = typeof location.state?.deletedProject === 'string' ? location.state.deletedProject : undefined;
+  useEffect(() => { if (deletedProject) heading.current?.focus(); }, [deletedProject]);
   const [page, setPage] = useState(0);
   const projects = useQuery({ queryKey: ['projects', page], queryFn: ({ signal }) => listProjects(page, signal) });
   return <main id="main" className="page library">
+    {deletedProject && <Text role="status" mb="md">Deleted “{deletedProject}” and its project-owned media.</Text>}
     <section className="hero">
       <div>
         <Text className="eyebrow" c="teal.3">YOUR AI CONTINUITY SUPERVISOR</Text>
-        <Title order={1}>Make your film<br /><span>remember itself.</span></Title>
+        <Title ref={heading} tabIndex={-1} order={1}>Make your film<br /><span>remember itself.</span></Title>
         <Text c="gray.4" className="hero-copy">Your characters. Your world. Every detail.<br />Give your next sequence a place to stay consistent.</Text>
         <Group align="flex-start"><DemoLaunch /><Button component={Link} to="/projects/new" size="md" variant="default">Create a project <span aria-hidden="true" className="button-arrow">↗</span></Button></Group>
       </div>

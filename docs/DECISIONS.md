@@ -1,5 +1,22 @@
 # Decisions
 
+## PR9 accepted scope — September 14
+
+Patrick authorizes UX Polish + Project Lifecycle Usability after PR8 merge, with
+zero provider calls. PR10 Security Hardening is next; selected-range understanding
+is future work after PR10. Existing PR8 provider/domain choices stay intact.
+
+- Workflow stage count is not time completion. Use backend stages and elapsed time;
+  omit ETA because no trustworthy historical timing baseline is available.
+- In/Out persists only in mounted React inspection state. No analysis scope change.
+- Match source hashes to packaged provenance; generic uploads retain only known facts.
+- [ADR-0010](adr/ADR-0010-project-deletion.md) implements Patrick's explicit ordinary-project
+  deletion request, including a narrow whole-project exception to history retention,
+  exact-name confirmation, active-run refusal and recoverable safe media cleanup.
+  Demo copies remain Reset-only and preserve historical copies.
+- [PR10 preparation](PR10-SECURITY-PLAN.md) inventories security work without beginning
+  it. September 18 is unchanged; no new authentication, billing or public tenancy.
+
 ## PR8 finalization clarification — September 14
 
 Patrick requests read-only recovery of the subsequent successful UI flow, no paid

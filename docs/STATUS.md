@@ -1,8 +1,53 @@
 # SceneProof Status
 
 Last updated: 2026-09-14
-Current branch: `feat/p1-ai-film-understanding`
-Current milestone: PR7 merged; PR8 complete for merge review with disclosed source-validation/UX limits.
+Current branch: `feat/p1-ux-polish`
+Current milestone: PR9 — UX Polish + Project Lifecycle Usability (in progress).
+PR9 base: `ba7076fef8a2b70083ca434214a4c92d08ba0dc7`; fetched origin, fast-forwarded main and verified merged PR8 tip `726a8ee` ancestry. Initial worktree clean.
+Current PR9 task: checkpoint existing implementation; PR9 remains incomplete.
+Exact next task: add Film Intelligence / Continuity Findings tab hierarchy in
+Workspace while preserving query/range state and guided-tour targets; clarify
+Import a shot versus Continuity Findings purpose. Then finish selection-driven
+active-frame auto-scroll and focused keyboard/tab/browser regression tests.
+Recovered after usage interruption: two modified tracked files, two new components,
+no staged changes or PR9 commits; branch had no upstream. Existing work preserved.
+Implemented: five-track backend-stage workflow bar with Step X of Y, text/symbol
+states, active-only animation/reduced motion, persisted-timestamp elapsed time and
+quiet polling. Refresh now animates only for manual requests; terminal polling stops.
+ETA omitted: no trustworthy timing baseline. Results prioritize exact summary,
+concerns and explicit candidate actions; compact evidence expands to full inspection;
+methodology and warnings remain available. Source labeling uses actual duration and
+hash-matched packaged provenance, preserving historical master validation.
+Timeline: focused Left/Right sampled frames, Shift+Left/Right segments, I/O marks,
+Escape clear, Home/End; typing is excluded. Visible source/clip playhead, In/Out
+handles and range highlight. Marks are local inspection-only state, not analysis input.
+Deletion: exact-name confirmation, ordinary projects only, active analysis refused;
+owned relational cascade and safe media cleanup with retryable pending state. Demo
+Reset remains replacement; packaged assets retained. ADR-0010 records the boundary.
+Next milestone: PR10 Security Hardening; preparation document only in PR9.
+Verification: full backend build passes with 127 tests, zero failures/errors/skips.
+Earlier full frontend suite: 96 pass; latest checkpoint rerun: 33 directly affected
+tests pass across seven files. Fresh TypeScript/Vite build and OpenAPI drift pass.
+Full 20-test Chromium run's final artifact reports passed/no failed tests; its
+terminal session was lost at interruption. Earlier isolated PR9 Chromium flow
+explicitly passed. No claim of recovered full console output. Screenshots for all
+seven requested surfaces at 1280/820/390 exist under test-results/pr9-*.png.
+Representative desktop progress/results/concerns, narrow progress/delete, tablet
+range and corrected full-size evidence reviewed; exhaustive final visual signoff
+remains partial. Initial failures (ambiguous selectors, a checked-exception Mockito
+fixture and sandbox browser access) were corrected, not counted as passes.
+DONE: core progress/polling/results/evidence, local marks/source labels, deletion,
+and PR10 planning. PARTIAL: final visual/accessibility signoff and active-frame
+scrolling (keyboard navigation scrolls; all selection paths are not centralized).
+NOT STARTED: Film Intelligence / Continuity Findings tabs and purpose-copy refinements
+explicitly requested in Patrick's latest continuation. No new optional work started.
+Known limits: sampled frames only/no playback, marks reset on remount, no ETA, local
+unauthenticated deployment, tiny deletion tombstones retained and manual cleanup
+retry after interruption; Vite retains a 531.50 kB entry-chunk warning.
+Blockers: none external; remaining PR9 scope prevents merge readiness.
+No provider calls authorized or made. Do not merge or start PR10.
+
+## Historical PR8 handoff (superseded by verified merge and PR9 authorization)
 Recovered exact HEAD: `f1024fb2c686d82b3e471af4c44e267840598afe`; finalization is documentation-only.
 Verified implementation HEAD: `8f3c689925b537e7678d1f356900df877cb95445`. Final pushed documentation SHA is in the handoff (this file cannot contain its own commit hash).
 Current task: PR8 guided-tour focus race reproduced and fixed; awaiting CI/merge review.

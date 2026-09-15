@@ -8,6 +8,7 @@ import { ReferenceBible } from './ReferenceBible';
 import { GuidedTour } from './GuidedTour';
 import { DemoReset } from './DemoControls';
 import { FilmIntelligence } from './FilmIntelligence';
+import { DeleteProject } from './DeleteProject';
 
 export function Workspace() {
   const { projectId = '' } = useParams();
@@ -19,7 +20,7 @@ export function Workspace() {
   if (project.isError) return <main id="main" className="page narrow"><Alert color="red" title={project.error instanceof ApiError && project.error.status === 404 ? 'Project not found' : 'Could not open this project'} role="alert"><Stack><Text size="sm">Return to your projects, or try opening this workspace again.</Text><Group><Button component={Link} to="/" variant="default">All projects</Button><Button variant="light" color="red" onClick={() => void project.refetch()}>Try again</Button></Group></Stack></Alert></main>;
   const current = project.data;
   return <main id="main" className="workspace">
-    <div className="workspace-toolbar"><div><Anchor component={Link} to="/" c="dimmed" size="xs">← All projects</Anchor><Title ref={heading} tabIndex={-1} order={1} size="h3" mt={4}>{current.name}</Title></div><Group><Badge color="teal" variant="light">{current.demo ? current.demo.retired ? 'Previous demo copy' : 'Demo project' : 'Project saved'}</Badge><DemoReset key={`reset-${projectId}`} project={current} /><GuidedTour key={`tour-${projectId}`} /></Group></div>
+    <div className="workspace-toolbar"><div><Anchor component={Link} to="/" c="dimmed" size="xs">← All projects</Anchor><Title ref={heading} tabIndex={-1} order={1} size="h3" mt={4}>{current.name}</Title></div><Group><Badge color="teal" variant="light">{current.demo ? current.demo.retired ? 'Previous demo copy' : 'Demo project' : 'Project saved'}</Badge><DemoReset key={`reset-${projectId}`} project={current} /><GuidedTour key={`tour-${projectId}`} /><DeleteProject key={`delete-${projectId}`} project={current} /></Group></div>
     {current.demo && <Text size="sm" c="dimmed" px="md" pb="md">{current.description} Explore the Reference Bible and select frames in the timeline. The demo starts without recorded findings; saved findings come from an explicitly requested analysis.</Text>}
     <FilmIntelligence key={`film-${projectId}`} projectId={projectId} />
     <div className="workspace-grid">

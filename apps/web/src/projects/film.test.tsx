@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
@@ -137,7 +137,55 @@ it('read failures remain visible and refresh is read-only', async () => {
   vi.mocked(api.getFilmIntelligence).mockRejectedValueOnce(new Error('Unavailable'));
   const user = userEvent.setup(); open();
   await screen.findByText(/last known state may be outdated/);
-  await user.click(screen.getByRole('button', { name: 'Refresh film state' }));
+  await user.click(screen.getByRole('button', { name: 'Refresh now' }));
   await screen.findByRole('button', { name: 'Understand film' });
+  expect(api.understandFilm).not.toHaveBeenCalled();
+});
+
+it('polls quietly, keeps manual refresh idle, then stops on persisted success', async () => {
+  state = { ...state, runs: [run] };
+  let resolvePoll!: (value: api.FilmIntelligence) => void;
+  vi.mocked(api.getFilmIntelligence).mockResolvedValueOnce(state).mockImplementationOnce(() => new Promise(resolve => { resolvePoll = resolve; }));
+  open(); await screen.findByText('Step 4 of 5');
+  await waitFor(() => expect(resolvePoll).toBeDefined(), { timeout: 3000 });
+  expect(screen.getByText('Syncing…')).toBeVisible();
+  expect(screen.getByRole('button', { name: 'Refresh now' })).not.toHaveAttribute('data-loading');
+  await act(async () => resolvePoll({ ...state, runs: [complete] }));
+  await screen.findByText('Saved · live updates stopped');
+  const calls = vi.mocked(api.getFilmIntelligence).mock.calls.length;
+  await act(async () => { await new Promise(resolve => setTimeout(resolve, 1700)); });
+  expect(api.getFilmIntelligence).toHaveBeenCalledTimes(calls);
+});
+
+it('animates refresh only on an explicit click and leaves failed runs terminal', async () => {
+  state = { ...state, runs: [{ ...run, stage: 'FAILED', completedAt: source.createdAt, failureMessage: 'Persistent failure' }] };
+  let resolveRefresh!: (value: api.FilmIntelligence) => void;
+  vi.mocked(api.getFilmIntelligence).mockResolvedValueOnce(state).mockImplementationOnce(() => new Promise(resolve => { resolveRefresh = resolve; }));
+  open(); await screen.findByText(/Persistent failure/);
+  const button = screen.getByRole('button', { name: 'Refresh now' }); fireEvent.click(button);
+  await waitFor(() => expect(button).toHaveAttribute('data-loading'));
+  await act(async () => resolveRefresh(state));
+  await waitFor(() => expect(button).not.toHaveAttribute('data-loading'));
+  await act(async () => { await new Promise(resolve => setTimeout(resolve, 1700)); });
+  expect(api.getFilmIntelligence).toHaveBeenCalledTimes(2);
+});
+
+it('prioritizes exact summary and concerns while retaining expandable uncertainty, limitations and full evidence', async () => {
+  state = { ...state, runs: [{ ...complete, result: { ...complete.result!, potentialConcerns: [{ title: 'Possible prop change', explanation: 'Could this be a different object?', uncertainty: 'Identity is uncertain', evidence: candidate.proposal.evidence }] } }] };
+  const user = userEvent.setup(); open();
+  expect(await screen.findByRole('heading', { name: 'Understanding summary' })).toBeVisible();
+  expect(screen.getByText(complete.result!.summary)).toBeVisible();
+  expect(screen.getByRole('heading', { name: 'Possible prop change' })).toBeVisible();
+  expect(screen.getByText('Identity is uncertain')).not.toBeVisible();
+  await user.click(screen.getByText('Concern rationale & uncertainty'));
+  expect(screen.getByText('Identity is uncertain')).toBeVisible();
+  await user.click(screen.getByText('Methodology & limitations'));
+  expect(screen.getByText(/Only sampled frames were inspected/)).toBeVisible();
+  expect(screen.getByText(/Transcript timestamps are approximate/)).toBeVisible();
+  expect(screen.getByText(/Proposals require creator confirmation/)).toBeVisible();
+  const concerns = screen.getByRole('region', { name: 'Potential continuity concerns' });
+  await user.click(within(concerns).getByText(/Inspect supporting evidence/));
+  await user.click(within(concerns).getByRole('button', { name: 'Enlarge source frame at 0.50s' }));
+  expect(within(await screen.findByRole('dialog')).getByRole('img')).toHaveAttribute('src', '/frame.png');
   expect(api.understandFilm).not.toHaveBeenCalled();
 });

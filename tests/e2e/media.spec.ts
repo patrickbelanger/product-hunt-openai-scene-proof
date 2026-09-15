@@ -15,7 +15,7 @@ test('import actual pixels, validate contract, reload and retain failed import h
   await expect(frame).toHaveJSProperty('naturalWidth', 160);
   await page.reload();
   await expect(frame).toBeVisible();
-  await expect(page.getByText(/Still image/)).toBeVisible();
+  await expect(page.getByText('Playhead · Still image')).toBeVisible();
   const listed = await request.get(`/api/v1/projects/${project.id}/shots`);
   const shots = await listed.json();
   const validator = new Ajv2020({ strict: false, allErrors: true });

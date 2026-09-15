@@ -1,5 +1,26 @@
 # Implementation Plan
 
+## PR9 — UX Polish + Project Lifecycle Usability (current)
+
+- [x] Preserve interrupted local work on `feat/p1-ux-polish`; base `ba7076f`, PR8 merged.
+- [x] Visible five-stage workflow bar, Step X of Y, failed/current/future/completed states and reduced motion.
+- [x] Quiet polling, separate manual refresh, saved-time elapsed, no unsupported ETA.
+- [x] Results hierarchy, concerns, compact full-inspectable evidence and discoverable limitations.
+- [x] Focused timeline keyboard navigation, playhead/time and local inspection-only In/Out.
+- [x] Actual source duration and hash-verified master/derivative provenance.
+- [x] Confirmed ordinary-project deletion, related history/media cleanup/replay, demo protection and ADR-0010.
+- [x] PR10 attack-surface inventory and threat/review plan; no broad security implementation.
+- [ ] Finish backend/frontend/build/OpenAPI/browser verification and desktop/tablet/mobile screenshot review.
+- [x] Backend build/127 tests, frontend 96-test prior suite plus fresh 33 affected tests, TypeScript/Vite and OpenAPI drift; Chromium final artifact passes.
+- [ ] Add Film Intelligence / Continuity Findings tabs, preserve state/tour targets and clarify import/findings purpose.
+- [ ] Centralize active-frame auto-scroll for all selection paths; keyboard path already scrolls.
+- [ ] Complete final responsive/accessibility visual review after remaining UX work.
+- [ ] Final PR9 completion handoff. Current commit/push is an intermediate checkpoint, not merge approval.
+
+PR8 is COMPLETE. PR10 Security Hardening is NEXT. Selected-range provider analysis
+is future work after PR10, requiring explicit consent and immutable range provenance.
+Earlier incomplete PR8 merge checkboxes below are historical; merged lineage is verified.
+
 ## Final PR8 handoff checkpoint
 
 - [x] Reproduce/fix late guided-tour autofocus stealing Tab focus; 16 tour / 79 frontend tests, five Chromium tour tests, frontend build and OpenAPI drift pass. No PR9 expansion.

@@ -1,5 +1,54 @@
 # UX
 
+## PR9 UX polish and project lifecycle
+
+Film Understanding shows five persistent workflow tracks from actual backend stages:
+source verification, visual structure, audio transcription, film understanding and
+candidate saving. Step X of Y is workflow position, never a completion percentage.
+Recorded timestamps determine completion; failure marks the last real stage failed,
+even when its timestamp is closed. Text and symbols accompany color. Only the active
+stage animates; reduced-motion disables that animation. Started/stage-update times
+and elapsed seconds remain factual. No ETA is claimed without timing evidence.
+
+GET polling remains 1.5 seconds while active/reconciling. A reserved compact live
+line says Syncing or Live/updated age; Refresh now has separate manual loading state.
+Terminal states stop polling and elapsed updates. Read errors preserve saved state.
+Transcript/evidence/candidates appear only from persisted data; no thought simulation.
+
+Understanding summary retains model wording and separates observed arc, recurring
+elements, narrative titles and compact statistics. Potential concerns precede
+candidate anchors; concise cards expose uncertainty/rationale on demand. Evidence
+uses small source-time thumbnails with full-size modal inspection and transcript
+provenance. Recurring entity/narrative details, original warnings and Methodology &
+limitations remain discoverable. No concern becomes a Finding or confirmed rule.
+
+The timeline is focusable and supports Left/Right sampled frames, Shift+Left/Right
+shot/analysis segments, Home/End, I/O and Escape. Inputs/editors preserve native keys.
+The selected frame/playhead and source time are visible; imported clips lacking a
+source mapping say Clip, never invented whole-film time. Playback is unavailable,
+so Space keeps normal browser/button behavior. Mouse/touch selection remains.
+
+I/O or explicit buttons set/adjust local inspection marks on sampled frames. Handles
+navigate back to each mark; a bordered highlight and text show In, Out and duration.
+Reversed ranges are rejected with an explanation. Each range belongs to the actual
+analysis source or individual imported clip; cross-clip source provenance is never
+invented. Marks do not change paid request inputs, and reset on component remount.
+
+Analysis source displays the current persisted duration. Source details uses the
+packaged manifest only when SHA-256 matches, showing master/range or historical
+master identity. A generic upload gets no invented master provenance.
+
+Delete project is a secondary danger action for ordinary projects. Confirmation
+names the project, warns of irreversible history/media removal and requires typing
+its exact name. Keep project receives initial focus; Escape/cancel restores focus.
+Pending submission cannot duplicate/dismiss. Active analysis and demos refuse
+deletion. Success returns to the library; cleanup errors stay retryable in the dialog.
+Current/retired demos retain the existing Reset replacement policy.
+
+Responsive progress stacks at narrow widths, evidence retains contain sizing, and
+focus outlines/visible labels support keyboard inspection. Final screenshot/check
+results are recorded in STATUS and PR9-REVIEW; implementation is not a test claim.
+
 ## Implemented
 
 Dark, restrained visual workspace. The header shows SceneProof and local workspace

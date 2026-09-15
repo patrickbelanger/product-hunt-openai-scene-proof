@@ -2,7 +2,7 @@
 
 **Keep every shot in character.** Your AI continuity supervisor for generative film.
 
-Current slice: PR8 AI Film Understanding, based on merged PR7 populated demo.
+Current slice: PR9 UX Polish + Project Lifecycle Usability, based on merged PR8.
 Choose **Try the demo film** to open **Between the Line — Continuity Study** with
 eight real video clips and five persisted visual references. Original film by Laurie
 and Patrick, explicitly authorized by Patrick. **Create a project** remains available.
@@ -16,8 +16,12 @@ New/reset demo copies use the derived 0–36.291667-second analysis source; the 
 consents to at most one transcription plus one Astra discovery call per attempt.
 Real persisted stages survive reload; candidates require Accept/Edit/Reject before
 becoming continuity memory. Visual promotion uses the ordinary Reference Bible.
-No fake progress, automatic truth, benchmark hints or paid retries. General UX is
-PR9, not this branch. See [PR8 review](docs/PR8-REVIEW.md) for verified evidence/limits.
+No fake progress, automatic truth, benchmark hints or paid retries. PR9 adds a visible
+workflow bar, quiet polling, compact results/evidence and keyboard timeline inspection.
+I/O sets local inspection marks; it never changes analysis scope. Ordinary-project
+deletion requires typing the exact name and removes owned runtime records/media;
+demos retain Reset. See [PR9 review](docs/PR9-REVIEW.md) and the documentation-only
+[PR10 security plan](docs/PR10-SECURITY-PLAN.md). No PR9 live provider calls.
 
 Start a new session with [STATUS](docs/STATUS.md), then follow the recovery protocol
 in [AGENTS.md](AGENTS.md). Product requirements: [BRD](docs/BRD.md). Delivery:
