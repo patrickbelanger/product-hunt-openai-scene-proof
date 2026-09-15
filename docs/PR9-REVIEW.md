@@ -8,6 +8,21 @@ own commit hash. No existing PR9 work was discarded or reimplemented.
 
 ## Delivered
 
+### Final functional gate — Analyze Selection
+
+**DECISION REQUIRED — defer Analyze Selection.** Focused investigation at clean
+`2c0e3f3` finds reusable continuity-provider/findings/sampled-evidence components,
+but no existing immutable range request/replay contract or end-to-end range policy
+for transcript/narrative evidence and later targeted neighbor re-evaluation.
+This is material domain work, not a PR9 UI connection. No new model/subsystem is
+inherently required; new extraction/transcription is avoidable for a future
+sampled-evidence-only slice. Full answers, alternatives and source references are
+in [the investigation](ANALYZE-SELECTION-INVESTIGATION.md).
+Advanced inspection stays inspection-only; selection analysis remains a post-PR10
+candidate. Documentation only: no new tests/build run or provider calls. Prior
+verification remains the baseline. PR9 is ready for merge subject to reviewer/CI
+approval; do not merge or start PR10 automatically.
+
 ### September 15 clarity addendum
 
 Resumed clean from `b64d3552877248854e8a52f53096418593d68dad`; frontend/docs only.

@@ -5,8 +5,17 @@ Current branch: `feat/p1-ux-polish`
 Current milestone: PR9 — UX Polish + Project Lifecycle Usability (implemented, verified; awaiting review).
 PR9 base: `ba7076fef8a2b70083ca434214a4c92d08ba0dc7` (merged PR8).
 Recovered clean pushed checkpoint: `b5334f00be63ebc4f360299a18974d4ca6738b12`.
-Current task: commit/push final clarity addendum; no merge or PR10 start.
+Current task: close focused Analyze Selection gate with documentation-only deferral; PR9 ready for merge review, no merge or PR10 start.
 Existing PR9 work preserved; no restart, backend/API changes or PR8 reinterpretation.
+
+Analyze Selection investigation at clean `2c0e3f3050e416b0cbdea8bd28b8888ac8e8d21c`:
+DECISION REQUIRED — defer Analyze Selection. Existing provider/findings and sampled
+frames are reusable, but immutable range/replay provenance, transcript-boundary
+policy and targeted re-evaluation scope need material domain work. No new model or
+transcription subsystem is inherently necessary. See ANALYZE-SELECTION-INVESTIGATION.md.
+Advanced inspection remains inspection-only; Analyze Selection is a post-PR10
+candidate. No runtime/test/API changes or provider calls. Documentation diff check
+only for this investigation; prior verified test/build baseline below is unchanged.
 
 Final clarity addendum resumed clean from `b64d3552877248854e8a52f53096418593d68dad`.
 DONE: four-step Film Intelligence-first tour with tab-aware targets; visible source

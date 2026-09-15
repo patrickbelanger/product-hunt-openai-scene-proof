@@ -26,6 +26,11 @@ evidence before detailed rationale. All original evidence/model wording remains.
 
 ### Explanatory roadmap only — after PR10 unless reprioritized
 
+The final PR9 [architecture gate](ANALYZE-SELECTION-INVESTIGATION.md) defers Analyze
+Selection: reusable continuity analysis still needs an immutable source-range
+contract, bounded transcript policy and explicit re-evaluation scope. Advanced
+inspection remains local inspection/navigation only; I/O never starts analysis.
+
 Small native disclosures keep planned capabilities subordinate to current work:
 - **Analyze Selection:** inside Advanced inspection; In/Out → explicit paid consent
   and analysis request → bounded visual/transcript evidence → result persisted with
