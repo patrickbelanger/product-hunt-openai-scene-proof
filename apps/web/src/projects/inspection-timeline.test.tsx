@@ -48,12 +48,23 @@ it('preserves normal input/editor keys and tab does not trap focus', async () =>
 
 it('supports mouse marks and rejects a reversed range without changing it', async () => {
   render(<Harness />); const user = userEvent.setup();
+  const disclosure = screen.getByText('Advanced inspection');
+  expect(disclosure.closest('details')).not.toHaveAttribute('open');
+  expect(screen.getByRole('button', { name: 'Mark In' })).not.toBeVisible();
+  await user.click(disclosure);
+  expect(screen.getByText(/Set an inspection range while reviewing a clip/)).toBeVisible();
   await user.click(screen.getByRole('button', { name: 'Mark Out' }));
   await user.click(screen.getByRole('button', { name: 'Inspect 10.00s' }));
   await user.click(screen.getByRole('button', { name: 'Mark In' }));
   expect(screen.getByRole('status')).toHaveTextContent('Mark In must be before');
   await user.click(screen.getByRole('button', { name: 'Clear range' }));
   expect(screen.getByText('In — · Out — · Selection —')).toBeVisible();
+  expect(screen.getByText(/Planned: analyze a selected range/)).not.toBeVisible();
+  await user.click(screen.getByText('Planned: Analyze Selection'));
+  expect(screen.getByText(/Planned: analyze a selected range/)).toBeVisible();
+  await user.click(disclosure);
+  expect(screen.getByRole('region')).toHaveTextContent('Playhead');
+  expect(screen.getByText('In — · Out — · Selection —')).not.toBeVisible();
 });
 
 it('minimally scrolls only an out-of-view selection, not polling rerenders, and checks again when revealed', () => {

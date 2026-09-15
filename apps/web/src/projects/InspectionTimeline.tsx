@@ -4,6 +4,7 @@ import type { FilmIntelligence, Shot } from '@sceneproof/api-client';
 
 export function InspectionTimeline({ shots, segments, selectedId, onSelect, children, active = true }: { shots: Shot[]; segments: FilmIntelligence['segments']; selectedId?: string; onSelect: (id: string) => void; children: ReactNode; active?: boolean }) {
   const root = useRef<HTMLDivElement>(null);
+  const advanced = useRef<HTMLDetailsElement>(null);
   const frames = shots.flatMap(shot => {
     const segment = segments.find(value => value.id === shot.id);
     return shot.frames.map(frame => ({ ...frame, shotId: shot.id, group: segment ? 'source' : shot.id, time: frame.timestampMs === null ? null : (segment?.startMs ?? 0) + frame.timestampMs }));
@@ -34,6 +35,7 @@ export function InspectionTimeline({ shots, segments, selectedId, onSelect, chil
   const stamp = (time: number) => `${(time / 1000).toFixed(2)}s`;
   function mark(boundary: 'start' | 'end') {
     if (!current || current.time === null) return;
+    if (advanced.current) advanced.current.open = true;
     const next = { ...visibleRange, group: current.group, [boundary]: current.time };
     if (next.start !== undefined && next.end !== undefined && next.start > next.end) {
       setNotice('Mark In must be before or at Mark Out. Adjust the other mark or clear the range.');
@@ -72,6 +74,8 @@ export function InspectionTimeline({ shots, segments, selectedId, onSelect, chil
     <Group justify="space-between"><Text size="sm" fw={600} aria-live="polite">Playhead · {current?.time === null ? 'Still image' : current ? `${current.group === 'source' ? 'Source' : 'Clip'} ${stamp(current.time!)}` : 'No sampled frame'}</Text><Text size="xs">Frame {frames.length ? index + 1 : 0} of {frames.length}</Text></Group>
     <Text id="timeline-shortcuts" size="xs" c="dimmed" mt="xs">← → Frame · Shift+← → Segment · I Mark In · O Mark Out · Esc Clear · Home/End</Text>
     <Text size="xs" c="dimmed">Sampled-frame inspection; video playback is not available.</Text>
+    <details ref={advanced} className="context-help advanced-inspection"><summary>Advanced inspection</summary>
+    <Text size="xs" c="dimmed" mt="xs">Set an inspection range while reviewing a clip. In this MVP, ranges help navigation and do not change AI analysis.</Text>
     {timelineFrames.length > 0 && <div className="inspection-rail" aria-label="Inspection range">
       {visibleRange?.start !== undefined && visibleRange.end !== undefined && <span className="inspection-range" data-testid="inspection-range" style={{ left: `${position(visibleRange.start)}%`, width: `${position(visibleRange.end) - position(visibleRange.start)}%` }} />}
       {timelineFrames.map(frame => <button key={frame.id} type="button" className="inspection-tick" style={{ left: `${position(frame.time!)}%` }} aria-label={`Inspect ${stamp(frame.time!)}`} aria-current={frame.id === current?.id ? 'true' : undefined} onClick={() => onSelect(frame.id)} />)}
@@ -83,6 +87,8 @@ export function InspectionTimeline({ shots, segments, selectedId, onSelect, chil
     <Text size="xs" mt="xs">In {visibleRange?.start === undefined ? '—' : stamp(visibleRange.start)} · Out {visibleRange?.end === undefined ? '—' : stamp(visibleRange.end)} · Selection {visibleRange?.start !== undefined && visibleRange.end !== undefined ? stamp(visibleRange.end - visibleRange.start) : '—'}</Text>
     <Text size="xs" c="dimmed">Inspection only · marks apply within this {current?.group === 'source' ? 'analysis source' : 'clip'} and do not change AI analysis.</Text>
     {notice && <Text size="xs" role="status">{notice}</Text>}
+    <details className="context-help"><summary>Planned: Analyze Selection</summary><Text size="xs" c="dimmed">Planned: analyze a selected range using bounded visual and transcript evidence. Mark In/Out → explicit analysis request and paid consent → bounded evidence → persisted result tied to the exact range. Not available in this MVP.</Text></details>
+    </details>
     {children}
   </div>;
 }

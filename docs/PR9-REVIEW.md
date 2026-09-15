@@ -8,6 +8,39 @@ own commit hash. No existing PR9 work was discarded or reimplemented.
 
 ## Delivered
 
+### September 15 clarity addendum
+
+Resumed clean from `b64d3552877248854e8a52f53096418593d68dad`; frontend/docs only.
+The four-step tour now introduces Film Intelligence first, including sampled/contextual
+understanding, proposals versus rules, concerns versus errors and creator authority.
+Tab-aware navigation preserves the remaining Bible/media/Findings targets and focus.
+Source name and fixed-source state are visible; details explicitly explain unavailable
+replacement and creating another project, alongside identity/duration/master provenance.
+Advanced inspection collapses the existing range controls; I/O reveals them, and
+collapsing preserves their local state. Frame selection/time remain visible outside.
+Why this exists explains concern-to-evidence inspection. Analyze Selection, Source
+Monitor ↔ Evidence Frame and Fix Assist appear only as subordinate Planned help,
+with no active/fake CTA or new capability. UX records the post-PR10 roadmap boundary.
+The redundant film intro is removed; concern evidence precedes detailed rationale,
+with all model wording, evidence, uncertainty and existing creator actions retained.
+
+Addendum checks: **66 affected frontend tests / eight files; six Chromium flows;
+TypeScript/Vite build; diff whitespace check pass.** Entry JS 541.37 kB retains the
+existing warning. Earlier full-suite/backend/OpenAPI evidence below was not rerun.
+Native disclosure Enter/Space, tour focus, retained tabs/ranges, polling and saved
+findings are covered. Initial unit assumptions about native details keyboard/role
+visibility were corrected for jsdom; actual keyboard behavior passes in Chromium.
+No external providers, playback, generation, Analyze Selection, PR10 start or merge.
+
+Reviewed desktop/tablet/mobile (1280/820/390): both workflows, tour, source details,
+collapsed/expanded Advanced inspection and contextual help. No horizontal page
+overflow; planned content stays collapsed by default and does not compete with
+current actions. Reproducible ignored captures add `pr9-source-{width}.png`,
+`pr9-advanced-{collapsed,expanded}-{width}.png`, `pr9-findings-help-{width}.png` and
+updated `tour-{width}-step-{1,2,3,4}.png`. No physical-device/screen-reader certification.
+
+### Existing PR9 delivery (preserved)
+
 - Five real backend workflow tracks with Step X of Y, completed/current/future and
   exact failure states. Saved timestamps drive elapsed time; no percentage or ETA.
   Active-only animation respects reduced motion. Quiet polling/live age does not
@@ -41,7 +74,7 @@ own commit hash. No existing PR9 work was discarded or reimplemented.
 - PR10 attack-surface/threat inventory in `PR10-SECURITY-PLAN.md`; preparation only.
   ADR-0010 records the narrow deletion extension. No other backend domain expansion.
 
-## Verification
+## Pre-addendum verification
 
 - Final frontend: 101 tests across 12 files passed. Focused runs: 54 affected tests,
   then 29 final tab/timeline/tour regressions, including filter-clear tab retention.

@@ -1,12 +1,28 @@
 # SceneProof Status
 
-Last updated: 2026-09-14
+Last updated: 2026-09-15
 Current branch: `feat/p1-ux-polish`
 Current milestone: PR9 — UX Polish + Project Lifecycle Usability (implemented, verified; awaiting review).
 PR9 base: `ba7076fef8a2b70083ca434214a4c92d08ba0dc7` (merged PR8).
 Recovered clean pushed checkpoint: `b5334f00be63ebc4f360299a18974d4ca6738b12`.
-Current task: commit/push final PR9 review handoff; no merge or PR10 start.
+Current task: commit/push final clarity addendum; no merge or PR10 start.
 Existing PR9 work preserved; no restart, backend/API changes or PR8 reinterpretation.
+
+Final clarity addendum resumed clean from `b64d3552877248854e8a52f53096418593d68dad`.
+DONE: four-step Film Intelligence-first tour with tab-aware targets; visible source
+name/fixed-state and explicit replacement guidance; collapsed Advanced inspection
+with intact I/O marks; small contextual planned-feature disclosures. Removed repeated
+Film Intelligence intro and put concern evidence before detailed rationale. No model
+wording/evidence removed. Current capabilities remain dominant; planned text is not a CTA.
+Future notes: Source Monitor ↔ Evidence Frame, Analyze Selection and Fix Assist are
+explanatory only, after PR10 unless reprioritized. No playback/export/generation added.
+Addendum verification: 66 affected frontend tests across eight files; six Chromium
+tour/UX flows; TypeScript/Vite build pass. Entry JS 541.37 kB, existing warning only.
+Desktop/tablet/mobile (1280/820/390) captures reviewed for both workflows, tour,
+source details, Advanced inspection collapsed/expanded and contextual help. Native
+disclosure Enter/Space verified in Chromium; unit tests use click for jsdom's native
+details limitations. No full suite/backend/OpenAPI rerun for this frontend-only addendum;
+prior baseline is recorded below. Zero external provider calls. No remaining addendum blockers.
 
 DONE: real five-stage Film Understanding progress, quiet polling, results/evidence
 hierarchy, source labels, keyboard inspection/local marks, project deletion and
@@ -38,10 +54,10 @@ Deletion retains exact-name irreversible confirmation, demo/active-run protectio
 owned relational cascade, safe owned-media cleanup and retryable pending cleanup.
 Demo Reset remains the lifecycle; packaged assets are never deleted.
 
-Verification: final frontend suite 101/101; TypeScript/Vite production build passes.
-Entry JS 539.29 kB (was 531.50 kB, +1.47%); existing warning retained, no bundle refactor.
+Pre-addendum verification: full frontend suite 101/101; TypeScript/Vite production build passes.
+Pre-addendum entry JS 539.29 kB (was 531.50 kB, +1.47%); no bundle refactor.
 Backend/API untouched in this slice: checkpoint full build/127 tests and OpenAPI
-drift remain the baseline, not newly rerun checks. Final full Chromium: 20/20 pass
+drift remain the baseline, not newly rerun checks. Pre-addendum full Chromium: 20/20 pass
 (2.2 minutes). Final diff whitespace check passes.
 Earlier 54 focused tests, then 29 final tab/timeline/tour tests passed. Browser review
 fixed the legacy media-reload tab navigation assertion; a subsequent reference-image

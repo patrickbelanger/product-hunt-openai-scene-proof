@@ -16,6 +16,7 @@
 - [x] Centralize selection-driven active-frame auto-scroll; visible frames and unrelated renders do not scroll.
 - [x] Review responsive screenshots, keyboard/focus behavior and retained inspection state at 1280/820/390.
 - [x] Final PR9 completion/review handoff documented for commit/push; merge still requires review.
+- [x] Final clarity addendum: Film-first tour, fixed-source guidance, Advanced inspection/help disclosures and evidence-first rationale; 66 affected frontend tests, six Chromium flows, build and responsive review pass. Future Source Monitor/Analyze Selection/Fix Assist remain text only.
 
 PR8 is COMPLETE. PR10 Security Hardening is NEXT. Selected-range provider analysis
 is future work after PR10, requiring explicit consent and immutable range provenance.

@@ -2,6 +2,46 @@
 
 ## PR9 UX polish and project lifecycle
 
+### Final clarity addendum — September 15
+
+Quick tour remains four steps but starts with Film Intelligence: understand the
+whole film through sampled visuals/transcript context, then inspect and let the
+creator decide. It names recurring entities, narrative context, candidate anchors
+and potential concerns without treating proposals as rules or questions as errors.
+Subsequent steps cover the Reference Bible, media/timeline and Findings/evidence
+with the existing creator actions. Each step reveals its appropriate mounted tab;
+Back returns to Film Intelligence, and focus/Skip/Escape/preferences are preserved.
+
+Source name, actual analysis-source duration and fixed-source state are visible.
+Source details retains identity/master/derived provenance and explicitly explains
+that replacement is unavailable: create a new project for another film. This
+matches the existing primary-source constraint; no upload/replacement API changed.
+
+Advanced inspection is collapsed by default. It contains the existing range rail,
+In/Out handles/buttons and selected duration. Frame/time and keyboard shortcuts
+remain visible outside it. I/O opens the disclosure when setting a valid mark;
+collapsing does not discard marks. Ranges remain local navigation state only.
+The repeated Film Intelligence introduction is removed; concerns offer supporting
+evidence before detailed rationale. All original evidence/model wording remains.
+
+### Explanatory roadmap only — after PR10 unless reprioritized
+
+Small native disclosures keep planned capabilities subordinate to current work:
+- **Analyze Selection:** inside Advanced inspection; In/Out → explicit paid consent
+  and analysis request → bounded visual/transcript evidence → result persisted with
+  immutable range provenance. Not an active or disabled CTA.
+- **Source Monitor ↔ Evidence Frame:** Findings' Why this exists explains today's
+  concern-to-exact-evidence connection. Future video-assisted inspection would place
+  source video at the finding timestamp beside the cited frame, allow jumping
+  between context/evidence, then creator review/correction. No playback is implemented.
+- **Fix Assist:** Finding → correction proposal → creator review → export / optional
+  generation. Current copy-correction remains real; export/generation are planned
+  only and require separately scoped decisions. No automatic correction or canon.
+
+Current principle: Understand → Inspect → Creator decides. Future: Focus → Correct.
+Difference is not a continuity error; none of this help starts analysis or changes
+provider scope, request inputs, models, security architecture or creator authority.
+
 Film Intelligence is the default primary workspace tab: understand visual/narrative
 context, then confirm what should stay consistent. Continuity Findings groups the
 Reference Bible, shot import, frame inspector/timeline and saved continuity review.
@@ -11,8 +51,8 @@ Import a shot is for precise frame-level inspection/focused visual comparison, n
 prerequisite for Film Intelligence. Both tab panels stay mounted: polling, drafts,
 evidence selection and local marks survive tab changes. Arrow keys on the tab list
 move focus/activate tabs; Tab enters visible content. Linked findings/analyses open
-their review tab; film links open discovery. Starting the tour reveals its existing
-Findings targets without selecting a frame or discarding a draft.
+their review tab; film links open discovery. Tour steps reveal their Film Intelligence
+or Findings targets without selecting a frame or discarding a draft.
 
 Film Understanding shows five persistent workflow tracks from actual backend stages:
 source verification, visual structure, audio transcription, film understanding and
@@ -214,8 +254,8 @@ no reset control. No fake React project/media DTOs are used in runtime paths.
 The first successfully opened workspace offers a compact “Take the quick tour”
 invitation with Start tour / Skip. There is no automatic modal or focus movement.
 Quick tour stays in the workspace toolbar, including after completion or Skip.
-The four concise steps cover Reference Bible, media/timeline, findings/evidence,
-and resolve/steer. Findings steps use the stable panel even when empty, describe
+The four concise steps cover Film Intelligence, Reference Bible, media/timeline,
+and findings/evidence with resolve/steer. Findings steps use the stable panel even when empty, describe
 actions as appearing on an open finding, and never manufacture findings or controls.
 Editing the Bible does not start analysis; creator intent does not force agreement.
 
@@ -231,7 +271,7 @@ controls cannot receive tour keyboard navigation or pointer actions.
 
 The card sits at the bottom right on desktop/tablet and spans the available width
 on mobile, with bounded height and internal scrolling. Explicit `data-tour` targets
-mark stable Reference Bible, media and Findings containers. Active panels have an
+mark stable Film Intelligence, Reference Bible, media and Findings containers. Active panels have an
 outline and textual step marker. A step may scroll its panel into view once; it
 never selects a frame or finding, and resize/ordinary scrolling does not trigger
 another scroll. Temporary bottom space lets even a short last panel clear the card;

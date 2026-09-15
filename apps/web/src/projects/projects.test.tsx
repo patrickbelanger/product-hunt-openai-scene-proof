@@ -58,11 +58,13 @@ describe('project critical path', () => {
     expect(rules).toHaveValue('Unsaved creator draft');
   });
 
-  it('reveals the mounted findings workspace when starting the tour from Film Intelligence', async () => {
+  it('introduces Film Intelligence then reveals mounted findings targets without remounting', async () => {
     const user = userEvent.setup(); open(`/projects/${project.id}`);
     await user.click(await screen.findByRole('button', { name: 'Quick tour' }));
+    expect(screen.getByRole('tab', { name: 'Film Intelligence' })).toHaveAttribute('aria-selected', 'true');
+    expect(await screen.findByRole('dialog')).toHaveTextContent('Anchors are proposals, not rules.');
+    await user.click(screen.getByRole('button', { name: 'Next' }));
     expect(screen.getByRole('tab', { name: 'Continuity Findings' })).toHaveAttribute('aria-selected', 'true');
-    expect(await screen.findByRole('dialog')).toBeVisible();
     expect(screen.getByLabelText('Continuity rules', { exact: true })).toBeVisible();
   });
 

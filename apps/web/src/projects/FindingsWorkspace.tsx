@@ -64,6 +64,11 @@ export function FindingsWorkspace({ projectId, demo = false, active = true }: { 
       <Stack gap="md">
         <Group justify="space-between"><Text className="panel-label" id="findings-title">CONTINUITY FINDINGS</Text><Button size="compact-xs" variant="subtle" loading={findings.isFetching || analysis.isFetching} onClick={() => { void findings.refetch(); if (analysisId) void analysis.refetch(); }}>Refresh findings</Button></Group>
         <Text size="xs" c="dimmed">{analysisId ? 'Results for the linked analysis.' : 'Saved findings, newest analysis first. Earlier analyses remain in history.'} Refresh only reads saved results.</Text>
+        <details className="context-help"><summary>Why this exists</summary>
+          <Text size="sm" mt="xs">Continuity Findings connects a specific continuity concern to the exact evidence used to support it. Inspect the evidence, then decide; a difference alone is not a continuity error.</Text>
+          <Text size="xs" c="dimmed" mt="sm">Planned: Source Monitor ↔ Evidence Frame. Position source video at the finding timestamp beside the exact cited frame, jump between source context and evidence, then review or correct the finding. Video-assisted inspection is not available in this MVP.</Text>
+          <Text size="xs" c="dimmed" mt="sm">Planned: Fix Assist. Finding → correction proposal → creator review → export / optional generation. Today you can copy a saved correction prompt; Fix Assist export and generation are not available.</Text>
+        </details>
         {analysisId && <Button variant="subtle" size="compact-xs" onClick={() => { setFrameId(undefined); setParams(previous => { const next = new URLSearchParams(previous); next.delete('analysisId'); next.delete('finding'); next.delete('findingsPage'); return next; }); }}>All saved findings</Button>}
         {analysisId && analysis.isPending && <Text role="status">Loading analysis status…</Text>}
         {analysis.isError && <Alert color="red" title="Analysis status unavailable" role="alert">{analysis.error.message}</Alert>}

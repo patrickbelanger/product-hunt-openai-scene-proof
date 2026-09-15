@@ -143,6 +143,10 @@ button, a, input, textarea { -webkit-tap-highlight-color: transparent; }
 .workflow-progress [data-state=failed] .workflow-track { background: #ffa8a8; }
 .film-run-meta { min-height: 24px; color: #adb9b3; }
 .film-live-state { width: 200px; max-width: 100%; min-height: 18px; }
+.source-provenance { max-width: 65ch; overflow-wrap: anywhere; }
+.context-help { font-size: 12px; margin-block: 12px; }
+.context-help > summary { cursor: pointer; min-height: 32px; padding-block: 6px; }
+.context-help > summary:focus-visible { outline: 2px solid #b3eddd; outline-offset: 2px; }
 .film-intelligence summary { min-height: 28px; }
 .inspection-timeline .mantine-Button-root { min-height: 32px; }
 .film-summary-copy { max-width: 80ch; line-height: 1.65; }

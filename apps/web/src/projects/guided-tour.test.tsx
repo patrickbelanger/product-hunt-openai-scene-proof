@@ -16,11 +16,11 @@ vi.mock('@sceneproof/api-client', async importOriginal => ({
 }));
 
 const project = { id: 'c2bca20c-5964-4a4f-a4f5-c11659823f08', name: 'Tour sequence', description: '', rules: 'Keep the coat.', createdAt: '2026-09-13T16:00:00Z', updatedAt: '2026-09-13T16:00:00Z' };
-const headings = ['Reference Bible', 'Media and timeline', 'Findings and evidence', 'Resolve and steer'];
+const headings = ['Film Intelligence', 'Reference Bible', 'Media and timeline', 'Findings and evidence'];
 const dialog = () => within(screen.getByRole('dialog'));
 
 function open(workspace = false) {
-  return render(<Providers>{workspace ? <MemoryRouter initialEntries={[`/projects/${project.id}`]}><App /></MemoryRouter> : <><GuidedTour /><section data-tour="reference-bible">Bible</section><section data-tour="media">Media</section><section data-tour="findings">Findings</section></>}</Providers>);
+  return render(<Providers>{workspace ? <MemoryRouter initialEntries={[`/projects/${project.id}`]}><App /></MemoryRouter> : <><GuidedTour /><section data-tour="film-intelligence">Film</section><section data-tour="reference-bible">Bible</section><section data-tour="media">Media</section><section data-tour="findings">Findings</section></>}</Providers>);
 }
 
 async function complete(user: ReturnType<typeof userEvent.setup>) {
@@ -49,7 +49,7 @@ describe('optional guided tour', () => {
   it('starts at step one with deterministic heading focus and no Back control', async () => {
     const user = userEvent.setup(); open();
     await user.click(screen.getByRole('button', { name: 'Start tour' }));
-    await waitFor(() => expect(dialog().getByRole('heading', { name: 'Step 1 of 4 Reference Bible' })).toHaveFocus());
+    await waitFor(() => expect(dialog().getByRole('heading', { name: 'Step 1 of 4 Film Intelligence' })).toHaveFocus());
     expect(dialog().queryByRole('button', { name: 'Back' })).not.toBeInTheDocument();
     expect(screen.getByRole('dialog')).toHaveAttribute('aria-modal', 'true');
   });
@@ -163,7 +163,7 @@ describe('optional guided tour', () => {
 
   it('uses truthful fallback for missing or hidden targets and still completes', async () => {
     const user = userEvent.setup(); open();
-    document.querySelector('[data-tour="reference-bible"]')!.removeAttribute('data-tour');
+    document.querySelector('[data-tour="film-intelligence"]')!.removeAttribute('data-tour');
     await user.click(screen.getByRole('button', { name: 'Start tour' }));
     expect(dialog().getByText(/This area is not visible/)).toBeInTheDocument();
     await user.click(dialog().getByRole('button', { name: 'Next' }));
@@ -176,7 +176,7 @@ describe('optional guided tour', () => {
 
   it('highlights semantic targets, scrolls only on navigation and cleans up', async () => {
     const user = userEvent.setup(); open();
-    const target = document.querySelector<HTMLElement>('[data-tour="reference-bible"]')!;
+    const target = document.querySelector<HTMLElement>('[data-tour="film-intelligence"]')!;
     vi.spyOn(target, 'getClientRects').mockReturnValue([{ top: 900 }] as unknown as DOMRectList);
     vi.spyOn(target, 'getBoundingClientRect').mockReturnValue({ top: 900 } as DOMRect);
     target.scrollIntoView = vi.fn();
@@ -204,9 +204,9 @@ describe('optional guided tour', () => {
     await user.click(screen.getByRole('button', { name: 'Start tour' }));
     await user.click(dialog().getByRole('button', { name: 'Next' }));
     await user.click(dialog().getByRole('button', { name: 'Next' }));
-    expect(dialog().getByText(/After an analysis, any saved concerns appear here/)).toBeInTheDocument();
+    expect(dialog().getByText(/Import stills or video/)).toBeInTheDocument();
     await user.click(dialog().getByRole('button', { name: 'Next' }));
-    expect(dialog().getByText(/It does not force Astra to agree/)).toBeInTheDocument();
+    expect(dialog().getByText(/You remain the authority/)).toBeInTheDocument();
     await user.click(dialog().getByRole('button', { name: 'Done' }));
     expect(screen.getByLabelText('Continuity rules', { exact: true })).toHaveValue('Unsaved creator draft');
     for (const operation of [api.createProject, api.updateProjectRules, api.uploadReference, api.updateReference, api.archiveReference, api.uploadShot, api.createAnalysis, api.createFindingAction]) expect(operation).not.toHaveBeenCalled();

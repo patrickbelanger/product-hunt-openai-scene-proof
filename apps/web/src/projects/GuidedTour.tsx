@@ -4,10 +4,10 @@ import { Button, Group, Modal, Paper, Stack, Text } from '@mantine/core';
 export const TOUR_PREFERENCE_KEY = 'sceneproof.guided-tour.v1';
 
 const steps = [
+  { target: 'film-intelligence', title: 'Film Intelligence', location: 'Understand → Inspect → Creator decides', text: 'Understand the whole film through sampled visuals and transcript context: recurring entities, narrative context, candidate continuity anchors and potential concerns. Anchors are proposals, not rules. Concerns are questions to review, not confirmed errors. You decide what becomes continuity truth.' },
   { target: 'reference-bible', title: 'Reference Bible', location: 'Reference Bible panel', text: 'Define what should stay consistent. Continuity rules and visual references are your source of truth. Editing here never starts analysis.' },
   { target: 'media', title: 'Media and timeline', location: 'Media workspace and shot timeline', text: 'Import stills or video, then inspect the ordered shots and representative frames used as evidence. The timeline follows your sequence.' },
-  { target: 'findings', title: 'Findings and evidence', location: 'Continuity findings panel', text: 'After an analysis, any saved concerns appear here. Compare their evidence and copy an actionable correction. A difference alone is not a continuity error.' },
-  { target: 'findings', title: 'Resolve and steer', location: 'Continuity findings panel · open finding actions', text: 'On an open finding, Resolve records a correction; Dismiss sets a concern aside. “This change is intentional” requests independent targeted re-evaluation. Creator intent adds context. It does not force Astra to agree.' },
+  { target: 'findings', title: 'Findings and evidence', location: 'Continuity Findings · focused frame/shot inspection', text: 'Connect a saved concern to its exact supporting evidence. Compare frames and copy a correction; Resolve records a correction, Dismiss sets a concern aside, and “This change is intentional” requests independent re-evaluation. You remain the authority. A difference alone is not a continuity error.' },
 ] as const;
 
 function shouldInvite() {
@@ -19,7 +19,7 @@ function shouldInvite() {
   }
 }
 
-export function GuidedTour({ onStart }: { onStart?: () => void } = {}) {
+export function GuidedTour({ onNavigate }: { onNavigate?: (workflow: 'film' | 'findings') => void } = {}) {
   const [invitation, setInvitation] = useState(shouldInvite);
   const [step, setStep] = useState<number | null>(null);
   const [missingTarget, setMissingTarget] = useState(false);
@@ -38,8 +38,12 @@ export function GuidedTour({ onStart }: { onStart?: () => void } = {}) {
 
   function start(button: HTMLButtonElement) {
     opener.current = button;
-    onStart?.();
-    setStep(0);
+    navigate(0);
+  }
+
+  function navigate(next: number) {
+    onNavigate?.(next === 0 ? 'film' : 'findings');
+    setStep(next);
   }
 
   useEffect(() => {
@@ -82,8 +86,8 @@ export function GuidedTour({ onStart }: { onStart?: () => void } = {}) {
         <Text size="sm">{current.text}</Text>
         {missingTarget && <Text size="xs" c="dimmed">This area is not visible in the current layout. You can continue the tour or return to the workspace.</Text>}
         <Group justify="space-between" mt="xs"><Button variant="subtle" size="sm" onClick={() => close('skipped')}>Skip</Button><Group gap="xs">
-          {step! > 0 && <Button variant="default" size="sm" onClick={() => setStep(step! - 1)}>Back</Button>}
-          {step === 3 ? <Button size="sm" onClick={() => close('completed')}>Done</Button> : <Button size="sm" onClick={() => setStep(step! + 1)}>Next</Button>}
+          {step! > 0 && <Button variant="default" size="sm" onClick={() => navigate(step! - 1)}>Back</Button>}
+          {step === 3 ? <Button size="sm" onClick={() => close('completed')}>Done</Button> : <Button size="sm" onClick={() => navigate(step! + 1)}>Next</Button>}
         </Group></Group>
       </Stack>}
       </Modal.Body>

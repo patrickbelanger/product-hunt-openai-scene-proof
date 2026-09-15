@@ -3,10 +3,11 @@ import { expect, test, type Page } from '@playwright/test';
 
 const preferenceKey = 'sceneproof.guided-tour.v1';
 const steps = [
+  { title: 'Film Intelligence', target: 'film-intelligence' },
   { title: 'Reference Bible', target: 'reference-bible' },
   { title: 'Media and timeline', target: 'media' },
   { title: 'Findings and evidence', target: 'findings' },
-  { title: 'Resolve and steer', target: 'findings' },
+
 ];
 
 async function guardTourRequests(page: Page) {
@@ -85,7 +86,7 @@ for (const width of [1280, 820, 390]) {
     await expect(restart).toBeVisible();
     await expect(page.getByText('Take the quick tour')).toHaveCount(0);
     await restart.focus(); await page.keyboard.press('Enter');
-    await expect(dialog.getByRole('heading')).toHaveText('Step 1 of 4Reference Bible');
+    await expect(dialog.getByRole('heading')).toHaveText('Step 1 of 4Film Intelligence');
     await dialog.getByRole('button', { name: 'Next' }).click();
     await dialog.getByRole('button', { name: 'Back' }).click();
     await expect(dialog.getByRole('heading')).toBeFocused();
@@ -94,6 +95,7 @@ for (const width of [1280, 820, 390]) {
     await page.keyboard.press('Enter');
     await dialog.getByRole('button', { name: 'Skip' }).click();
     await expect(restart).toBeFocused();
+    await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
     await page.getByRole('button', { name: 'Refresh findings' }).click();
     await expect(page.getByRole('heading', { name: 'No saved findings here.' })).toBeVisible();
     expect(await page.evaluate(key => localStorage.getItem(key), preferenceKey)).toBe('skipped');
@@ -111,7 +113,7 @@ test('tour remains usable with unavailable storage and a hidden responsive ancho
   const unexpected = await guardTourRequests(page);
   await page.goto(`/projects/${project.id}`);
   await page.getByRole('button', { name: 'Quick tour' }).click();
-  await page.addStyleTag({ content: '[data-tour="media"] { display: none; }' });
+  await page.addStyleTag({ content: '[data-tour="reference-bible"] { display: none; }' });
   const dialog = page.getByRole('dialog');
   await dialog.getByRole('button', { name: 'Next' }).click();
   await expect(dialog.getByText(/This area is not visible in the current layout/)).toBeVisible();
