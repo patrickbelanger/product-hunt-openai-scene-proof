@@ -19,7 +19,7 @@ function shouldInvite() {
   }
 }
 
-export function GuidedTour() {
+export function GuidedTour({ onStart }: { onStart?: () => void } = {}) {
   const [invitation, setInvitation] = useState(shouldInvite);
   const [step, setStep] = useState<number | null>(null);
   const [missingTarget, setMissingTarget] = useState(false);
@@ -38,6 +38,7 @@ export function GuidedTour() {
 
   function start(button: HTMLButtonElement) {
     opener.current = button;
+    onStart?.();
     setStep(0);
   }
 

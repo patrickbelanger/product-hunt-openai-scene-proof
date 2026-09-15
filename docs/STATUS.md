@@ -2,50 +2,64 @@
 
 Last updated: 2026-09-14
 Current branch: `feat/p1-ux-polish`
-Current milestone: PR9 — UX Polish + Project Lifecycle Usability (in progress).
-PR9 base: `ba7076fef8a2b70083ca434214a4c92d08ba0dc7`; fetched origin, fast-forwarded main and verified merged PR8 tip `726a8ee` ancestry. Initial worktree clean.
-Current PR9 task: checkpoint existing implementation; PR9 remains incomplete.
-Exact next task: add Film Intelligence / Continuity Findings tab hierarchy in
-Workspace while preserving query/range state and guided-tour targets; clarify
-Import a shot versus Continuity Findings purpose. Then finish selection-driven
-active-frame auto-scroll and focused keyboard/tab/browser regression tests.
-Recovered after usage interruption: two modified tracked files, two new components,
-no staged changes or PR9 commits; branch had no upstream. Existing work preserved.
-Implemented: five-track backend-stage workflow bar with Step X of Y, text/symbol
-states, active-only animation/reduced motion, persisted-timestamp elapsed time and
-quiet polling. Refresh now animates only for manual requests; terminal polling stops.
-ETA omitted: no trustworthy timing baseline. Results prioritize exact summary,
-concerns and explicit candidate actions; compact evidence expands to full inspection;
-methodology and warnings remain available. Source labeling uses actual duration and
-hash-matched packaged provenance, preserving historical master validation.
-Timeline: focused Left/Right sampled frames, Shift+Left/Right segments, I/O marks,
-Escape clear, Home/End; typing is excluded. Visible source/clip playhead, In/Out
-handles and range highlight. Marks are local inspection-only state, not analysis input.
-Deletion: exact-name confirmation, ordinary projects only, active analysis refused;
-owned relational cascade and safe media cleanup with retryable pending state. Demo
-Reset remains replacement; packaged assets retained. ADR-0010 records the boundary.
-Next milestone: PR10 Security Hardening; preparation document only in PR9.
-Verification: full backend build passes with 127 tests, zero failures/errors/skips.
-Earlier full frontend suite: 96 pass; latest checkpoint rerun: 33 directly affected
-tests pass across seven files. Fresh TypeScript/Vite build and OpenAPI drift pass.
-Full 20-test Chromium run's final artifact reports passed/no failed tests; its
-terminal session was lost at interruption. Earlier isolated PR9 Chromium flow
-explicitly passed. No claim of recovered full console output. Screenshots for all
-seven requested surfaces at 1280/820/390 exist under test-results/pr9-*.png.
-Representative desktop progress/results/concerns, narrow progress/delete, tablet
-range and corrected full-size evidence reviewed; exhaustive final visual signoff
-remains partial. Initial failures (ambiguous selectors, a checked-exception Mockito
-fixture and sandbox browser access) were corrected, not counted as passes.
-DONE: core progress/polling/results/evidence, local marks/source labels, deletion,
-and PR10 planning. PARTIAL: final visual/accessibility signoff and active-frame
-scrolling (keyboard navigation scrolls; all selection paths are not centralized).
-NOT STARTED: Film Intelligence / Continuity Findings tabs and purpose-copy refinements
-explicitly requested in Patrick's latest continuation. No new optional work started.
-Known limits: sampled frames only/no playback, marks reset on remount, no ETA, local
-unauthenticated deployment, tiny deletion tombstones retained and manual cleanup
-retry after interruption; Vite retains a 531.50 kB entry-chunk warning.
-Blockers: none external; remaining PR9 scope prevents merge readiness.
-No provider calls authorized or made. Do not merge or start PR10.
+Current milestone: PR9 — UX Polish + Project Lifecycle Usability (implemented, verified; awaiting review).
+PR9 base: `ba7076fef8a2b70083ca434214a4c92d08ba0dc7` (merged PR8).
+Recovered clean pushed checkpoint: `b5334f00be63ebc4f360299a18974d4ca6738b12`.
+Current task: commit/push final PR9 review handoff; no merge or PR10 start.
+Existing PR9 work preserved; no restart, backend/API changes or PR8 reinterpretation.
+
+DONE: real five-stage Film Understanding progress, quiet polling, results/evidence
+hierarchy, source labels, keyboard inspection/local marks, project deletion and
+PR10 planning. Final slice adds default Film Intelligence / Continuity Findings
+tabs, import/findings purpose and empty-state guidance, selection-driven scrolling
+and responsive/accessibility review. PARTIAL: none in the approved PR9 slice.
+NOT STARTED: PR10 implementation and post-PR10 Analyze Selection (intentionally deferred).
+
+Progress uses backend stages and saved timestamps, Step X of Y, completed/current/
+future/failed text and symbols. Only the active stage animates; reduced motion stops
+animation. Factual elapsed time only, no unsupported ETA/percentage. Quiet live age
+and Syncing state do not animate Refresh now; terminal polling stops.
+Both tab panels remain mounted: polling, drafts, evidence/frame and In/Out survive
+tab switches. Arrow keys activate tabs; findings/analysis links open review, film
+links open discovery. Clearing a findings filter stays in Findings. The guided tour
+reveals its existing targets without changing selected evidence or drafts.
+Import a shot explains precise frame-level inspection/focused comparison and is
+not required for Film Intelligence. Empty findings explain persisted concerns,
+API-started continuity analysis and existing creator actions; no invented UI action.
+
+Timeline Left/Right = sampled frame; Shift+Left/Right = segment; Home/End, I/O and
+Escape remain. Typing retains native keys. Selection changes/tab reveal scroll only
+an out-of-view thumbnail by its minimal internal viewport offset. Already-visible
+frames and polling/unrelated renders do not scroll. Instant movement avoids queued
+animation and respects reduced motion. Marks remain inspection-only and local.
+Source labeling uses actual duration, with hash-matched master/analysis provenance:
+36.29s derivative versus 92.46s master; historical PR8 master validation is unchanged.
+Deletion retains exact-name irreversible confirmation, demo/active-run protection,
+owned relational cascade, safe owned-media cleanup and retryable pending cleanup.
+Demo Reset remains the lifecycle; packaged assets are never deleted.
+
+Verification: final frontend suite 101/101; TypeScript/Vite production build passes.
+Entry JS 539.29 kB (was 531.50 kB, +1.47%); existing warning retained, no bundle refactor.
+Backend/API untouched in this slice: checkpoint full build/127 tests and OpenAPI
+drift remain the baseline, not newly rerun checks. Final full Chromium: 20/20 pass
+(2.2 minutes). Final diff whitespace check passes.
+Earlier 54 focused tests, then 29 final tab/timeline/tour tests passed. Browser review
+fixed the legacy media-reload tab navigation assertion; a subsequent reference-image
+request hit net::ERR_CONNECTION_TIMED_OUT at the local Vite proxy. Trace inspected;
+no assertion weakening, retries or timeout increases were added.
+Screenshots cover progress/results/concern/evidence/playhead/range/delete and both
+tabs at desktop 1280, tablet 820 and narrow 390, including empty/populated findings.
+Reviewed hierarchy, wrapping, focus, controls and no horizontal page overflow.
+No physical-device or screen-reader certification is claimed.
+
+Known limits: sampled frames/no playback; marks reset on reload/project remount;
+dense rail ticks are supplemented by keyboard navigation and full thumbnail buttons;
+no ETA/Analyze Selection; local unauthenticated deployment. Deletion DB/filesystem
+cleanup is not atomic; manual retry and small durable tombstones remain.
+Blockers: none. Ready for PR9 reviewer/CI approval; final commit SHA is in the Git handoff.
+Next milestone: PR10 Security Hardening (HIGH), preparation only in
+`docs/PR10-SECURITY-PLAN.md`. Do not start it or merge automatically.
+Zero external provider calls; no generation/Fix Assist or Analyze Selection implemented.
 
 ## Historical PR8 handoff (superseded by verified merge and PR9 authorization)
 Recovered exact HEAD: `f1024fb2c686d82b3e471af4c44e267840598afe`; finalization is documentation-only.

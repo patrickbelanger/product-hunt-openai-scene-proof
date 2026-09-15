@@ -9,6 +9,8 @@ reasoning), with [preparation inventory](PR10-SECURITY-PLAN.md) only in PR9.
 Selected-range Film Understanding/Analyze Selection follows PR10 unless separately
 reprioritized. September 18 is unchanged. Earlier handoff/ordering statements below
 are historical and superseded by this approved sequence; no standalone progress PR.
+PR9's final workspace tab/inspection slice is implemented and verified; final review
+handoff is in STATUS and PR9-REVIEW. PR10 is not started by this work.
 
 ## Current handoff — September 14
 

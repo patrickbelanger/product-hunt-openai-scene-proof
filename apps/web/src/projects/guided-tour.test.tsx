@@ -195,6 +195,7 @@ describe('optional guided tour', () => {
 
   it('navigates a real empty workspace without mutations, provider calls, request IDs or draft changes', async () => {
     const user = userEvent.setup(); open(true);
+    await user.click(await screen.findByRole('tab', { name: 'Continuity Findings' }));
     await screen.findByRole('heading', { name: 'No saved findings here.' });
     await user.clear(screen.getByLabelText('Continuity rules', { exact: true }));
     await user.type(screen.getByLabelText('Continuity rules', { exact: true }), 'Unsaved creator draft');

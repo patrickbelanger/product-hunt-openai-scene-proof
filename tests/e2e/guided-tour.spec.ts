@@ -42,8 +42,10 @@ for (const width of [1280, 820, 390]) {
     await page.goto(`/projects/${project.id}`);
     await expect(page.getByText('Take the quick tour')).toBeVisible();
     await expect(page.getByRole('dialog')).toHaveCount(0);
+    await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'No saved findings here.' })).toBeVisible();
     await page.getByLabel('Continuity rules', { exact: true }).fill('Unsaved tour draft');
+    await page.getByRole('tab', { name: 'Film Intelligence', exact: true }).click();
     const start = page.getByRole('button', { name: 'Start tour' });
     await start.focus(); await page.keyboard.press('Enter');
     const dialog = page.getByRole('dialog');

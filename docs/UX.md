@@ -2,6 +2,18 @@
 
 ## PR9 UX polish and project lifecycle
 
+Film Intelligence is the default primary workspace tab: understand visual/narrative
+context, then confirm what should stay consistent. Continuity Findings groups the
+Reference Bible, shot import, frame inspector/timeline and saved continuity review.
+Its purpose and empty state distinguish saved findings from discovery proposals;
+continuity analysis is currently requested through the API, not an invented UI action.
+Import a shot is for precise frame-level inspection/focused visual comparison, not a
+prerequisite for Film Intelligence. Both tab panels stay mounted: polling, drafts,
+evidence selection and local marks survive tab changes. Arrow keys on the tab list
+move focus/activate tabs; Tab enters visible content. Linked findings/analyses open
+their review tab; film links open discovery. Starting the tour reveals its existing
+Findings targets without selecting a frame or discarding a draft.
+
 Film Understanding shows five persistent workflow tracks from actual backend stages:
 source verification, visual structure, audio transcription, film understanding and
 candidate saving. Step X of Y is workflow position, never a completion percentage.
@@ -27,6 +39,11 @@ shot/analysis segments, Home/End, I/O and Escape. Inputs/editors preserve native
 The selected frame/playhead and source time are visible; imported clips lacking a
 source mapping say Clip, never invented whole-film time. Playback is unavailable,
 so Space keeps normal browser/button behavior. Mouse/touch selection remains.
+Selection changes and revealing the inspection tab check the active thumbnail
+against the internal timeline viewport. Already-visible frames do not scroll;
+out-of-view frames move only the minimum offset, without scrolling the page.
+Instant movement avoids animation queues on rapid Arrow/Shift+Arrow input and
+also respects reduced motion. Unrelated/polling renders do not reset scroll.
 
 I/O or explicit buttons set/adjust local inspection marks on sampled frames. Handles
 navigate back to each mark; a bordered highlight and text show In, Out and duration.

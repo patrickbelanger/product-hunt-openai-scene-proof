@@ -6,6 +6,14 @@ PR8 is merged. PR9 delivers creator-facing UX polish and ordinary-project deleti
 PR10 Security Hardening is next. Historical handoff sections below preserve their
 original evidence rather than reopening PR8 architecture.
 
+Film Intelligence is the hero/default workspace tab. Continuity Findings is the
+separate frame-level review workspace with the Reference Bible, optional shot
+import and evidence inspector. Import supports precise frame inspection or focused
+visual comparison; it is not required for whole-film discovery. Saved findings
+come from continuity analysis (currently started through the API), not automatic
+promotion of Film Intelligence concerns. Creators inspect evidence and explicitly
+resolve, dismiss or request re-evaluation using the existing actions.
+
 Real workflow progress, quiet automatic polling, truthful elapsed time, a clearer
 Understanding summary/concern hierarchy and compact inspectable evidence make the
 existing discovery understandable. Difference != continuity error. Observation →

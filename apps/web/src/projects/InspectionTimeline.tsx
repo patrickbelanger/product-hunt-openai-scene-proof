@@ -1,14 +1,29 @@
-import { useState, type KeyboardEvent, type ReactNode } from 'react';
+import { useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { Button, Group, Text } from '@mantine/core';
 import type { FilmIntelligence, Shot } from '@sceneproof/api-client';
 
-export function InspectionTimeline({ shots, segments, selectedId, onSelect, children }: { shots: Shot[]; segments: FilmIntelligence['segments']; selectedId?: string; onSelect: (id: string) => void; children: ReactNode }) {
+export function InspectionTimeline({ shots, segments, selectedId, onSelect, children, active = true }: { shots: Shot[]; segments: FilmIntelligence['segments']; selectedId?: string; onSelect: (id: string) => void; children: ReactNode; active?: boolean }) {
+  const root = useRef<HTMLDivElement>(null);
   const frames = shots.flatMap(shot => {
     const segment = segments.find(value => value.id === shot.id);
     return shot.frames.map(frame => ({ ...frame, shotId: shot.id, group: segment ? 'source' : shot.id, time: frame.timestampMs === null ? null : (segment?.startMs ?? 0) + frame.timestampMs }));
   });
   const index = Math.max(0, frames.findIndex(frame => frame.id === selectedId));
   const current = frames[index];
+  useLayoutEffect(() => {
+    if (!active || !current) return;
+    const viewport = root.current?.querySelector<HTMLElement>('.media-timeline');
+    const frame = document.getElementById(`frame-${current.id}`);
+    if (!viewport || !frame || !viewport.contains(frame)) return;
+    const bounds = viewport.getBoundingClientRect();
+    if (!bounds.width || !bounds.height) return;
+    const selected = frame.getBoundingClientRect();
+    const top = bounds.top + viewport.clientTop;
+    const left = bounds.left + viewport.clientLeft;
+    const vertical = selected.top < top ? selected.top - top : Math.max(0, selected.bottom - top - viewport.clientHeight);
+    const horizontal = selected.left < left ? selected.left - left : Math.max(0, selected.right - left - viewport.clientWidth);
+    if (vertical || horizontal) viewport.scrollBy({ top: vertical, left: horizontal, behavior: 'instant' });
+  }, [current?.id, active]);
   const [range, setRange] = useState<{ group: string; start?: number; end?: number }>();
   const [notice, setNotice] = useState('');
   const visibleRange = range?.group === current?.group ? range : undefined;
@@ -51,9 +66,9 @@ export function InspectionTimeline({ shots, segments, selectedId, onSelect, chil
       }
     }
     const selected = frames[Math.max(0, Math.min(frames.length - 1, next))];
-    if (selected) { onSelect(selected.id); document.getElementById(`frame-${selected.id}`)?.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
+    if (selected) onSelect(selected.id);
   }
-  return <div className="inspection-timeline" tabIndex={0} role="region" aria-label="Keyboard timeline inspection" aria-describedby="timeline-shortcuts" onKeyDown={navigate}>
+  return <div ref={root} className="inspection-timeline" tabIndex={0} role="region" aria-label="Keyboard timeline inspection" aria-describedby="timeline-shortcuts" onKeyDown={navigate}>
     <Group justify="space-between"><Text size="sm" fw={600} aria-live="polite">Playhead · {current?.time === null ? 'Still image' : current ? `${current.group === 'source' ? 'Source' : 'Clip'} ${stamp(current.time!)}` : 'No sampled frame'}</Text><Text size="xs">Frame {frames.length ? index + 1 : 0} of {frames.length}</Text></Group>
     <Text id="timeline-shortcuts" size="xs" c="dimmed" mt="xs">← → Frame · Shift+← → Segment · I Mark In · O Mark Out · Esc Clear · Home/End</Text>
     <Text size="xs" c="dimmed">Sampled-frame inspection; video playback is not available.</Text>

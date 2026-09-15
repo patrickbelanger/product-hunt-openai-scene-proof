@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MantineProvider } from '@mantine/core';
-import { expect, it } from 'vitest';
+import { expect, it, vi } from 'vitest';
 import type { Shot } from '@sceneproof/api-client';
 import { InspectionTimeline } from './InspectionTimeline';
 
@@ -54,4 +54,26 @@ it('supports mouse marks and rejects a reversed range without changing it', asyn
   expect(screen.getByRole('status')).toHaveTextContent('Mark In must be before');
   await user.click(screen.getByRole('button', { name: 'Clear range' }));
   expect(screen.getByText('In — · Out — · Selection —')).toBeVisible();
+});
+
+it('minimally scrolls only an out-of-view selection, not polling rerenders, and checks again when revealed', () => {
+  function view(selectedId: string, active = true) {
+    return <MantineProvider><InspectionTimeline shots={[...shots]} segments={[]} selectedId={selectedId} active={active} onSelect={() => {}}><div className="media-timeline">{shots.flatMap(shot => shot.frames.map(frame => <button key={frame.id} id={`frame-${frame.id}`}>{frame.id}</button>))}</div></InspectionTimeline></MantineProvider>;
+  }
+  const rendered = render(view('frame-0-0'));
+  const viewport = rendered.container.querySelector<HTMLElement>('.media-timeline')!;
+  Object.defineProperties(viewport, { clientWidth: { value: 300 }, clientHeight: { value: 200 } });
+  vi.spyOn(viewport, 'getBoundingClientRect').mockReturnValue({ top: 100, left: 100, bottom: 300, right: 400, width: 300, height: 200 } as DOMRect);
+  const scroll = vi.fn(); viewport.scrollBy = scroll;
+  const frame = document.getElementById('frame-frame-0-1')!;
+  const rect = vi.spyOn(frame, 'getBoundingClientRect').mockReturnValue({ top: 180, bottom: 230, left: 110, right: 210 } as DOMRect);
+  rendered.rerender(view('frame-0-1')); expect(scroll).not.toHaveBeenCalled();
+  rect.mockReturnValue({ top: 280, bottom: 330, left: 110, right: 210 } as DOMRect);
+  rendered.rerender(view('frame-0-1')); expect(scroll).not.toHaveBeenCalled();
+  rendered.rerender(view('frame-0-1', false)); expect(scroll).not.toHaveBeenCalled();
+  rendered.rerender(view('frame-0-1')); expect(scroll).toHaveBeenLastCalledWith({ top: 30, left: 0, behavior: 'instant' });
+  rendered.rerender(view('frame-0-0'));
+  scroll.mockClear();
+  rect.mockReturnValue({ top: 60, bottom: 110, left: 70, right: 170 } as DOMRect);
+  rendered.rerender(view('frame-0-1')); expect(scroll).toHaveBeenCalledExactlyOnceWith({ top: -40, left: -30, behavior: 'instant' });
 });

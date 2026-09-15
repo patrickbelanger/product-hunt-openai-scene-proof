@@ -17,8 +17,18 @@ test('PR9 progress, evidence, keyboard range and deletion across desktop tablet 
   await page.route(`**/api/v1/projects/${project.id}/film`, route => route.fulfill({ json: active }));
   await page.goto(`/projects/${project.id}`);
   const panel = page.getByRole('region', { name: 'Film Intelligence' });
+  const filmTab = page.getByRole('tab', { name: 'Film Intelligence', exact: true });
+  const findingsTab = page.getByRole('tab', { name: 'Continuity Findings', exact: true });
+  await expect(filmTab).toHaveAttribute('aria-selected', 'true');
+  const backgroundPoll = page.waitForRequest(value => value.method() === 'GET' && value.url().endsWith(`/projects/${project.id}/film`));
+  await filmTab.focus(); await page.keyboard.press('ArrowRight');
+  await expect(findingsTab).toBeFocused();
+  await expect(page.getByText(/Findings are saved frame-level continuity concerns/)).toBeVisible();
+  await backgroundPoll;
+  await page.keyboard.press('ArrowLeft'); await expect(filmTab).toBeFocused();
   for (const width of [1280, 820, 390]) {
     await page.setViewportSize({ width, height: 900 });
+    await filmTab.click();
     await expect(panel.getByRole('list', { name: 'Film Understanding workflow progress' })).toBeVisible();
     await expect(panel.getByText(/Step \d of 5/)).toBeVisible();
     await expect(panel.getByRole('button', { name: 'Refresh now' })).not.toHaveAttribute('data-loading');
@@ -36,6 +46,7 @@ test('PR9 progress, evidence, keyboard range and deletion across desktop tablet 
   page.on('request', value => { if (value.method() !== 'GET' && value.url().includes('/api/')) writes.push(value.url()); });
   for (const width of [1280, 820, 390]) {
     await page.setViewportSize({ width, height: 900 });
+    await filmTab.click();
     await panel.scrollIntoViewIfNeeded();
     await expect(panel.getByText('Analysis source · 36.29s')).toBeVisible();
     await expect(panel.getByRole('heading', { name: 'Understanding summary' })).toBeVisible();
@@ -52,11 +63,29 @@ test('PR9 progress, evidence, keyboard range and deletion across desktop tablet 
     await page.keyboard.press('Escape');
     await expect(evidence).toHaveCount(0);
     await concern.getByText(/Inspect supporting evidence/).click();
+    await findingsTab.click();
+    await expect(page.getByText(/Inspect frame-level continuity issues/)).toBeVisible();
+    await page.screenshot({ path: `test-results/pr9-findings-empty-${width}.png`, fullPage: true });
     const timeline = page.getByRole('region', { name: 'Keyboard timeline inspection' });
     await timeline.scrollIntoViewIfNeeded(); await timeline.focus();
+    const scrollTop = () => timeline.locator('.media-timeline').evaluate(element => element.scrollTop);
+    const activeVisible = () => timeline.locator('.media-timeline').evaluate(element => {
+      const viewport = element.getBoundingClientRect();
+      const frame = element.querySelector('.frame-playhead')!.getBoundingClientRect();
+      return frame.top >= viewport.top - 1 && frame.bottom <= viewport.bottom + 1;
+    });
+    await page.keyboard.press('End');
+    await expect.poll(activeVisible).toBe(true);
+    await page.keyboard.press('Home');
+    await expect.poll(activeVisible).toBe(true);
+    const before = await scrollTop();
+    await page.getByRole('button', { name: 'Refresh findings' }).click();
+    expect(await scrollTop()).toBe(before);
+    await timeline.focus();
     await page.keyboard.press('Home'); await page.keyboard.press('ArrowRight');
     await expect(timeline.getByText('Frame 2 of', { exact: false })).toBeVisible();
     await expect(timeline.locator('.inspection-playhead')).toBeVisible();
+    await expect.poll(activeVisible).toBe(true);
     await page.screenshot({ path: `test-results/pr9-playhead-${width}.png`, fullPage: true });
     await page.keyboard.press('i'); await page.keyboard.press('Shift+ArrowRight'); await page.keyboard.press('o');
     await expect(timeline.getByTestId('inspection-range')).toBeVisible();
@@ -64,6 +93,11 @@ test('PR9 progress, evidence, keyboard range and deletion across desktop tablet 
     await expect(timeline.getByRole('button', { name: /Go to Mark Out/ })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     await page.screenshot({ path: `test-results/pr9-range-${width}.png`, fullPage: true });
+    const playhead = await timeline.getByText(/^Playhead/).textContent();
+    await filmTab.click(); await findingsTab.click();
+    await expect(timeline.getByText(playhead!, { exact: true })).toBeVisible();
+    await expect(timeline.getByTestId('inspection-range')).toBeVisible();
+    await timeline.focus();
     await page.keyboard.press('Escape');
     await expect(timeline.getByTestId('inspection-range')).toHaveCount(0);
     await page.getByRole('button', { name: 'Delete project', exact: true }).click();

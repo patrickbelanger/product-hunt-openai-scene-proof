@@ -7,6 +7,7 @@ test('import actual pixels, validate contract, reload and retain failed import h
   const created = await request.post('/api/v1/projects', { data: { name: `Media browser verification ${Date.now()}` } });
   const project = await created.json();
   await page.goto(`/projects/${project.id}`);
+  await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
   const png = await page.evaluate(() => { const canvas = document.createElement('canvas'); canvas.width = 160; canvas.height = 90; const context = canvas.getContext('2d')!; context.fillStyle = '#ce5449'; context.fillRect(0, 0, 160, 90); return canvas.toDataURL('image/png').split(',')[1]; });
   await page.getByRole('region', { name: 'Media workspace' }).locator('input[type=file]').setInputFiles({ name: 'original-fixture.png', mimeType: 'image/png', buffer: Buffer.from(png, 'base64') });
   await page.getByRole('button', { name: 'Import shot' }).click();
@@ -14,6 +15,7 @@ test('import actual pixels, validate contract, reload and retain failed import h
   await expect(frame).toBeVisible();
   await expect(frame).toHaveJSProperty('naturalWidth', 160);
   await page.reload();
+  await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
   await expect(frame).toBeVisible();
   await expect(page.getByText('Playhead · Still image')).toBeVisible();
   const listed = await request.get(`/api/v1/projects/${project.id}/shots`);
@@ -28,6 +30,7 @@ test('import actual pixels, validate contract, reload and retain failed import h
   await page.getByRole('button', { name: 'Import shot' }).click();
   await expect(page.getByRole('alert')).toContainText('Import failed');
   await page.reload();
+  await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
   await expect(page.getByText('Import failed · Unsupported or invalid file. Use JPEG, PNG or MP4/H.264.')).toBeVisible();
   await expect(frame).toHaveJSProperty('naturalWidth', 160);
   await page.screenshot({ path: 'test-results/media-desktop.png', fullPage: true });
