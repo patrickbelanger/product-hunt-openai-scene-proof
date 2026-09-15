@@ -3,7 +3,7 @@
   "info": {
     "title": "SceneProof API",
     "version": "0.1.0",
-    "description": "Local development foundation. No authentication; do not expose publicly."
+    "description": "Local/operator-controlled demo API, without authentication or user isolation. All API responses are no-store. Mutations require same-origin browser requests; JSON bodies are limited to 64 KiB. Global process request admission can return safe Problem 429 responses; upload/storage admission can return 429/503 before parsing. New paid runs share durable configurable deployment ceilings, default 10 logical runs per rolling hour and 100 per rolling 24 hours. PAID_RUNS_ENABLED=false blocks new paid runs with 429; existing run/request replays remain available and consume no new reservation. Film Intelligence counts once despite at most two provider calls. No automatic retries, refunds, Retry-After guarantee or monetary quota. Do not expose this shared workspace as a public multi-user service."
   },
   "paths": {
 "/api/v1/projects/{projectId}/film":{"parameters":[{"name":"projectId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}],"get":{"operationId":"getFilmIntelligence","description":"Read source, bounded run history and confirmed anchors. No inference. Private no-store response.","responses":{"200":{"description":"Persisted result","content":{"application/json":{"schema":{"$ref":"#/components/schemas/FilmIntelligence"}}}},"default":{"$ref":"#/components/responses/Problem"}}}},

@@ -158,6 +158,7 @@ class DemoApiTest @Autowired constructor(
             content = mapper.writeValueAsString(mapOf("requestId" to UUID.randomUUID(), "type" to "DISMISS", "explanation" to "Test creator decision", "scope" to "This test sequence", "affectedShotIds" to context.shots.map { it.id }))
         }.andExpect { status { isOk() } }
         val fresh = demos.reset(original.id)
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM paid_run_reservations WHERE run_id = ?", Long::class.java, UUID.fromString(mapper.readTree(run)["id"].asString()))).isEqualTo(1)
         assertThat(fresh.id).isNotEqualTo(original.id)
         assertThat(fresh.rules).isEqualTo(template.project.rules)
         assertThat(references.list(fresh.id).map { it.title }).containsExactly(reference.title)
@@ -177,6 +178,17 @@ class DemoApiTest @Autowired constructor(
         reset(UUID.randomUUID()).andExpect { status { isNotFound() } }
         assertThat(count()).isEqualTo(1)
         verifyNoInteractions(source, port)
+    }
+
+    @Test fun `reset refuses active analysis without replacing its project or erasing admission`() {
+        val original = created()
+        val run = UUID.randomUUID()
+        jdbc.update("INSERT INTO analysis_runs (id, project_id, request_id, status, model, started_at) VALUES (?, ?, ?, 'RUNNING', ?, CURRENT_TIMESTAMP)", run, original.id, UUID.randomUUID(), ANALYSIS_MODEL)
+        jdbc.update("INSERT INTO paid_run_reservations (run_id) VALUES (?)", run)
+        reset(original.id).andExpect { status { isConflict() } }
+        assertThat(projects.get(original.id).demo!!.retired).isFalse()
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM paid_run_reservations WHERE run_id = ?", Long::class.java, run)).isEqualTo(1)
+        verifyNoInteractions(port)
     }
 
     @Test fun `reset replay and landing recovery follow current copy even across later resets`() {

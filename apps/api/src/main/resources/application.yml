@@ -1,6 +1,14 @@
 server:
   address: ${SERVER_ADDRESS:127.0.0.1}
   port: ${SERVER_PORT:8085}
+  tomcat:
+    threads:
+      max: 32
+      min-spare: 2
+    accept-count: 32
+    max-connections: 64
+    connection-timeout: 20s
+    max-http-form-post-size: 101MB
   error:
     include-message: never
     include-stacktrace: never
@@ -14,6 +22,9 @@ spring:
     password: ${DATABASE_PASSWORD:sceneproof-local}
     hikari:
       maximum-pool-size: 5
+      connection-timeout: 5000
+      data-source-properties:
+        options: -c lock_timeout=5000 -c statement_timeout=180000
   jpa:
     open-in-view: false
     hibernate:
@@ -40,9 +51,23 @@ management:
       show-details: never
 
 sceneproof:
+  http:
+    reads-per-minute: ${HTTP_READS_PER_MINUTE:600}
+    writes-per-minute: ${HTTP_WRITES_PER_MINUTE:120}
+    media-per-minute: ${HTTP_MEDIA_PER_MINUTE:30}
+  paid-runs:
+    enabled: ${PAID_RUNS_ENABLED:true}
+    hourly-limit: ${PAID_RUNS_HOURLY_LIMIT:10}
+    daily-limit: ${PAID_RUNS_DAILY_LIMIT:100}
   astra:
     api-key: ${OPENAI_API_KEY:}
   media:
+    minimum-free-bytes: ${MEDIA_MINIMUM_FREE_BYTES:536870912}
     root: ${MEDIA_ROOT:.local/media}
     ffmpeg: ${FFMPEG_PATH:ffmpeg}
     ffprobe: ${FFPROBE_PATH:ffprobe}
+
+logging:
+  level:
+    org.hibernate.engine.jdbc.spi.SqlExceptionHelper: OFF
+    org.hibernate.orm.jdbc.error: OFF

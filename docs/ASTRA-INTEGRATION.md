@@ -1,5 +1,20 @@
 # Astra integration
 
+## PR10 deployment safety
+
+All new film/continuity/targeted runs atomically reserve deployment-wide admission
+before provider work: defaults 10 logical runs/rolling hour and 100/rolling 24 hours.
+Film reserves once for its existing at-most-two-call workflow. PAID_RUNS_ENABLED=false
+rejects new attempts (429); saved reads and admitted-request replay remain available.
+No retry, refund, internal spend estimate or monetary guarantee. Reservations survive
+project deletion/reset/restart. See ADR-0011 and PR10-REVIEW for settings/retention.
+
+Responses request/response IDs now require the expected prefix and bounded ASCII
+identifier syntax and exclude configured keys/secret-shaped strings. Transcription
+applies its existing sanitizer at parse completion and failure boundaries too.
+Raw upstream rejection bodies remain withheld; stable classifications and safe IDs
+remain available. Test suites use mocks/capture servers, with zero live provider calls.
+
 ## PR8 final live evidence
 
 The recovered master-source run completed purpose-built Audio Transcriptions, validated

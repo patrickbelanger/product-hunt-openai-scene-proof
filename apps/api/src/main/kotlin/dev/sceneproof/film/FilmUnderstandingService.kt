@@ -12,6 +12,7 @@ class FilmUnderstandingService(
     private val repository: FilmRepository, private val sources: SourceFilmService,
     private val transcription: AudioTranscriptionPort, private val understanding: FilmUnderstandingPort,
     private val validator: FilmResultValidator,
+    private val work: dev.sceneproof.analysis.PaidWorkGate,
 ) {
     private val log = LoggerFactory.getLogger(FilmUnderstandingService::class.java)
 
@@ -26,7 +27,10 @@ class FilmUnderstandingService(
 
     internal fun execute(run: FilmRun) {
         var completion: FilmUnderstandingCompletion? = null
+        var acquired = false
         try {
+            work.acquire()
+            acquired = true
             val source = requireNotNull(repository.source(run.projectId))
             require(source.id == run.sourceFilmId)
             sources.verify(source)
@@ -51,6 +55,6 @@ class FilmUnderstandingService(
                 known?.usage ?: completion?.usage, known?.providerResponseId ?: completion?.providerResponseId, known?.providerRequestId ?: completion?.providerRequestId)
             try { repository.fail(run.id, failure) } catch (_: Exception) { log.warn("Film failure persistence unavailable for {}", run.id) }
             log.warn("Film Understanding {} failed with {}", run.id, failure.code)
-        }
+        } finally { if (acquired) work.release() }
     }
 }

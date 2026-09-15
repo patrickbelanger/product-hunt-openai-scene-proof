@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:55432/sceneproof?currentSchema=sceneproof_paid_test
+  flyway:
+    default-schema: sceneproof_paid_test
+    schemas: sceneproof_paid_test
+  jpa:
+    properties:
+      hibernate:
+        default_schema: sceneproof_paid_test
+sceneproof:
+  astra:
+    api-key: ''
+  paid-runs:
+    enabled: true
+    hourly-limit: 2
+    daily-limit: 3

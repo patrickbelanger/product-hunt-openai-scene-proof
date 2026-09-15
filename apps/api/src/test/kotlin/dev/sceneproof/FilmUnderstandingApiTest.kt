@@ -182,6 +182,7 @@ class FilmUnderstandingApiTest @Autowired constructor(
         val run = await(start())
         assertThat(run.stage).isEqualTo(FilmStage.SUCCEEDED)
         assertThat(run.reasoning).isEqualTo("medium")
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM paid_run_reservations WHERE run_id = ?", Long::class.java, run.id)).isEqualTo(1)
         assertThat(run.transcriptionModel).isEqualTo("gpt-4o-transcribe-diarize")
         assertThat(run.stages.map { it.stage }).containsExactly(*FilmStage.entries.filter { it != FilmStage.FAILED }.toTypedArray())
         assertThat(run.stages.all { it.completedAt != null }).isTrue()
@@ -216,6 +217,7 @@ class FilmUnderstandingApiTest @Autowired constructor(
         val run = await(start())
         assertThat(run.stage).isEqualTo(FilmStage.FAILED)
         assertThat(run.failureMessage).contains("TLS_FAILURE", "No upstream response headers").doesNotContain("Private transport information")
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM paid_run_reservations WHERE run_id = ?", Long::class.java, run.id)).isEqualTo(1)
         assertThat(start(run.requestId).id).isEqualTo(run.id)
         assertThat(repository.candidates(source.projectId, run.id)).isEmpty()
         verifyNoInteractions(filmPort)
@@ -281,6 +283,43 @@ class FilmUnderstandingApiTest @Autowired constructor(
         assertThatThrownBy { repository.advance(run.id, FilmStage.PREPARING_SOURCE, FilmStage.DETECTING_STRUCTURE) }.isInstanceOf(AnalysisFailure::class.java)
         assertThat(start(run.requestId).stage).isEqualTo(FilmStage.FAILED)
         verifyNoInteractions(filmPort, audioPort)
+    }
+
+    @Test fun `expired but live worker blocks another provider worker and destructive cleanup`() {
+        val entered = CountDownLatch(1)
+        val release = CountDownLatch(1).also { releases.add(it) }
+        doAnswer {
+            entered.countDown()
+            check(release.await(15, TimeUnit.SECONDS))
+            TranscriptionCompletion(emptyList(), "req_fixture")
+        }.`when`(audioPort).transcribe(anyAudio())
+        val original = start()
+        assertThat(entered.await(10, TimeUnit.SECONDS)).isTrue()
+        try {
+            jdbc.update("UPDATE film_understanding_runs SET started_at = CURRENT_TIMESTAMP - INTERVAL '11 minutes' WHERE id = ?", original.id)
+            assertThat(repository.get(source.projectId, original.id).failureCode).isEqualTo("FILM_INTERRUPTED")
+            val next = await(start())
+            assertThat(next.failureCode).isEqualTo("ANALYSIS_BUSY")
+            mvc.delete("/api/v1/projects/${source.projectId}") {
+                contentType = MediaType.APPLICATION_JSON; content = """{"confirmationName":"Film test"}"""
+            }.andExpect { status { isConflict() } }
+            verify(audioPort, times(1)).transcribe(anyAudio())
+            verifyNoInteractions(filmPort)
+        } finally { release.countDown() }
+    }
+
+    @Test fun `failed film frame copy removes staging and unpublished segment directories`() {
+        doAnswer { invocation ->
+            val path = invocation.callRealMethod()
+            if (invocation.getArgument<String>(2) == "00.png") throw IllegalStateException("Fixture copy failure")
+            path
+        }.`when`(storageSpy).file(ArgumentMatchers.eq(source.projectId) ?: source.projectId, ArgumentMatchers.any(UUID::class.java) ?: UUID(0, 0), ArgumentMatchers.anyString() ?: "")
+        val run = await(start())
+        assertThat(run.stage).isEqualTo(FilmStage.FAILED)
+        val owned = directory.resolve("media").resolve(source.projectId.toString())
+        assertThat(Files.list(owned).use { it.map { path -> path.fileName.toString() }.toList() }).containsExactly(source.id.toString())
+        assertThat(repository.segments(source.projectId)).isEmpty()
+        verifyNoInteractions(audioPort, filmPort)
     }
 
     @Test fun `fresh attempt reuses immutable structure without replaying old request or memory`() {

@@ -11,6 +11,19 @@ import java.util.UUID
 import java.util.concurrent.Flow
 
 class AstraAdapterTest {
+    @Test fun `provider identifiers cannot echo credentials or free form errors`() {
+        val transport = OpenAiResponsesTransport(mapper, "private-fixture-token")
+        listOf("sk-fixture", "req_sk-fixture", "req_private-fixture-token", "req_bad\nheader", "arbitrary").forEach { identifier ->
+            assertThatThrownBy { transport.parseEnvelope<Unit>(401, byteArrayOf(), identifier) { _, _, _, _ -> } }
+                .isInstanceOfSatisfying(AnalysisFailure::class.java) { assertThat(it.providerRequestId).isNull() }
+        }
+        val response = mapper.readTree(response()).deepCopy() as tools.jackson.databind.node.ObjectNode
+        response.put("id", "resp_private-fixture-token")
+        transport.parseEnvelope(200, mapper.writeValueAsBytes(response), "req_fixture") { _, responseId, requestId, _ ->
+            assertThat(responseId).isNull()
+            assertThat(requestId).isEqualTo("req_fixture")
+        }
+    }
     private val mapper = JsonMapper.builder().addModule(KotlinModule.Builder().build()).build()
     private val validator = ContinuityResultValidator(mapper)
     private val adapter = AstraContinuityAnalysisAdapter(mapper, validator, "test-only-placeholder")

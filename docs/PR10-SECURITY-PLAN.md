@@ -1,8 +1,26 @@
-# PR10 Security Hardening — preparation inventory
+# PR10 Security Hardening — implementation and review plan
 
-Prepared during PR9, September 14, 2026. **Planning only; PR10 has not started.**
-PR8 Film Understanding is complete; PR9 UX/project lifecycle is current; PR10 is
-next and uses HIGH reasoning. September 18 remains the delivery target.
+Prepared during PR9; refreshed September 15, 2026 against merged PR9 `bcc7c7c`.
+PR10 is implemented and verified on `feat/p1-security-hardening`; no product features
+or live provider validation. September 18 remains the delivery target.
+
+## Execution checklist
+
+- [x] Recover clean merged main, create PR10 branch, reconcile endpoint inventory.
+- [x] Durable deployment-wide paid-run ceilings and approved operator kill switch.
+- [x] Preserve replay/no-retry, atomic run/reservation writes and independent retention.
+- [x] Canonical alias rejection, deletion boundaries and staged-media cleanup.
+- [x] Request/connection/body/upload bounds, disk safety reserve and HTTP headers.
+- [x] Provider identifier sanitization and logging/configuration review.
+- [x] Complete expanded deterministic tests, full backend/frontend/build/Chromium checks.
+- [x] Finalize dependency evidence and synchronized security documentation.
+- [x] Prepare verified commit/push handoff; final Git identity/cleanliness is reported separately.
+
+The table below retains the pre-change inventory. Implemented fixes, final limits,
+evidence and explicit residual risks are recorded in [PR10-REVIEW](PR10-REVIEW.md).
+The per-client limiter proposal is implemented as bounded **global process buckets**:
+no IP identity/fairness claim, spoofable proxy trust or unbounded client-key map.
+Paid admission is separately durable across processes sharing the database schema.
 
 ## Trust boundaries and assumptions
 
@@ -27,7 +45,7 @@ Paths below are relative to `/api/v1/projects/{projectId}` unless stated otherwi
 R = read, W = write, D = destructive, E = expensive/provider-backed, L = large input,
 F = filesystem-affecting. Decoding is expensive even when no provider is involved.
 
-| Surface | Classification | Current controls / PR10 review |
+| Surface | Classification | PR9 baseline / PR10 review concern |
 | --- | --- | --- |
 | GET `/api/v1/projects`, GET project | R | 20-item project pages, bounded page number; no user ownership |
 | POST `/api/v1/projects`, PUT `/rules` | W | Validated bounded text; no creation/client frequency quota |

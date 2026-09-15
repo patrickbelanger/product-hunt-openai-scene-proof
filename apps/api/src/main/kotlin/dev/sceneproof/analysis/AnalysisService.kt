@@ -6,7 +6,7 @@ import java.util.UUID
 import java.util.concurrent.Semaphore
 
 @Service
-class AnalysisService(private val repository: AnalysisRepository, private val assembler: AnalysisContextAssembler, private val port: ContinuityAnalysisPort, private val validator: ContinuityResultValidator) {
+class AnalysisService(private val repository: AnalysisRepository, private val assembler: AnalysisContextAssembler, private val port: ContinuityAnalysisPort, private val validator: ContinuityResultValidator, private val work: PaidWorkGate) {
     private val permits = Semaphore(1)
     private val log = LoggerFactory.getLogger(AnalysisService::class.java)
 
@@ -19,7 +19,10 @@ class AnalysisService(private val repository: AnalysisRepository, private val as
             val (run, created) = repository.start(projectId, requestId)
             if (!created) return run
             var completion: AnalysisCompletion? = null
+            var acquired = false
             try {
+                work.acquire()
+                acquired = true
                 val context = assembler.assemble(projectId)
                 repository.recordContext(run.id, context)
                 completion = port.analyze(context)
@@ -38,7 +41,7 @@ class AnalysisService(private val repository: AnalysisRepository, private val as
                 }
                 log.warn("Analysis {} failed with {}", run.id, failure.code)
                 throw failure
-            }
+            } finally { if (acquired) work.release() }
             return repository.get(projectId, run.id)
         } finally { permits.release() }
     }

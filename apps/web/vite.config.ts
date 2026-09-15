@@ -7,10 +7,18 @@ const apiTarget = loadEnv('development', '.', 'API_').API_PROXY_TARGET ?? 'http:
 export default defineConfig({
   plugins: [react()],
   server: {
+    host: '127.0.0.1',
+    headers: {
+      'X-Content-Type-Options': 'nosniff',
+      'X-Frame-Options': 'DENY',
+      'Referrer-Policy': 'no-referrer',
+      'Content-Security-Policy': "frame-ancestors 'none'; object-src 'none'; base-uri 'self'",
+    },
     port: 5173,
     strictPort: true,
+    cors: false,
     proxy: {
-      '/api': apiTarget,
+      '/api': { target: apiTarget, changeOrigin: false },
       '/actuator': apiTarget,
       '/openapi.json': apiTarget,
       '/__test': apiTarget,

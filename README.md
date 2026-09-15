@@ -2,7 +2,7 @@
 
 **Keep every shot in character.** Your AI continuity supervisor for generative film.
 
-Current slice: PR9 UX Polish + Project Lifecycle Usability, based on merged PR8.
+Current slice: PR10 Security Hardening, based on merged PR9; product behavior frozen.
 Choose **Try the demo film** to open **Between the Line — Continuity Study** with
 eight real video clips and five persisted visual references. Original film by Laurie
 and Patrick, explicitly authorized by Patrick. **Create a project** remains available.
@@ -20,8 +20,8 @@ No fake progress, automatic truth, benchmark hints or paid retries. PR9 adds a v
 workflow bar, quiet polling, compact results/evidence and keyboard timeline inspection.
 I/O sets local inspection marks; it never changes analysis scope. Ordinary-project
 deletion requires typing the exact name and removes owned runtime records/media;
-demos retain Reset. See [PR9 review](docs/PR9-REVIEW.md) and the documentation-only
-[PR10 security plan](docs/PR10-SECURITY-PLAN.md). No PR9 live provider calls.
+demos retain Reset. See [PR9 review](docs/PR9-REVIEW.md) and the
+[PR10 security review](docs/PR10-REVIEW.md). No PR10 live provider calls.
 
 Start a new session with [STATUS](docs/STATUS.md), then follow the recovery protocol
 in [AGENTS.md](AGENTS.md). Product requirements: [BRD](docs/BRD.md). Delivery:
@@ -57,6 +57,16 @@ Local verification uses FFmpeg N-120856-g9893d66add-20250831; CI installs Ubuntu
 FFmpeg package. See [Media pipeline](docs/MEDIA-PIPELINE.md) for limits and arguments.
 
 ## Run locally
+
+PR10 deployment safety defaults: `PAID_RUNS_ENABLED=true`,
+`PAID_RUNS_HOURLY_LIMIT=10`, `PAID_RUNS_DAILY_LIMIT=100`. Set the switch false and
+restart the API to reject new paid attempts while retaining saved reads/replay.
+Existing workers are not canceled. These are logical-run safety ceilings, not dollar
+quotas: Film Intelligence counts once for at most two provider calls; admitted
+failures still consume a slot. No automatic retries/refunds. Reservations survive
+project deletion/reset/restart; older-than-24h rows may be pruned while durable run
+identity continues preventing replay. Shared database/schema/configuration required.
+See [security review](docs/PR10-REVIEW.md) for HTTP/storage settings and limitations.
 
 Requirements: Java 25, Node from `.nvmrc`, Docker with Compose. Run from repository root.
 On this Windows machine, select Java 25 in each backend terminal:

@@ -1,5 +1,21 @@
 # Decisions
 
+## PR10 accepted safety controls — September 15
+
+Patrick approves durable deployment-wide ceilings of ten new logical paid runs per
+rolling hour and 100 per rolling 24 hours, configurable and enabled normally.
+PAID_RUNS_ENABLED=false rejects new runs with 429 before provider work; persisted
+results/replays remain usable. Film Intelligence counts once despite at most two
+internal provider calls; continuity/targeted count once. Reservations commit with
+run creation, survive project deletion/reset/restart and never imply a dollar quota.
+No automatic retries or live validation. [ADR-0011](adr/ADR-0011-demo-security-controls.md)
+records implementation/retention and the remaining local/demo trust boundary.
+
+Ordinary bounded implementation details: global process request buckets avoid
+untrusted forwarded-IP identity and unlimited client maps; a 512 MiB free-space
+watermark protects bounded ingestion without introducing a billing/storage product.
+These controls do not authorize public tenancy or change September 18 scope.
+
 ## PR9 accepted scope — September 14
 
 Patrick authorizes UX Polish + Project Lifecycle Usability after PR8 merge, with

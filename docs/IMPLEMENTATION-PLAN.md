@@ -1,5 +1,17 @@
 # Implementation Plan
 
+## PR10 — Security Hardening (current)
+
+- [x] Recover merged PR9 at `bcc7c7c`; preserve interrupted PR10 work in place.
+- [x] Reconcile endpoint/resource inventory and record concrete security gaps.
+- [x] Implement approved durable 10/hour, 100/day logical paid-run admission and kill switch.
+- [x] Harden storage aliases/cleanup, provider identifiers, HTTP bodies/headers/admission.
+- [x] Add deterministic admission, filesystem, worker/lifecycle and HTTP regression tests.
+- [x] Complete full verification and synchronized security handoff.
+- [x] Prepare commit/push and clean-branch verification; final Git identity is in the handoff. No merge.
+
+PR9 below is historical and merged. Product behavior remains frozen for PR10.
+
 ## PR9 — UX Polish + Project Lifecycle Usability (current)
 
 - [x] Preserve interrupted local work on `feat/p1-ux-polish`; base `ba7076f`, PR8 merged.
