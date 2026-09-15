@@ -466,7 +466,8 @@ export interface paths {
         get: operations["getProject"];
         put?: never;
         post?: never;
-        delete?: never;
+        /** @description Irreversibly delete an ordinary project and owned runtime history/media. Exact name confirmation required. Demo copies and active analyses are rejected. Retry the same UUID if media cleanup is pending; completed deletion is idempotent. */
+        delete: operations["deleteProject"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1640,6 +1641,33 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["Project"];
                 };
+            };
+            default: components["responses"]["Problem"];
+        };
+    };
+    deleteProject: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    confirmationName: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Project records and owned media removed */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             default: components["responses"]["Problem"];
         };

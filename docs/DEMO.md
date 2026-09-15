@@ -1,5 +1,17 @@
 # Demo film
 
+## PR9 lifecycle and source presentation
+
+PR8 is merged; historical successful live validation remains the 92.458667-second
+master. New/reset analysis source is the deterministically verified 36.291667-second
+derivative. UI uses the persisted source duration and hash-matched master/range
+details, without relabeling old runs or claiming a successful live derivative run.
+
+Delete is hidden and server-rejected for current and retired demo copies. Reset demo
+is still the intended replacement lifecycle, preserving old copies/history and
+packaged assets. Ordinary-project deletion cannot target repository demo files.
+In/Out marks are local inspection only, never Analyze Selection or a paid request.
+
 ## Final PR8 evidence
 
 New/reset Film Intelligence sources use the 36.291667-second derivative. The successful

@@ -279,6 +279,13 @@
       }
     },
     "/api/v1/projects/{id}": {
+      "delete": {
+        "operationId": "deleteProject",
+        "description": "Irreversibly delete an ordinary project and owned runtime history/media. Exact name confirmation required. Demo copies and active analyses are rejected. Retry the same UUID if media cleanup is pending; completed deletion is idempotent.",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "additionalProperties": false, "required": ["confirmationName"], "properties": { "confirmationName": { "type": "string", "minLength": 1, "maxLength": 120 } } } } } },
+        "responses": { "204": { "description": "Project records and owned media removed" }, "default": { "$ref": "#/components/responses/Problem" } }
+      },
       "get": {
         "operationId": "getProject",
         "parameters": [

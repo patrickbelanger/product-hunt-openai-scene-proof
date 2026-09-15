@@ -2,14 +2,14 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ApiError, createProject, getProject, listProjects, listShots, listFindings, listReferences } from '@sceneproof/api-client';
+import { ApiError, createProject, getProject, getAnalysis, listProjects, listShots, listFindings, listReferences } from '@sceneproof/api-client';
 import { App } from '../App';
 import { Providers } from '../providers';
 
 vi.mock('@sceneproof/api-client', async importOriginal => ({
   ...await importOriginal<typeof import('@sceneproof/api-client')>(),
   getFilmIntelligence: vi.fn().mockResolvedValue({ source: null, runs: [], segments: [], confirmedAnchors: [] }),
-  createProject: vi.fn(), getProject: vi.fn(), listProjects: vi.fn(), listShots: vi.fn(), listFindings: vi.fn(), listReferences: vi.fn(),
+  createProject: vi.fn(), getProject: vi.fn(), getAnalysis: vi.fn(), listProjects: vi.fn(), listShots: vi.fn(), listFindings: vi.fn(), listReferences: vi.fn(),
 }));
 
 const project = {
@@ -32,6 +32,55 @@ beforeEach(() => {
 });
 
 describe('project critical path', () => {
+  it('defaults to Film Intelligence and supports keyboard tabs without losing inspection state or drafts', async () => {
+    vi.mocked(listShots).mockResolvedValue([{ id: 'shot', name: 'Test clip', position: 0, kind: 'VIDEO', status: 'READY', failureCode: null, durationMs: 4000, frames: [0, 1].map(position => ({ id: `sample-${position}`, position, timestampMs: position * 2000, width: 40, height: 40, url: '/test.png' })) }]);
+    const user = userEvent.setup(); open(`/projects/${project.id}`);
+    const film = await screen.findByRole('tab', { name: 'Film Intelligence' });
+    const findings = screen.getByRole('tab', { name: 'Continuity Findings' });
+    expect(film).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByText(/Understand the film's visual and narrative context/)).toBeVisible();
+    film.focus(); await user.keyboard('{ArrowRight}');
+    expect(findings).toHaveFocus(); expect(findings).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByText(/Inspect frame-level continuity issues/)).toBeVisible();
+    expect(screen.getByText(/Import a shot when you want precise/)).toBeVisible();
+    expect(await screen.findByText(/Findings are saved frame-level continuity concerns/)).toBeVisible();
+    const rules = screen.getByLabelText('Continuity rules', { exact: true });
+    await user.clear(rules); await user.type(rules, 'Unsaved creator draft');
+    const timeline = screen.getByRole('region', { name: 'Keyboard timeline inspection' });
+    timeline.focus(); await user.keyboard('i{ArrowRight}o');
+    expect(screen.getByText('In 0.00s · Out 2.00s · Selection 2.00s')).toBeVisible();
+    findings.focus(); await user.keyboard('{ArrowLeft}'); expect(film).toHaveFocus();
+    expect(timeline).not.toBeVisible();
+    await user.keyboard('{ArrowRight}');
+    expect(screen.getByRole('region', { name: 'Keyboard timeline inspection' })).toBe(timeline);
+    expect(screen.getByText('Playhead · Clip 2.00s')).toBeVisible();
+    expect(screen.getByTestId('inspection-range')).toBeVisible();
+    expect(rules).toHaveValue('Unsaved creator draft');
+  });
+
+  it('introduces Film Intelligence then reveals mounted findings targets without remounting', async () => {
+    const user = userEvent.setup(); open(`/projects/${project.id}`);
+    await user.click(await screen.findByRole('button', { name: 'Quick tour' }));
+    expect(screen.getByRole('tab', { name: 'Film Intelligence' })).toHaveAttribute('aria-selected', 'true');
+    expect(await screen.findByRole('dialog')).toHaveTextContent('Anchors are proposals, not rules.');
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByRole('tab', { name: 'Continuity Findings' })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByLabelText('Continuity rules', { exact: true })).toBeVisible();
+  });
+
+  it('opens a findings deep link in the findings tab', async () => {
+    open(`/projects/${project.id}?finding=missing`);
+    expect(await screen.findByRole('tab', { name: 'Continuity Findings' })).toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('keeps findings visible when clearing its analysis link', async () => {
+    vi.mocked(getAnalysis).mockRejectedValue(new ApiError(404));
+    const user = userEvent.setup(); open(`/projects/${project.id}?analysisId=missing`);
+    await user.click(await screen.findByRole('button', { name: 'All saved findings' }));
+    expect(screen.getByRole('tab', { name: 'Continuity Findings' })).toHaveAttribute('aria-selected', 'true');
+    expect(await screen.findByText('No saved findings here.')).toBeVisible();
+  });
+
   it('creates a project with rules and opens the saved workspace', async () => {
     const user = userEvent.setup();
     open('/');

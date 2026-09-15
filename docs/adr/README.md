@@ -1,5 +1,7 @@
 # Architecture Decision Records
 
+- [ADR-0010: Ordinary-project deletion](ADR-0010-project-deletion.md)
+
 Sequential `ADR-NNNN-description.md` records describe meaningful decisions.
 Use status Proposed, Accepted, Superseded or Deprecated; include date, context,
 decision, alternatives, consequences, delivery impact and references. Supersede

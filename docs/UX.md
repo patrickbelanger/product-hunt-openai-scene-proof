@@ -1,5 +1,116 @@
 # UX
 
+## PR9 UX polish and project lifecycle
+
+### Final clarity addendum — September 15
+
+Quick tour remains four steps but starts with Film Intelligence: understand the
+whole film through sampled visuals/transcript context, then inspect and let the
+creator decide. It names recurring entities, narrative context, candidate anchors
+and potential concerns without treating proposals as rules or questions as errors.
+Subsequent steps cover the Reference Bible, media/timeline and Findings/evidence
+with the existing creator actions. Each step reveals its appropriate mounted tab;
+Back returns to Film Intelligence, and focus/Skip/Escape/preferences are preserved.
+
+Source name, actual analysis-source duration and fixed-source state are visible.
+Source details retains identity/master/derived provenance and explicitly explains
+that replacement is unavailable: create a new project for another film. This
+matches the existing primary-source constraint; no upload/replacement API changed.
+
+Advanced inspection is collapsed by default. It contains the existing range rail,
+In/Out handles/buttons and selected duration. Frame/time and keyboard shortcuts
+remain visible outside it. I/O opens the disclosure when setting a valid mark;
+collapsing does not discard marks. Ranges remain local navigation state only.
+The repeated Film Intelligence introduction is removed; concerns offer supporting
+evidence before detailed rationale. All original evidence/model wording remains.
+
+### Explanatory roadmap only — after PR10 unless reprioritized
+
+The final PR9 [architecture gate](ANALYZE-SELECTION-INVESTIGATION.md) defers Analyze
+Selection: reusable continuity analysis still needs an immutable source-range
+contract, bounded transcript policy and explicit re-evaluation scope. Advanced
+inspection remains local inspection/navigation only; I/O never starts analysis.
+
+Small native disclosures keep planned capabilities subordinate to current work:
+- **Analyze Selection:** inside Advanced inspection; In/Out → explicit paid consent
+  and analysis request → bounded visual/transcript evidence → result persisted with
+  immutable range provenance. Not an active or disabled CTA.
+- **Source Monitor ↔ Evidence Frame:** Findings' Why this exists explains today's
+  concern-to-exact-evidence connection. Future video-assisted inspection would place
+  source video at the finding timestamp beside the cited frame, allow jumping
+  between context/evidence, then creator review/correction. No playback is implemented.
+- **Fix Assist:** Finding → correction proposal → creator review → export / optional
+  generation. Current copy-correction remains real; export/generation are planned
+  only and require separately scoped decisions. No automatic correction or canon.
+
+Current principle: Understand → Inspect → Creator decides. Future: Focus → Correct.
+Difference is not a continuity error; none of this help starts analysis or changes
+provider scope, request inputs, models, security architecture or creator authority.
+
+Film Intelligence is the default primary workspace tab: understand visual/narrative
+context, then confirm what should stay consistent. Continuity Findings groups the
+Reference Bible, shot import, frame inspector/timeline and saved continuity review.
+Its purpose and empty state distinguish saved findings from discovery proposals;
+continuity analysis is currently requested through the API, not an invented UI action.
+Import a shot is for precise frame-level inspection/focused visual comparison, not a
+prerequisite for Film Intelligence. Both tab panels stay mounted: polling, drafts,
+evidence selection and local marks survive tab changes. Arrow keys on the tab list
+move focus/activate tabs; Tab enters visible content. Linked findings/analyses open
+their review tab; film links open discovery. Tour steps reveal their Film Intelligence
+or Findings targets without selecting a frame or discarding a draft.
+
+Film Understanding shows five persistent workflow tracks from actual backend stages:
+source verification, visual structure, audio transcription, film understanding and
+candidate saving. Step X of Y is workflow position, never a completion percentage.
+Recorded timestamps determine completion; failure marks the last real stage failed,
+even when its timestamp is closed. Text and symbols accompany color. Only the active
+stage animates; reduced-motion disables that animation. Started/stage-update times
+and elapsed seconds remain factual. No ETA is claimed without timing evidence.
+
+GET polling remains 1.5 seconds while active/reconciling. A reserved compact live
+line says Syncing or Live/updated age; Refresh now has separate manual loading state.
+Terminal states stop polling and elapsed updates. Read errors preserve saved state.
+Transcript/evidence/candidates appear only from persisted data; no thought simulation.
+
+Understanding summary retains model wording and separates observed arc, recurring
+elements, narrative titles and compact statistics. Potential concerns precede
+candidate anchors; concise cards expose uncertainty/rationale on demand. Evidence
+uses small source-time thumbnails with full-size modal inspection and transcript
+provenance. Recurring entity/narrative details, original warnings and Methodology &
+limitations remain discoverable. No concern becomes a Finding or confirmed rule.
+
+The timeline is focusable and supports Left/Right sampled frames, Shift+Left/Right
+shot/analysis segments, Home/End, I/O and Escape. Inputs/editors preserve native keys.
+The selected frame/playhead and source time are visible; imported clips lacking a
+source mapping say Clip, never invented whole-film time. Playback is unavailable,
+so Space keeps normal browser/button behavior. Mouse/touch selection remains.
+Selection changes and revealing the inspection tab check the active thumbnail
+against the internal timeline viewport. Already-visible frames do not scroll;
+out-of-view frames move only the minimum offset, without scrolling the page.
+Instant movement avoids animation queues on rapid Arrow/Shift+Arrow input and
+also respects reduced motion. Unrelated/polling renders do not reset scroll.
+
+I/O or explicit buttons set/adjust local inspection marks on sampled frames. Handles
+navigate back to each mark; a bordered highlight and text show In, Out and duration.
+Reversed ranges are rejected with an explanation. Each range belongs to the actual
+analysis source or individual imported clip; cross-clip source provenance is never
+invented. Marks do not change paid request inputs, and reset on component remount.
+
+Analysis source displays the current persisted duration. Source details uses the
+packaged manifest only when SHA-256 matches, showing master/range or historical
+master identity. A generic upload gets no invented master provenance.
+
+Delete project is a secondary danger action for ordinary projects. Confirmation
+names the project, warns of irreversible history/media removal and requires typing
+its exact name. Keep project receives initial focus; Escape/cancel restores focus.
+Pending submission cannot duplicate/dismiss. Active analysis and demos refuse
+deletion. Success returns to the library; cleanup errors stay retryable in the dialog.
+Current/retired demos retain the existing Reset replacement policy.
+
+Responsive progress stacks at narrow widths, evidence retains contain sizing, and
+focus outlines/visible labels support keyboard inspection. Final screenshot/check
+results are recorded in STATUS and PR9-REVIEW; implementation is not a test claim.
+
 ## Implemented
 
 Dark, restrained visual workspace. The header shows SceneProof and local workspace
@@ -148,8 +259,8 @@ no reset control. No fake React project/media DTOs are used in runtime paths.
 The first successfully opened workspace offers a compact “Take the quick tour”
 invitation with Start tour / Skip. There is no automatic modal or focus movement.
 Quick tour stays in the workspace toolbar, including after completion or Skip.
-The four concise steps cover Reference Bible, media/timeline, findings/evidence,
-and resolve/steer. Findings steps use the stable panel even when empty, describe
+The four concise steps cover Film Intelligence, Reference Bible, media/timeline,
+and findings/evidence with resolve/steer. Findings steps use the stable panel even when empty, describe
 actions as appearing on an open finding, and never manufacture findings or controls.
 Editing the Bible does not start analysis; creator intent does not force agreement.
 
@@ -165,7 +276,7 @@ controls cannot receive tour keyboard navigation or pointer actions.
 
 The card sits at the bottom right on desktop/tablet and spans the available width
 on mobile, with bounded height and internal scrolling. Explicit `data-tour` targets
-mark stable Reference Bible, media and Findings containers. Active panels have an
+mark stable Film Intelligence, Reference Bible, media and Findings containers. Active panels have an
 outline and textual step marker. A step may scroll its panel into view once; it
 never selects a frame or finding, and resize/ordinary scrolling does not trigger
 another scroll. Temporary bottom space lets even a short last panel clear the card;

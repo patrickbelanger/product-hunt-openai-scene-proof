@@ -14,6 +14,7 @@ test('Reference Bible persists rules images and original finding citations throu
   const providerWrites: string[] = [];
   page.on('request', outgoing => { if (outgoing.method() === 'POST' && /\/(analyses|actions)(\?|$)/.test(new URL(outgoing.url()).pathname)) providerWrites.push(outgoing.url()); });
   await page.goto(`/projects/${project.id}`);
+  await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
   await page.getByLabel('Continuity rules', { exact: true }).fill('The square stays red.');
   await page.getByRole('button', { name: 'Save rules' }).click();
   await expect(page.getByText('Rules saved.', { exact: true })).toBeVisible();
@@ -43,6 +44,7 @@ test('Reference Bible persists rules images and original finding citations throu
   await expect(bible.getByRole('img', { name: 'Reference: Declared red prop' })).toHaveJSProperty('naturalWidth', 320);
   await expect(dialog).not.toBeVisible();
   await page.reload();
+  await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
   await expect(page.getByLabel('Continuity rules', { exact: true })).toHaveValue('The square stays red.');
   await expect(bible.getByRole('img')).toHaveAttribute('src', reference.url);
   expect(providerWrites).toEqual([]);
@@ -97,6 +99,7 @@ test('Reference Bible persists rules images and original finding citations throu
 test('reference editing failures remain isolated and modal restores keyboard focus', async ({ page, request }) => {
   const project = await (await request.post('/api/v1/projects', { data: { name: `PR5 reference failure ${Date.now()}` } })).json();
   await page.goto(`/projects/${project.id}`);
+  await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
   await page.route(`**/projects/${project.id}/rules`, route => route.fulfill({ status: 503, contentType: 'application/problem+json', body: JSON.stringify({ title: 'Unavailable', status: 503, detail: 'Rules storage unavailable.' }) }));
   await page.getByLabel('Continuity rules', { exact: true }).fill('Unsaved draft');
   await page.getByRole('button', { name: 'Save rules' }).click();

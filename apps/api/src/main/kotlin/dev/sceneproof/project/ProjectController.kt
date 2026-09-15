@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -51,10 +52,17 @@ data class DemoIdentity(val instanceId: UUID, val templateVersion: String, val r
 data class ProjectPage(val items: List<ProjectView>, val page: Int, val hasNext: Boolean)
 
 data class UpdateRulesRequest(@field:Size(max = 8000) val rules: String)
+data class DeleteProjectRequest(@field:NotBlank @field:Size(max = 120) val confirmationName: String)
 
 @RestController
 @RequestMapping("/api/v1/projects")
-class ProjectController(private val service: ProjectService) {
+class ProjectController(private val service: ProjectService, private val deletion: ProjectDeletionService) {
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable id: UUID, @Valid @RequestBody request: DeleteProjectRequest): ResponseEntity<Void> {
+        deletion.delete(id, request.confirmationName)
+        return ResponseEntity.noContent().build()
+    }
+
     @GetMapping
     fun list(@RequestParam(defaultValue = "0") @Min(0) @Max(10000) page: Int): ProjectPage = service.list(page)
 

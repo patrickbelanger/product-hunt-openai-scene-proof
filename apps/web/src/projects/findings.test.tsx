@@ -15,6 +15,18 @@ const run: AnalysisRun = { id: 'run-1', kind: 'SEQUENCE', projectId: 'project', 
 
 function Location() { return <output aria-label="Current URL">{useLocation().search}</output>; }
 function open(query = '') { return render(<Providers><MemoryRouter initialEntries={[`/projects/project${query}`]}><FindingsWorkspace projectId="project" /><Location /></MemoryRouter></Providers>); }
+
+it('keeps contextual roadmap help collapsed and clearly separate from current capabilities', async () => {
+  const user = userEvent.setup(); open();
+  const help = screen.getByText('Why this exists');
+  expect(help.closest('details')).not.toHaveAttribute('open');
+  expect(screen.getByText(/Planned: Source Monitor/)).not.toBeVisible();
+  await user.click(help);
+  expect(screen.getByText(/connects a specific continuity concern/)).toBeVisible();
+  expect(screen.getByText(/Planned: Source Monitor/)).toHaveTextContent('not available in this MVP');
+  expect(screen.getByText(/Planned: Fix Assist/)).toHaveTextContent('export and generation are not available');
+  expect(screen.queryByRole('button', { name: /Fix Assist|Source Monitor|Analyze Selection/ })).not.toBeInTheDocument();
+});
 beforeEach(() => {
   vi.mocked(listFindingActions).mockResolvedValue([]);
   vi.mocked(listShots).mockResolvedValue(shots);

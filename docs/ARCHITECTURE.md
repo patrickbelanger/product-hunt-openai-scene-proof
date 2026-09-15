@@ -1,5 +1,21 @@
 # Architecture
 
+## PR9 boundaries
+
+PR8 provider models, schema, orchestration, retries, limits and creator authority are
+unchanged. React FilmProgress derives workflow states from saved stages/timestamps;
+no backend progress model, ETA engine or SSE is added. SourceProvenance matches the
+existing source SHA-256 against packaged manifest metadata. InspectionTimeline owns
+ephemeral In/Out state; no range is sent to any API or persisted as analysis input.
+
+The sole backend domain extension is ordinary-project deletion: ProjectController
+→ ProjectDeletionService → existing MediaStorage. V10 adds UUID-only cleanup records,
+project-owned cascading FKs and the narrow deleted-parent history exception.
+Metadata deletion commits before filesystem cleanup; failures remain explicitly
+retryable. Demo copies retain PR7 replacement/retention. [ADR-0010](adr/ADR-0010-project-deletion.md)
+records storage boundaries and limitations; [PR10 plan](PR10-SECURITY-PLAN.md) is
+preparation only, not implementation or a claim of public deployment safety.
+
 ## Implemented foundation
 
 One monorepo: `apps/api` Kotlin/Spring Boot; `apps/web` React/TypeScript;

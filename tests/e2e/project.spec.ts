@@ -15,6 +15,7 @@ test('create, persist, reload and reopen a continuity project', async ({ page })
   await expect(page).toHaveURL(/\/projects\/[0-9a-f-]{36}$/);
   await expect(page.getByRole('heading', { name: projectName })).toBeVisible();
   await page.reload();
+  await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
   await expect(page.getByText('The black blazer remains unchanged through the metro sequence.')).toBeVisible();
   await expect(page.getByText('No saved findings here.')).toBeVisible();
   await page.screenshot({ path: 'test-results/workspace-desktop.png', fullPage: true });

@@ -22,6 +22,11 @@ export type TranscriptSegment = components['schemas']['TranscriptSegment'];
 export type DecideFilmCandidate = components['schemas']['DecideFilmCandidate'];
 export type UnderstandFilmRequest = components['schemas']['UnderstandFilmRequest'];
 
+export async function deleteProject(id: string, confirmationName: string): Promise<void> {
+  const { error, response } = await api.DELETE('/api/v1/projects/{id}', { params: { path: { id } }, body: { confirmationName } });
+  if (!response.ok) throw new ApiError(response.status, error);
+}
+
 export async function getFilmIntelligence(projectId: string, signal?: AbortSignal): Promise<FilmIntelligence> {
   const { data, error, response } = await api.GET('/api/v1/projects/{projectId}/film', { params: { path: { projectId } }, signal });
   if (!data) throw new ApiError(response.status, error);

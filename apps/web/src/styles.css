@@ -35,6 +35,9 @@ button, a, input, textarea { -webkit-tap-highlight-color: transparent; }
 .library-footer { display: flex; justify-content: space-between; gap: 12px; margin-top: 55px; color: #7f8a84; font-size: 10px; letter-spacing: 1.3px; }
 .workspace-toolbar { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; border-bottom: 1px solid var(--scene-border); gap: 24px; }
 .workspace-toolbar h1 { overflow-wrap: anywhere; }
+.workspace-tabs > .mantine-Tabs-list { margin: 0 16px; }
+.workspace-tabs > .mantine-Tabs-list .mantine-Tabs-tab { min-height: 44px; padding-inline: 10px; }
+.workspace-tabs .mantine-Tabs-tab:focus-visible { outline: 2px solid #b3eddd; outline-offset: -3px; }
 .workspace-grid { display: grid; grid-template-columns: 260px minmax(280px, 1fr) 280px; min-height: 500px; }
 .workspace-panel { padding: 25px 22px; background: #151819; }
 .reference-panel { border-right: 1px solid var(--scene-border); }
@@ -129,3 +132,50 @@ button, a, input, textarea { -webkit-tap-highlight-color: transparent; }
 .film-stages time { margin-left: 8px; }
 .film-candidate { overflow-wrap: anywhere; }
 .film-intelligence blockquote { margin: 12px 0; padding-left: 12px; border-left: 2px solid var(--mantine-color-teal-8); }
+.workflow-progress { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; list-style: none; padding: 0; margin: 18px 0; }
+.workflow-progress li { position: relative; display: flex; align-items: flex-start; gap: 8px; padding-top: 14px; font-size: 12px; }
+.workflow-track { position: absolute; inset: 0 0 auto; height: 5px; border-radius: 3px; background: #46504c; }
+.workflow-progress small { display: block; margin-top: 4px; color: #adb9b3; }
+.workflow-icon { min-width: 16px; font-weight: 700; }
+.workflow-progress [data-state=complete] .workflow-track { background: #74cbb4; }
+.workflow-progress [data-state=active] .workflow-track { background: #b3eddd; }
+.workflow-progress [data-state=active] .workflow-icon { animation: workflow-pulse 1.8s ease-in-out infinite; }
+.workflow-progress [data-state=failed] .workflow-track { background: #ffa8a8; }
+.film-run-meta { min-height: 24px; color: #adb9b3; }
+.film-live-state { width: 200px; max-width: 100%; min-height: 18px; }
+.source-provenance { max-width: 65ch; overflow-wrap: anywhere; }
+.context-help { font-size: 12px; margin-block: 12px; }
+.context-help > summary { cursor: pointer; min-height: 32px; padding-block: 6px; }
+.context-help > summary:focus-visible { outline: 2px solid #b3eddd; outline-offset: 2px; }
+.film-intelligence summary { min-height: 28px; }
+.inspection-timeline .mantine-Button-root { min-height: 32px; }
+.film-summary-copy { max-width: 80ch; line-height: 1.65; }
+.film-candidates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); align-items: start; }
+.film-history { border-top: 1px solid var(--scene-border); }
+.film-limitations { font-size: 13px; color: #adb9b3; border-top: 1px solid var(--scene-border); }
+.film-limitations li { margin: 8px 0; }
+.concern-preview { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.film-frame-grid { grid-template-columns: repeat(auto-fit, minmax(100px, 130px)); gap: 10px; }
+.film-frame-grid img { height: 110px; }
+.film-thumbnail { display: block; width: 100%; padding: 0; border: 1px solid var(--scene-border); cursor: pointer; background: #101114; }
+.film-expanded-evidence { display: block; width: 100%; max-height: 70dvh; object-fit: contain; background: #101114; }
+.inspection-timeline { min-width: 0; border-top: 1px solid var(--scene-border); padding-top: 12px; }
+.inspection-timeline:focus-visible, .film-thumbnail:focus-visible { outline: 2px solid #b3eddd; outline-offset: 3px; }
+.inspection-rail { position: relative; height: 68px; margin: 18px 24px 8px; border-bottom: 2px solid #65756e; }
+.inspection-range { position: absolute; bottom: 0; height: 18px; background: #3e7767; border: 1px solid #b3eddd; }
+.inspection-tick { position: absolute; bottom: -12px; width: 24px; height: 32px; padding: 0; transform: translateX(-50%); border: 0; border-bottom: 4px solid #a9b4af; background: transparent; cursor: pointer; }
+.inspection-tick[aria-current=true] { border-color: #b3eddd; border-width: 8px; }
+.inspection-playhead { position: absolute; bottom: 20px; transform: translateX(-50%); color: #b3eddd; pointer-events: none; }
+.inspection-handle { position: absolute; transform: translateX(-50%); min-width: 40px; min-height: 28px; padding: 2px 6px; border: 1px solid #b3eddd; border-radius: 4px; color: #e3faf3; background: #214f42; cursor: pointer; }
+.inspection-handle.in { top: 0; }
+.inspection-handle.out { top: 29px; }
+.frame-playhead { outline: 2px solid #b3eddd; outline-offset: 2px; }
+@keyframes workflow-pulse { 50% { opacity: .45; } }
+@media (prefers-reduced-motion: reduce) { .workflow-progress [data-state=active] .workflow-icon { animation: none; } }
+@media (max-width: 700px) {
+  .workflow-progress { grid-template-columns: 1fr; gap: 10px; }
+  .workflow-progress li { padding: 0 0 0 14px; }
+  .workflow-track { inset: 0 auto 0 0; width: 4px; height: auto; }
+  .workflow-progress small { display: inline; margin-left: 8px; }
+  .film-intelligence { margin: 0 8px 16px; padding: 12px; }
+}

@@ -36,6 +36,7 @@ test('project → persisted findings → evidence comparison → real clipboard,
   page.on('request', outgoing => { if (outgoing.method() === 'POST' && outgoing.url().includes('/analyses')) analysisWrites.push(outgoing.url()); });
   await page.goto('/');
   await page.getByRole('link', { name: project.name }).click();
+  await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
   const choice = page.getByRole('button', { name: /The square changes color/ });
   await expect(choice).toBeVisible();
   await choice.focus();
@@ -70,8 +71,12 @@ test('project → persisted findings → evidence comparison → real clipboard,
   await page.screenshot({ path: 'test-results/findings-tablet.png', fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: 'test-results/findings-mobile.png', fullPage: true });
   await page.evaluate(() => { Object.defineProperty(navigator.clipboard, 'writeText', { configurable: true, value: () => Promise.reject(new Error('denied')) }); });
   await copy.click();
   await expect(page.getByRole('alert')).toContainText('Could not copy.');
+  await page.getByRole('button', { name: 'All saved findings' }).click();
+  await expect(page.getByRole('tab', { name: 'Continuity Findings', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await expect(choice).toBeVisible();
   expect(analysisWrites).toEqual([]);
 });

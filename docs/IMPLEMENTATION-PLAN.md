@@ -1,5 +1,27 @@
 # Implementation Plan
 
+## PR9 — UX Polish + Project Lifecycle Usability (current)
+
+- [x] Preserve interrupted local work on `feat/p1-ux-polish`; base `ba7076f`, PR8 merged.
+- [x] Visible five-stage workflow bar, Step X of Y, failed/current/future/completed states and reduced motion.
+- [x] Quiet polling, separate manual refresh, saved-time elapsed, no unsupported ETA.
+- [x] Results hierarchy, concerns, compact full-inspectable evidence and discoverable limitations.
+- [x] Focused timeline keyboard navigation, playhead/time and local inspection-only In/Out.
+- [x] Actual source duration and hash-verified master/derivative provenance.
+- [x] Confirmed ordinary-project deletion, related history/media cleanup/replay, demo protection and ADR-0010.
+- [x] PR10 attack-surface inventory and threat/review plan; no broad security implementation.
+- [x] Finish applicable verification and desktop/tablet/mobile screenshot review.
+- [x] Final frontend 101 tests, TypeScript/Vite, Chromium 20 tests and diff check pass. Backend/API untouched by final slice; checkpoint build/127 tests and OpenAPI drift remain prior evidence.
+- [x] Add Film Intelligence / Continuity Findings tabs, preserve state/tour targets and clarify import/findings purpose.
+- [x] Centralize selection-driven active-frame auto-scroll; visible frames and unrelated renders do not scroll.
+- [x] Review responsive screenshots, keyboard/focus behavior and retained inspection state at 1280/820/390.
+- [x] Final PR9 completion/review handoff documented for commit/push; merge still requires review.
+- [x] Final clarity addendum: Film-first tour, fixed-source guidance, Advanced inspection/help disclosures and evidence-first rationale; 66 affected frontend tests, six Chromium flows, build and responsive review pass. Future Source Monitor/Analyze Selection/Fix Assist remain text only.
+
+PR8 is COMPLETE. PR10 Security Hardening is NEXT. Selected-range provider analysis
+is future work after PR10, requiring explicit consent and immutable range provenance.
+Earlier incomplete PR8 merge checkboxes below are historical; merged lineage is verified.
+
 ## Final PR8 handoff checkpoint
 
 - [x] Reproduce/fix late guided-tour autofocus stealing Tab focus; 16 tour / 79 frontend tests, five Chromium tour tests, frontend build and OpenAPI drift pass. No PR9 expansion.

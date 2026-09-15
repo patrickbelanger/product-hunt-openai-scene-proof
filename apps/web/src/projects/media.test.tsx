@@ -18,7 +18,8 @@ it('imports and selects persisted frames without inventing still timestamps', as
   await user.upload(input, file);
   await user.click(screen.getByRole('button', { name: 'Import shot' }));
   expect(await screen.findByRole('img', { name: 'Frame from portrait.png' })).toHaveAttribute('src', '/frame.png');
-  expect(screen.getByText(/Still image/)).toBeVisible();
+  expect(screen.getByText('portrait.png · Still image')).toBeVisible();
+  expect(screen.getByText('Playhead · Still image')).toBeVisible();
   expect(uploadShot).toHaveBeenCalledWith('project', file);
 });
 

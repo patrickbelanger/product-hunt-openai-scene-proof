@@ -49,12 +49,14 @@ test('film upload, durable stages, reload, evidence and creator confirmation use
   await expect(accepted).toContainText('Original deterministic test narration');
   await accepted.getByRole('button', { name: 'Add visual reference to Bible' }).click();
   await expect(accepted.getByRole('button', { name: 'Added to Reference Bible' })).toBeDisabled();
+  await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
   await expect(page.getByRole('img', { name: 'Reference: Shape color' })).toBeVisible();
   await page.getByRole('button', { name: 'Inspect reference: Shape color' }).click();
   await expect(page.getByRole('dialog')).toContainText('Promoted from a creator-confirmed film anchor');
   await expect(page.getByRole('dialog').getByRole('link')).toHaveAttribute('href', `?filmRun=${run.id}`);
   await page.getByRole('dialog').getByRole('button', { name: 'Cancel', exact: true }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
+  await page.getByRole('tab', { name: 'Film Intelligence', exact: true }).click();
   await panel.getByRole('button', { name: 'Edit anchor' }).first().click();
   await page.getByLabel('Continuity expectation').fill('The creator expects a centered shape.');
   await page.getByRole('button', { name: 'Confirm edited anchor' }).click();

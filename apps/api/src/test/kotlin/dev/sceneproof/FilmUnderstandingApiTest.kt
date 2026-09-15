@@ -24,8 +24,10 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.bean.override.mockito.MockitoBean
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.multipart
 import org.springframework.test.web.servlet.post
 import tools.jackson.databind.ObjectMapper
@@ -50,6 +52,7 @@ class FilmUnderstandingApiTest @Autowired constructor(
     @MockitoBean lateinit var filmPort: FilmUnderstandingPort
     @MockitoBean lateinit var audioPort: AudioTranscriptionPort
     @MockitoBean lateinit var continuityPort: ContinuityAnalysisPort
+    @MockitoSpyBean lateinit var storageSpy: MediaStorage
     private lateinit var source: SourceFilm
     private val releases = mutableListOf<CountDownLatch>()
 
@@ -105,6 +108,67 @@ class FilmUnderstandingApiTest @Autowired constructor(
         verifyNoInteractions(filmPort, audioPort, continuityPort)
         mvc.multipart("/api/v1/projects/${source.projectId}/film/source") { file(MockMultipartFile("file", "fake.mp4", "video/mp4", byteArrayOf(1, 2))) }.andExpect { status { isUnsupportedMediaType() } }
         assertThat(repository.source(source.projectId)).isEqualTo(source)
+    }
+
+    @Test fun `project deletion removes discovery decisions references and owned media and supports replay`() {
+        val run = await(start())
+        val candidate = repository.candidates(source.projectId, run.id).first()
+        decisions.decide(source.projectId, candidate.id, DecideCandidateRequest(CandidateStatus.ACCEPTED))
+        val promoted = decisions.promote(source.projectId, candidate.id)
+        val context = assembler.assemble(source.projectId)
+        val finding = ContinuityFinding(FindingCategory.PROP, FindingSeverity.MEDIUM, 0.7, "Delete fixture", "Potential difference", "Red", "Changed", "Review context", context.shots.map { it.id }, context.shots.flatMap { it.frames.map { frame -> frame.id } }, listOf(promoted.referenceId!!), "Keep red", emptyList())
+        val result = ContinuityAnalysisResult("Deletion fixture", listOf(finding), context.shots.map { InspectedShot(it.id, it.frames.map { frame -> frame.id }) }, emptyList(), AnalysisMetadata(source.projectId, "1", "SAMPLED_SEQUENCE"))
+        val analysis = analyses.start(source.projectId, UUID.randomUUID()).first
+        analyses.recordContext(analysis.id, context)
+        analyses.succeed(analysis.id, context, AnalysisCompletion(result, ANALYSIS_MODEL, null, null, null))
+        val savedFinding = analyses.findings(source.projectId, analysis.id, 0).single()
+        val targeted = analyses.start(source.projectId, UUID.randomUUID()).first
+        jdbc.update("UPDATE analysis_runs SET kind = 'TARGETED' WHERE id = ?", targeted.id)
+        analyses.recordContext(targeted.id, context)
+        analyses.succeed(targeted.id, context, AnalysisCompletion(result.copy(findings = emptyList()), ANALYSIS_MODEL, null, null, null))
+        val action = UUID.randomUUID()
+        jdbc.update("INSERT INTO finding_actions (id, project_id, finding_id, original_analysis_run_id, request_id, action_type, explanation, scope, reanalysis_run_id) VALUES (?, ?, ?, ?, ?, 'INTENTIONAL_CHANGE', 'Creator explanation', 'Original scope', ?)", action, source.projectId, savedFinding.id, analysis.id, UUID.randomUUID(), targeted.id)
+        jdbc.update("INSERT INTO finding_action_shots (action_id, finding_id, project_id, shot_id) VALUES (?, ?, ?, ?)", action, savedFinding.id, source.projectId, context.shots.first().id)
+        jdbc.update("INSERT INTO targeted_results (action_id, outcome, result) VALUES (?, 'INTENT_ACCEPTED', '{}'::jsonb)", action)
+        val other = projects.create(CreateProjectRequest("Keep this project"))
+        val otherFile = storage.file(other.id, UUID.randomUUID(), "original.bin")
+        Files.write(otherFile, byteArrayOf(7))
+        val projectDirectory = storage.directory(source.projectId, source.id).parent
+        assertThatThrownBy { jdbc.update("DELETE FROM film_candidates WHERE id = ?", candidate.id) }.isInstanceOf(org.springframework.dao.DataAccessException::class.java)
+        repeat(2) {
+            mvc.delete("/api/v1/projects/${source.projectId}") { contentType = MediaType.APPLICATION_JSON; content = """{"confirmationName":"Film test"}""" }.andExpect { status { isNoContent() } }
+        }
+        mvc.get("/api/v1/projects/${source.projectId}").andExpect { status { isNotFound() } }
+        listOf("projects", "source_films", "film_understanding_runs", "film_understanding_stages", "film_transcript_segments", "film_candidates", "film_segments", "visual_references", "shots", "frames", "analysis_runs", "findings", "finding_shots", "finding_frames", "finding_actions", "finding_action_shots", "targeted_results", "analysis_references", "finding_references").forEach { table ->
+            val expected = if (table == "projects") 1L else 0L
+            assertThat(jdbc.queryForObject("SELECT count(*) FROM $table", Long::class.java)).describedAs(table).isEqualTo(expected)
+        }
+        assertThat(Files.exists(projectDirectory)).isFalse()
+        assertThat(Files.readAllBytes(otherFile)).containsExactly(7)
+        assertThatThrownBy { storage.directory(source.projectId, UUID.randomUUID()) }.isInstanceOf(IllegalArgumentException::class.java)
+        verify(filmPort, times(1)).understand(anyFilm()); verify(audioPort, times(1)).transcribe(anyAudio())
+    }
+
+    @Test fun `failed media cleanup reports pending state and retries after project rows are gone`() {
+        doThrow(IllegalStateException("test cleanup failure")).doCallRealMethod().`when`(storageSpy).deleteProject(source.projectId)
+        mvc.delete("/api/v1/projects/${source.projectId}") { contentType = MediaType.APPLICATION_JSON; content = """{"confirmationName":"Film test"}""" }.andExpect { status { isServiceUnavailable() }; jsonPath("$.detail") { value("Project records were deleted, but media cleanup is pending. Retry deletion to finish cleanup safely.") } }
+        mvc.get("/api/v1/projects/${source.projectId}").andExpect { status { isNotFound() } }
+        assertThat(jdbc.queryForObject("SELECT media_cleaned_at IS NULL FROM project_deletions WHERE project_id = ?", Boolean::class.java, source.projectId)).isTrue()
+        mvc.delete("/api/v1/projects/${source.projectId}") { contentType = MediaType.APPLICATION_JSON; content = """{"confirmationName":"Film test"}""" }.andExpect { status { isNoContent() } }
+        assertThat(jdbc.queryForObject("SELECT media_cleaned_at IS NOT NULL FROM project_deletions WHERE project_id = ?", Boolean::class.java, source.projectId)).isTrue()
+        verifyNoInteractions(filmPort, audioPort, continuityPort)
+    }
+
+    @Test fun `project deletion rejects missing confirmation demos and active runs without provider work`() {
+        mvc.delete("/api/v1/projects/${source.projectId}") { contentType = MediaType.APPLICATION_JSON; content = """{"confirmationName":"wrong name"}""" }.andExpect { status { isBadRequest() } }
+        mvc.delete("/api/v1/projects/${UUID.randomUUID()}") { contentType = MediaType.APPLICATION_JSON; content = """{"confirmationName":"Film test"}""" }.andExpect { status { isNotFound() } }
+        val demo = projects.createDemo(CreateProjectRequest("Demo"), UUID.randomUUID(), "test")
+        mvc.delete("/api/v1/projects/${demo.id}") { contentType = MediaType.APPLICATION_JSON; content = """{"confirmationName":"Demo"}""" }.andExpect { status { isConflict() } }
+        val active = repository.start(source.projectId, source.id, UUID.randomUUID()).first
+        mvc.delete("/api/v1/projects/${source.projectId}") { contentType = MediaType.APPLICATION_JSON; content = """{"confirmationName":"Film test"}""" }.andExpect { status { isConflict() } }
+        repository.fail(active.id, AnalysisFailure("TEST_FINISHED", "Test finished"))
+        assertThat(projects.get(source.projectId).name).isEqualTo("Film test")
+        verifyNoInteractions(filmPort, audioPort, continuityPort)
     }
 
     @Test fun `consent is required and cross project source cannot start work`() {

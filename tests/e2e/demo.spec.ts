@@ -32,6 +32,7 @@ test('approved film opens without upload, persists real references and frames, a
   await expect(page.getByRole('heading', { name: original.name })).toBeFocused();
   await expect(page.locator('details.import-panel')).not.toHaveAttribute('open');
   await page.getByRole('button', { name: 'Skip', exact: true }).click();
+  await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
   const bible = page.getByRole('complementary', { name: 'REFERENCE BIBLE' });
   const references: Reference[] = await (await request.get(`/api/v1/projects/${original.id}/references`)).json();
   const shots: Shot[] = await (await request.get(`/api/v1/projects/${original.id}/shots`)).json();
@@ -80,9 +81,11 @@ test('approved film opens without upload, persists real references and frames, a
   const fresh: Project = await resetResult.json();
   expect(fresh.id).not.toBe(original.id); expect(fresh.demo?.instanceId).toBe(original.demo?.instanceId);
   await expect(page).toHaveURL(new RegExp(`/projects/${fresh.id}$`));
+  await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
   await expect(page.getByLabel('Continuity rules', { exact: true })).toHaveValue(original.rules);
   await expect(bible.getByRole('img')).toHaveCount(5);
   await page.reload();
+  await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
   await expect(page.getByLabel('Continuity rules', { exact: true })).toHaveValue(original.rules);
   await expect(page.getByText('No saved findings here.')).toBeVisible();
   const freshShots: Shot[] = await (await request.get(`/api/v1/projects/${fresh.id}/shots`)).json();

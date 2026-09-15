@@ -1345,6 +1345,16 @@ Do not allow P2 work to endanger the core P0 flow.
 
 The repository must remain self-describing throughout the entire sprint.
 
+Accepted September 14 PR9 clarification: PR8 Film Understanding is merged and
+complete. PR9 UX Polish + Project Lifecycle Usability is current on
+feat/p1-ux-polish, including truthful workflow progress, keyboard/local In-Out
+inspection and confirmed ordinary-project deletion. PR10 Security Hardening is
+next; preparation only is recorded in docs/PR10-SECURITY-PLAN.md. Selected-range
+Film Understanding follows PR10 unless reprioritized and needs explicit paid
+consent plus immutable source-range provenance. PR9 makes no provider calls and
+does not implement Analyze Selection. Historical plans below are preserved;
+docs/DECISIONS.md and current STATUS govern accepted clarifications.
+
 Do not treat documentation as a one-time planning artifact.
 
 The documentation is the persistent project memory that allows a new Codex

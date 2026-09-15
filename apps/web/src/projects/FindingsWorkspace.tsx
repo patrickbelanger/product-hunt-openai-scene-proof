@@ -31,7 +31,7 @@ function Correction({ prompt }: { prompt: string }) {
   </section>;
 }
 
-export function FindingsWorkspace({ projectId, demo = false }: { projectId: string; demo?: boolean }) {
+export function FindingsWorkspace({ projectId, demo = false, active = true }: { projectId: string; demo?: boolean; active?: boolean }) {
   const [params, setParams] = useSearchParams();
   const analysisId = params.get('analysisId') || undefined;
   const selectedId = params.get('finding');
@@ -56,16 +56,19 @@ export function FindingsWorkspace({ projectId, demo = false }: { projectId: stri
     const shot = shots.data?.find(item => item.id === shotId);
     const frame = shot?.frames.find(item => selected?.relevantFrameIds.includes(item.id));
     if (frame) setFrameId(frame.id);
-    const target = document.getElementById(`shot-${shotId}`);
-    target?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     if (frame) document.getElementById(`frame-${frame.id}`)?.focus({ preventScroll: true });
   }
   return <>
-    <MediaWorkspace projectId={projectId} demo={demo} finding={selected} findings={(findings.data ?? []).filter(finding => finding.status === 'OPEN')} frameId={frameId} onSelectFrame={setFrameId} />
+    <MediaWorkspace projectId={projectId} demo={demo} active={active} finding={selected} findings={(findings.data ?? []).filter(finding => finding.status === 'OPEN')} frameId={frameId} onSelectFrame={setFrameId} />
     <aside data-tour="findings" className="workspace-panel findings-panel" aria-labelledby="findings-title">
       <Stack gap="md">
         <Group justify="space-between"><Text className="panel-label" id="findings-title">CONTINUITY FINDINGS</Text><Button size="compact-xs" variant="subtle" loading={findings.isFetching || analysis.isFetching} onClick={() => { void findings.refetch(); if (analysisId) void analysis.refetch(); }}>Refresh findings</Button></Group>
         <Text size="xs" c="dimmed">{analysisId ? 'Results for the linked analysis.' : 'Saved findings, newest analysis first. Earlier analyses remain in history.'} Refresh only reads saved results.</Text>
+        <details className="context-help"><summary>Why this exists</summary>
+          <Text size="sm" mt="xs">Continuity Findings connects a specific continuity concern to the exact evidence used to support it. Inspect the evidence, then decide; a difference alone is not a continuity error.</Text>
+          <Text size="xs" c="dimmed" mt="sm">Planned: Source Monitor ↔ Evidence Frame. Position source video at the finding timestamp beside the exact cited frame, jump between source context and evidence, then review or correct the finding. Video-assisted inspection is not available in this MVP.</Text>
+          <Text size="xs" c="dimmed" mt="sm">Planned: Fix Assist. Finding → correction proposal → creator review → export / optional generation. Today you can copy a saved correction prompt; Fix Assist export and generation are not available.</Text>
+        </details>
         {analysisId && <Button variant="subtle" size="compact-xs" onClick={() => { setFrameId(undefined); setParams(previous => { const next = new URLSearchParams(previous); next.delete('analysisId'); next.delete('finding'); next.delete('findingsPage'); return next; }); }}>All saved findings</Button>}
         {analysisId && analysis.isPending && <Text role="status">Loading analysis status…</Text>}
         {analysis.isError && <Alert color="red" title="Analysis status unavailable" role="alert">{analysis.error.message}</Alert>}
@@ -73,7 +76,7 @@ export function FindingsWorkspace({ projectId, demo = false }: { projectId: stri
         {analysis.data?.status === 'RUNNING' && <Text role="status">Analysis is running. Refresh to check its saved results.</Text>}
         {findings.isPending && <Text role="status">Loading findings…</Text>}
         {findings.isError && <Alert color="red" title="Findings unavailable" role="alert"><Text size="sm">{findings.error.message}</Text><Button mt="sm" variant="light" onClick={() => void findings.refetch()}>Retry loading findings</Button></Alert>}
-        {findings.isSuccess && findings.data.length === 0 && <div className="findings-empty"><Title order={2} size="h4">{analysis.data?.kind === 'TARGETED' ? 'Targeted re-evaluation' : analysis.data?.status === 'SUCCEEDED' ? 'No findings in this analysis.' : 'No saved findings here.'}</Title><Text size="sm" c="dimmed" mt="sm">{analysis.data?.kind === 'TARGETED' ? 'This run evaluates one existing finding. Open All saved findings and its creator history to inspect the judgement.' : analysis.data?.status === 'SUCCEEDED' ? 'This saved analysis reported no continuity issues.' : 'An empty list does not confirm that the project has been reviewed. Analysis is started separately through the API.'}</Text></div>}
+        {findings.isSuccess && findings.data.length === 0 && <div className="findings-empty"><Title order={2} size="h4">{analysis.data?.kind === 'TARGETED' ? 'Targeted re-evaluation' : analysis.data?.status === 'SUCCEEDED' ? 'No findings in this analysis.' : 'No saved findings here.'}</Title><Text size="sm" c="dimmed" mt="sm">{analysis.data?.kind === 'TARGETED' ? 'This run evaluates one existing finding. Open All saved findings and its creator history to inspect the judgement.' : analysis.data?.status === 'SUCCEEDED' ? 'This saved analysis reported no continuity issues.' : 'Findings are saved frame-level continuity concerns from a separately requested continuity analysis, currently started through the API. An empty list does not confirm review. When findings appear, select one to compare evidence, copy a suggested correction, or explicitly resolve, dismiss or request re-evaluation. Film Intelligence concerns are proposals, not automatically saved findings. A difference alone is not a continuity error.'}</Text></div>}
         {selectedId && findings.isSuccess && !selected && <Alert color="yellow" title="Finding not available" role="alert">The linked finding is not on this page or in this analysis. Choose a saved finding below.</Alert>}
         {!!findings.data?.length && <><Text size="xs" c="dimmed">Page {page + 1} · {findings.data.length} saved findings on this page · {findings.data.filter(finding => finding.status === 'OPEN').length} open</Text><ul className="finding-list">{findings.data.map(finding => <li key={finding.id}><button type="button" className="finding-button" aria-pressed={selected?.id === finding.id} onClick={() => select(finding)}><span className={`severity-label severity-${finding.severity.toLowerCase()}`}>{findingLabel(finding.severity)} severity · {findingLabel(finding.category)} · {finding.status}</span><strong>{finding.title}</strong><span>{finding.summary}</span></button></li>)}</ul></>}
         {(page > 0 || findings.data?.length === 20) && <Group><Button variant="default" disabled={page === 0 || findings.isFetching} onClick={() => changePage(page - 1)}>Previous findings</Button><Button variant="default" disabled={findings.data?.length !== 20 || findings.isFetching || page === 10000} onClick={() => changePage(page + 1)}>Next findings</Button></Group>}
