@@ -1,5 +1,29 @@
 # Media pipeline
 
+## PR10 hardening
+
+Canonical storage identity is checked on every operation; project/asset aliases,
+symlinks/junctions and nonregular content keys fail closed. Asset cleanup no longer
+creates absent directories and remains possible after a project deletion marker.
+Full-tree deletion validates before removing entries. Packaged assets are outside
+UUID-owned runtime trees; the configured root and its parents must be trusted.
+
+One multipart/demo HTTP request is admitted before spooling per process. Existing
+file/request/decoder limits remain unchanged. New asset directories and HTTP upload
+admission require at least 512 MiB free on both media and JVM-temp filesystems.
+This watermark allows room for the 101 MiB spool, 100 MiB original, up to 32 bounded
+RGB frames and temporary normalization. External disk writers/multiple API processes
+can race the check; use a dedicated volume and one API process for the supported demo.
+Deletion remains available under disk pressure. MEDIA_MINIMUM_FREE_BYTES may raise
+the watermark, never lower it. Servlet temp files retain container-managed cleanup.
+
+Film structure staging is removed after success/failure; unpublished copied segments
+are removed only after confirming they were not committed. If the DB cannot confirm,
+cleanup is deferred safely and logs only the generated run ID. Audio staging is also
+removed in finally. Process death still requires operator orphan reconciliation.
+Frame HTTP responses refuse files beyond the existing 8 MiB evidence limit; frames,
+references and generated data use no-store. No media/FFmpeg limit was loosened.
+
 PR1 implements synchronous local ingestion, with no model calls.
 
 PR5 shares those image primitives for visual references. Video bounds are unchanged.

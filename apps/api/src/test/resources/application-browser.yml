@@ -10,6 +10,13 @@ spring:
         default_schema: sceneproof_browser
 
 sceneproof:
+  http:
+    reads-per-minute: 10000
+    writes-per-minute: 10000
+    media-per-minute: 10000
+  paid-runs:
+    hourly-limit: 10000
+    daily-limit: 10000
   astra:
     api-key: ""
   media:

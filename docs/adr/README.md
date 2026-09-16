@@ -1,5 +1,7 @@
 # Architecture Decision Records
 
+- [ADR-0011: Durable demo admission and local security controls](ADR-0011-demo-security-controls.md)
+
 - [ADR-0010: Ordinary-project deletion](ADR-0010-project-deletion.md)
 
 Sequential `ADR-NNNN-description.md` records describe meaningful decisions.

@@ -11,11 +11,16 @@ import org.springframework.transaction.TransactionDefinition
 import java.util.UUID
 
 @Service
-class ProjectDeletionService(private val jdbc: JdbcTemplate, transactionManager: PlatformTransactionManager, private val storage: MediaStorage, private val gate: MediaIngestionGate) {
+class ProjectDeletionService(private val jdbc: JdbcTemplate, transactionManager: PlatformTransactionManager, private val storage: MediaStorage, private val gate: MediaIngestionGate, private val work: dev.sceneproof.analysis.PaidWorkGate) {
     private val transaction = TransactionTemplate(transactionManager).apply { propagationBehavior = TransactionDefinition.PROPAGATION_REQUIRES_NEW; timeout = 30 }
     fun delete(id: UUID, confirmationName: String) {
-        gate.acquire()
+        try { work.acquire() } catch (_: AnalysisFailure) {
+            throw AnalysisFailure("PROJECT_BUSY", "Wait for active analysis to finish before deleting this project.", 409)
+        }
+        var acquired = false
         try {
+            gate.acquire()
+            acquired = true
             transaction.executeWithoutResult {
                 jdbc.execute("SELECT pg_advisory_xact_lock(731204)")
                 val project = jdbc.query("SELECT name, demo_instance_id FROM projects WHERE id = ? FOR UPDATE", { row, _ -> row.getString("name") to row.getObject("demo_instance_id") }, id).firstOrNull()
@@ -36,6 +41,6 @@ class ProjectDeletionService(private val jdbc: JdbcTemplate, transactionManager:
             } catch (_: Exception) {
                 throw AnalysisFailure("PROJECT_CLEANUP_PENDING", "Project records were deleted, but media cleanup is pending. Retry deletion to finish cleanup safely.", 503)
             }
-        } finally { gate.release() }
+        } finally { if (acquired) gate.release(); work.release() }
     }
 }

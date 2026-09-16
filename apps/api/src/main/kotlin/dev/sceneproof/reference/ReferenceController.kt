@@ -41,7 +41,7 @@ class ReferenceController(private val repository: ReferenceRepository, private v
     @GetMapping("/references/{referenceId}/content")
     fun content(@PathVariable projectId: UUID, @PathVariable referenceId: UUID): ResponseEntity<ByteArray> =
         ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).header("X-Content-Type-Options", "nosniff")
-            .header("Cache-Control", "private, no-cache").body(service.content(repository.get(projectId, referenceId)))
+            .header("Cache-Control", "no-store").body(service.content(repository.get(projectId, referenceId)))
 
     @GetMapping("/findings/{findingId}/references")
     fun findingReferences(@PathVariable projectId: UUID, @PathVariable findingId: UUID): List<ReferenceView> = repository.findingReferences(projectId, findingId)

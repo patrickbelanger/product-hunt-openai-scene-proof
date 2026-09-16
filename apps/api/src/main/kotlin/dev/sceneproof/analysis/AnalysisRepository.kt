@@ -27,7 +27,7 @@ data class FindingView(
 )
 
 @Repository
-class AnalysisRepository(private val jdbc: JdbcTemplate, private val mapper: ObjectMapper, private val media: MediaRepository) {
+class AnalysisRepository(private val jdbc: JdbcTemplate, private val mapper: ObjectMapper, private val media: MediaRepository, private val admission: PaidRunAdmission) {
     @Transactional
     fun start(projectId: UUID, requestId: UUID): Pair<AnalysisRunView, Boolean> {
         media.checkProject(projectId)
@@ -44,6 +44,7 @@ class AnalysisRepository(private val jdbc: JdbcTemplate, private val mapper: Obj
             throw AnalysisFailure("ANALYSIS_RUN_LIMIT", "This project has reached the local limit of 100 analysis attempts.", 409)
         }
         val id = UUID.randomUUID()
+        admission.reserve(id)
         jdbc.update("INSERT INTO analysis_runs (id, project_id, request_id, status, model, started_at) VALUES (?, ?, ?, 'RUNNING', ?, CURRENT_TIMESTAMP)", id, projectId, requestId, ANALYSIS_MODEL)
         return get(projectId, id) to true
     }

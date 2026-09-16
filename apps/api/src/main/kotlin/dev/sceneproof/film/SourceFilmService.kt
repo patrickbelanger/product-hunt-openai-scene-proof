@@ -18,6 +18,7 @@ class SourceFilmService(
     @param:Value("\${sceneproof.media.ffmpeg:ffmpeg}") private val ffmpeg: String,
     @param:Value("\${sceneproof.media.ffprobe:ffprobe}") private val ffprobe: String,
 ) {
+    private val log = org.slf4j.LoggerFactory.getLogger(SourceFilmService::class.java)
     fun upload(projectId: UUID, upload: MultipartFile): SourceFilm {
         repository.source(projectId)
         gate.acquire()
@@ -50,6 +51,7 @@ class SourceFilmService(
     fun structure(source: SourceFilm, runId: UUID): List<FilmSegment> {
         repository.segments(source.projectId).takeIf { it.isNotEmpty() }?.let { return it }
         gate.acquire()
+        val created = mutableListOf<UUID>()
         try {
             val output = storage.directory(source.projectId, runId)
             val input = storage.file(source.projectId, source.id, "original.bin")
@@ -64,6 +66,7 @@ class SourceFilmService(
                 val start = if (position == 0) 0L else requireNotNull(frames.first().timestampMs)
                 val end = groups.getOrNull(position + 1)?.first()?.timestampMs ?: source.durationMs
                 val shotId = UUID.randomUUID()
+                created.add(shotId)
                 val copies = frames.mapIndexed { index, frame ->
                     val key = "%02d.png".format(java.util.Locale.ROOT, index)
                     Files.copy(output.resolve(frame.key), storage.file(source.projectId, shotId, key))
@@ -72,7 +75,14 @@ class SourceFilmService(
                 Triple(shotId, start to end, PreparedMedia("VIDEO", end - start, copies))
             }
             return repository.structure(source, prepared)
-        } finally { gate.release() }
+        } finally {
+            try {
+                val retained = repository.segments(source.projectId).map { it.id }.toSet()
+                created.filter { it !in retained }.forEach { storage.delete(source.projectId, it) }
+            } catch (_: Exception) { log.warn("Film segment cleanup deferred for {}", runId) }
+            try { storage.delete(source.projectId, runId) } catch (_: Exception) { log.warn("Film staging cleanup deferred for {}", runId) }
+            gate.release()
+        }
     }
 
     fun frames(source: SourceFilm, segments: List<FilmSegment>): List<AnalysisFrame> {
@@ -99,7 +109,7 @@ class SourceFilmService(
                 val bytes = Files.newInputStream(output).use { it.readNBytes(4_000_001) }
                 if (bytes.size !in 45..4_000_000) throw AnalysisFailure("AUDIO_LIMIT", "The extracted audio exceeded its bounded PCM size.")
                 return AudioInput(bytes, pcmDuration(bytes))
-            } finally { Files.deleteIfExists(output) }
+            } finally { storage.delete(source.projectId, runId) }
         } finally { gate.release() }
     }
 

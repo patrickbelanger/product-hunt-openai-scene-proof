@@ -25,8 +25,8 @@ class MediaController(private val service: MediaService, private val repository:
     fun content(@PathVariable projectId: UUID, @PathVariable frameId: UUID): ResponseEntity<FileSystemResource> {
         val (shotId, key) = repository.content(projectId, frameId)
         val resource = FileSystemResource(storage.file(projectId, shotId, key))
-        if (!resource.isReadable) throw MediaFailure("MEDIA_UNAVAILABLE", "The stored frame is unavailable.", 503)
+        if (!resource.isReadable || resource.contentLength() !in 1..8L * 1024 * 1024) throw MediaFailure("MEDIA_UNAVAILABLE", "The stored frame is unavailable.", 503)
         return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).header("X-Content-Type-Options", "nosniff")
-            .header("Cache-Control", "private, no-cache").contentLength(resource.contentLength()).body(resource)
+            .header("Cache-Control", "no-store").contentLength(resource.contentLength()).body(resource)
     }
 }

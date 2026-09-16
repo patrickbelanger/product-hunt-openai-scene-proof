@@ -1,5 +1,22 @@
 # Architecture
 
+## PR10 security boundary
+
+V11 PaidRunAdmission reserves a logical paid attempt in the existing run transaction
+under a deployment-wide PostgreSQL lock. Project lifecycle cannot erase its 24-hour
+window. Replays bypass new admission; failures after admission retain the slot.
+PAID_RUNS_ENABLED disables new work, not saved-result access. ADR-0011 records policy.
+PaidWorkGate bounds actual workers within one process, including expired-but-live
+workers; existing database global-active checks remain cross-process admission.
+
+HttpSafetyFilter precedes MVC/multipart parsing: global bounded request buckets,
+one upload/demo preparation, 64 KiB JSON bound, same-origin mutation checks, no-store
+and defensive API headers. Tomcat connections/threads and database acquisition/locks
+are bounded. LocalMediaStorage validates canonical identity and free-space reserves;
+derived staging/unpublished segment cleanup is compensated after ordinary failures.
+No authentication, public isolation or distributed filesystem guarantee is added.
+Exact settings, verification and static-host requirements: PR10-REVIEW.
+
 ## PR9 boundaries
 
 PR8 provider models, schema, orchestration, retries, limits and creator authority are

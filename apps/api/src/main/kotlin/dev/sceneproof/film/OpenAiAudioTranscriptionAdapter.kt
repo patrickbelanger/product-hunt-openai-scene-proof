@@ -156,7 +156,7 @@ class OpenAiAudioTranscriptionAdapter private constructor(private val apiKey: St
             require(segments.zipWithNext().all { it.first.startMs <= it.second.startMs })
             require(segments.sumOf { it.text.length } <= 24000)
             require(segments.isNotEmpty() || root.path("text").asString().isBlank())
-            return TranscriptionCompletion(segments, requestId)
-        } catch (_: Exception) { throw AnalysisFailure("INVALID_TRANSCRIPTION", "The transcript or its source audio bounds were invalid. No Film Understanding call was made.", 502, providerRequestId = requestId) }
+            return TranscriptionCompletion(segments, safeRequestId(requestId))
+        } catch (_: Exception) { throw AnalysisFailure("INVALID_TRANSCRIPTION", "The transcript or its source audio bounds were invalid. No Film Understanding call was made.", 502, providerRequestId = safeRequestId(requestId)) }
     }
 }

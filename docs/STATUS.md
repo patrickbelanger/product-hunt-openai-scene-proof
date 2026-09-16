@@ -1,5 +1,35 @@
 # SceneProof Status
 
+## PR10 security handoff — September 15, 2026
+
+Branch: `feat/p1-security-hardening`; base/unchanged HEAD at recovery:
+`bcc7c7c06d2d18af49ef1ec93bdaa01b36c56a82` (merged PR9).
+Existing uncommitted work recovered in place; nothing reset, discarded or re-scaffolded.
+Security only. No provider calls, PR9 UX work, Analyze Selection or merge.
+
+Implemented and verified: V11 durable global paid-run reservations,
+default 10/hour and 100/day, PAID_RUNS_ENABLED operator switch, replay exemption;
+canonical storage/alias checks, staging cleanup, disk-pressure admission, bounded
+HTTP body/concurrency/rate controls, safe provider identifiers and browser headers.
+One process-local worker gate also protects against overlapping stale workers and
+destructive cleanup; reset refuses active runs. See PR10-REVIEW and ADR-0011.
+
+Final verification: 152 backend tests / 18 suites, zero failures or skips; Gradle build
+and bootJar pass. Frontend 102 tests / 12 files, TypeScript/Vite build and OpenAPI
+generation/drift check pass. Chromium 22 flows pass, plus three security/lifecycle
+flows against the restarted final API. All providers were deterministic test doubles.
+npm audit reports zero advisories for 273 dependencies; backend applicability and
+deferred native/deployment risks are documented in PR10-REVIEW. Final 283-file
+known-key/pattern scan found no matches; no production source maps or test providers
+were found in production artifacts. No absolute security or public tenancy claim.
+Interrupted command was recovered as a Jackson 3 test-compilation failure and fixed;
+the prior java.security error was sandbox access, not an application defect.
+Java 25.0.2 verified under the operator account. No skipped check is claimed to pass.
+Ready for CI/reviewer review of the operator-controlled demo scope; stop before merge.
+Commit/push and clean-worktree identity are recorded in the final handoff, not here.
+
+Below is the historical PR9 handoff, superseded by PR9 merge and current PR10 work.
+
 Last updated: 2026-09-15
 Current branch: `feat/p1-ux-polish`
 Current milestone: PR9 — UX Polish + Project Lifecycle Usability (implemented, verified; awaiting review).

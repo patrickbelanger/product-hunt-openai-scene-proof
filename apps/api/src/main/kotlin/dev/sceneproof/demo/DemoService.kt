@@ -44,6 +44,9 @@ class DemoService(
                     val replay = jdbc.queryForList("SELECT replacement_project_id FROM demo_replacements WHERE source_project_id = ?", resetProjectId)
                     if (replay.isNotEmpty()) return@execute ProjectView.from(requireNotNull(current))
                     if (current?.id != resetProjectId) throw MediaFailure("DEMO_CHANGED", "This demo copy has already been replaced. Open the current demo from the landing page.", 409)
+                    jdbc.execute("SELECT pg_advisory_xact_lock(731204)")
+                    val active = jdbc.queryForObject("SELECT (SELECT count(*) FROM film_understanding_runs WHERE project_id = ? AND completed_at IS NULL) + (SELECT count(*) FROM analysis_runs WHERE project_id = ? AND status = 'RUNNING')", Long::class.java, resetProjectId, resetProjectId)!!
+                    if (active > 0) throw MediaFailure("DEMO_BUSY", "Wait for this demo's active analysis to finish before resetting.", 409)
                 }
                 val template = source.template()
                 if (current != null && current.demoTemplateVersion != template.version) {

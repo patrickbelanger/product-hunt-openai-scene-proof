@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
-class FindingActionService(private val actions: FindingActionRepository, private val analyses: AnalysisRepository, private val assembler: AnalysisContextAssembler, private val port: ContinuityAnalysisPort, private val validator: TargetedResultValidator) {
+class FindingActionService(private val actions: FindingActionRepository, private val analyses: AnalysisRepository, private val assembler: AnalysisContextAssembler, private val port: ContinuityAnalysisPort, private val validator: TargetedResultValidator, private val work: PaidWorkGate) {
     private val log = LoggerFactory.getLogger(FindingActionService::class.java)
 
     fun act(projectId: UUID, findingId: UUID, request: CreateFindingActionRequest): FindingActionView {
@@ -15,7 +15,10 @@ class FindingActionService(private val actions: FindingActionRepository, private
         if (!created || action.reanalysis == null) return action
         val runId = action.reanalysis.id
         var completion: TargetedCompletion? = null
+        var acquired = false
         try {
+            work.acquire()
+            acquired = true
             val original = analyses.finding(projectId, findingId)
             val sequence = assembler.assemble(projectId, original).copy(filmMemory = analyses.originalFilmMemory(projectId, original.analysisRunId))
             require(sequence.shots.flatMap { it.frames.map { frame -> frame.id } }.containsAll(original.relevantFrameIds))
@@ -36,7 +39,7 @@ class FindingActionService(private val actions: FindingActionRepository, private
             log.warn("Targeted analysis {} failed with {}", runId, failure.code)
             failure.analysisRunId = runId
             throw failure
-        }
+        } finally { if (acquired) work.release() }
         return actions.get(projectId, findingId, action.id)
     }
 }

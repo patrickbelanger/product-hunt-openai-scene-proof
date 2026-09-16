@@ -39,7 +39,7 @@ internal class OpenAiResponsesTransport(private val mapper: ObjectMapper, privat
     }
 
     internal fun <Completion> parseEnvelope(status: Int, bytes: ByteArray, requestId: String?, decode: (String, String?, String?, AnalysisUsage?) -> Completion): Completion {
-        val safeRequestId = requestId?.takeIf { it.length <= 160 && it.all { character -> character.isLetterOrDigit() || character in "_-" } }
+        val safeRequestId = safeIdentifier(requestId, "req_")
         if (status !in 200..299) {
             val failure = when (status) {
                 401, 403 -> AnalysisFailure("PROVIDER_AUTHENTICATION", "OpenAI authentication or access failed. Check server configuration.", 503)
@@ -55,7 +55,7 @@ internal class OpenAiResponsesTransport(private val mapper: ObjectMapper, privat
             require(bytes.size <= 256 * 1024)
             val root = mapper.readTree(bytes)
             usage = readUsage(root["usage"])
-            responseId = root["id"]?.takeIf { it.isString && it.asString().length <= 160 }?.asString()
+            responseId = safeIdentifier(root["id"]?.takeIf { it.isString }?.asString(), "resp_")
             if (root["status"]?.asString() != "completed") throw AnalysisFailure("PROVIDER_INCOMPLETE", "OpenAI did not return a complete analysis. No findings were saved.", 502)
             require(root["model"]?.asString() == ANALYSIS_MODEL)
             val output = root["output"]
@@ -71,6 +71,10 @@ internal class OpenAiResponsesTransport(private val mapper: ObjectMapper, privat
             val failure = exception as? AnalysisFailure ?: AnalysisFailure("INVALID_MODEL_OUTPUT", "OpenAI returned an invalid analysis. No findings were saved.", 502)
             throw AnalysisFailure(failure.code, failure.detail, failure.httpStatus, usage, responseId, safeRequestId)
         }
+    }
+
+    private fun safeIdentifier(value: String?, prefix: String): String? = value?.takeIf {
+        it.matches(Regex("${prefix}[A-Za-z0-9_-]{1,155}")) && !it.contains("sk-") && (apiKey.isEmpty() || !it.contains(apiKey))
     }
 
     private fun readUsage(node: JsonNode?): AnalysisUsage? {

@@ -12,7 +12,7 @@ import java.sql.ResultSet
 import java.util.UUID
 
 @Repository
-class FilmRepository(private val jdbc: JdbcTemplate, private val mapper: ObjectMapper, private val media: MediaRepository) {
+class FilmRepository(private val jdbc: JdbcTemplate, private val mapper: ObjectMapper, private val media: MediaRepository, private val admission: dev.sceneproof.analysis.PaidRunAdmission) {
     fun source(projectId: UUID): SourceFilm? {
         media.checkProject(projectId)
         return jdbc.query("SELECT * FROM source_films WHERE project_id = ?", { row, _ -> SourceFilm(row.uuid("id"), projectId, row.getString("name"), row.getString("sha256"), row.getLong("byte_size"), row.getLong("duration_ms"), row.getTimestamp("created_at").toInstant()) }, projectId).firstOrNull()
@@ -45,6 +45,7 @@ class FilmRepository(private val jdbc: JdbcTemplate, private val mapper: ObjectM
         }
         if (jdbc.queryForObject("SELECT count(*) FROM film_understanding_runs WHERE project_id = ?", Long::class.java, projectId)!! >= 10) throw AnalysisFailure("FILM_RUN_LIMIT", "This project has reached its limit of ten Film Understanding attempts.", 409)
         val id = UUID.randomUUID()
+        admission.reserve(id)
         jdbc.update("INSERT INTO film_understanding_runs (id, project_id, source_film_id, request_id, stage) VALUES (?, ?, ?, ?, 'PREPARING_SOURCE')", id, projectId, sourceId, requestId)
         jdbc.update("INSERT INTO film_understanding_stages (run_id, position, stage) VALUES (?, 0, 'PREPARING_SOURCE')", id)
         return get(projectId, id) to true
