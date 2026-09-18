@@ -5,9 +5,22 @@ import { NewProject } from './projects/NewProject';
 import { Workspace } from './projects/Workspace';
 import { PrivacyPolicy, TermsOfUse } from './legal/LegalPages';
 import { repositoryUrl } from './legal/disclosures';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [pathname]);
+
+  return null;
+}
 
 export function App() {
   return <>
+    <ScrollToTop />
     <a className="skip-link" href="#main">Skip to content</a>
     <header className="app-header">
       <Anchor component={Link} to="/" className="brand" underline="never" c="gray.1">
