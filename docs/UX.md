@@ -127,7 +127,12 @@ findings on the right, scrolling timeline below the inspector. Import takes one
 still or short video and shows real pending work. Errors retain the selected file
 for retry; completed failures remain visible after reload. Timeline buttons select
 actual PNG frames, showing video elapsed seconds or "Still image". Empty states
-remain truthful; sequence analysis remains explicitly API-started.
+remain truthful. Run continuity analysis is the primary action in Continuity Findings,
+enabled after at least one READY imported shot. Its synchronous request announces
+Analyzing continuity… and prevents duplicate clicks. Request errors display the API
+message/status; explicit retry reuses the UUID, never automatically retries. A returned
+run selects analysisId and clears finding/page/frame selection before saved findings
+load. Reload saved findings is secondary and only reads persisted results.
 Project names and rules wrap, including long unbroken content.
 
 Loading is announced through status roles; errors offer retry/navigation. Forms have

@@ -1,4 +1,3 @@
-import { randomUUID } from 'node:crypto';
 import { expect, test } from '@playwright/test';
 import Ajv2020 from 'ajv/dist/2020.js';
 import addFormats from 'ajv-formats';
@@ -20,11 +19,17 @@ test('project → persisted findings → evidence comparison → real clipboard,
     expect(imported.status()).toBe(201);
     shots.push(await imported.json());
   }
-  const analyzed = await request.post(`/api/v1/projects/${project.id}/analyses`, { data: { requestId: randomUUID() } });
+  await page.reload();
+  await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
+  const analysisResponse = page.waitForResponse(response => response.request().method() === 'POST' && response.url().endsWith(`/projects/${project.id}/analyses`));
+  await page.getByRole('button', { name: 'Run continuity analysis', exact: true }).click();
+  const analyzed = await analysisResponse;
   expect(analyzed.status()).toBe(200);
   const run = await analyzed.json();
   expect(run.status).toBe('SUCCEEDED');
   expect(run.usage).toBeNull();
+  await expect(page).toHaveURL(new RegExp(`analysisId=${run.id}`));
+  await expect(page.getByRole('button', { name: /The square changes color/ })).toBeVisible();
   const results = await request.get(`/api/v1/projects/${project.id}/findings?analysisId=${run.id}`);
   const findings: Finding[] = await results.json();
   const finding = findings[0]!;
@@ -64,7 +69,7 @@ test('project → persisted findings → evidence comparison → real clipboard,
   await page.reload();
   await expect(right).toHaveJSProperty('naturalWidth', 640);
   await expect(choice).toHaveAttribute('aria-pressed', 'true');
-  await page.getByRole('button', { name: 'Refresh findings' }).click();
+  await page.getByRole('button', { name: 'Reload saved findings' }).click();
   await expect(choice).toBeVisible();
   await page.setViewportSize({ width: 820, height: 1180 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);

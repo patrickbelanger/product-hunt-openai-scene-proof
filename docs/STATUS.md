@@ -1,5 +1,39 @@
 # SceneProof Status
 
+## Continuity Findings release-blocker fix — September 16, 2026
+
+Branch: `bugfix/continuity-analysis-cta`, from verified merged PR10 main `826bf99`.
+Recovery found clean PR10 feature HEAD and stale local main/origin refs; fetching
+confirmed PR #10 merged. No backend/provider/API/security code is changed.
+
+Implemented: primary Run continuity analysis after at least one READY imported shot,
+accessible synchronous loading and duplicate-click guard, same-UUID manual retry
+after request failure, explicit API status/detail errors, returned analysis URL with
+stale finding/page/frame cleared, and secondary GET-only Reload saved findings.
+Difference != continuity error, evidence, Reference Bible and targeted steering
+remain intact. Request UUID retention covers the mounted workspace (including tab
+switches); full reload recovery is not introduced. No automatic or live provider calls.
+
+Verified: 22 focused findings tests; full frontend 108 tests / 12 files with one
+worker; TypeScript, Vite production build and OpenAPI drift check. Gradle build and
+fresh backend regression execution pass: 152 tests, zero failures/errors/skips.
+Existing Vite >500 kB warning remains.
+First full frontend run alongside backend compilation had four timing/lookup
+failures in unchanged project/demo tests; isolated serial rerun passed without
+assertion/timeout changes. Initial test-fixture TypeScript mismatch was corrected.
+Java and Chromium require operator access outside the sandbox; sandbox failures
+are not passes. Chromium full suite: 21/22 pass, including UI-started continuity,
+saved-only reload, evidence, references, steering, security and responsive checks.
+The unchanged Film Intelligence test hit two simultaneous Reject anchor matches;
+its first isolated rerun hit HTTP 500 at the shared database advisory lock while
+backend tests were active. After backend completion, both Film Intelligence tests
+pass in isolation without code/assertion/timeout changes. Thus all browser scenarios
+have passing evidence, but the initial full run was not wholly green. Desktop/mobile
+Findings captures were inspected; existing browser checks cover tablet/narrow overflow.
+
+Verification is complete; stop for review. No commit, push or merge requested.
+Earlier PR10/PR9 handoffs below are historical; PR10 is merged.
+
 ## PR10 security handoff — September 15, 2026
 
 Branch: `feat/p1-security-hardening`; base/unchanged HEAD at recovery:

@@ -1,5 +1,16 @@
 # Implementation Plan
 
+## Post-PR10 release blocker — Continuity Findings start action
+
+- [x] Inspect clean merged PR10 main (`826bf99`) and create `bugfix/continuity-analysis-cta`.
+- [x] Primary Run continuity analysis CTA, READY-shot prerequisite, accessible pending/duplicate guard.
+- [x] Existing client, same-UUID manual retry, explicit errors, returned-run URL and cleared stale selection.
+- [x] Secondary GET-only Reload saved findings and corrected shipped-path documentation.
+- [x] Complete focused/full frontend (22/108), typecheck/build, OpenAPI and backend (152) verification.
+- [x] Chromium: 21/22 in full run, both Film Intelligence tests pass after isolated rerun; initial selector/SQL failures remain recorded in STATUS. No assertions weakened or provider calls made.
+
+Historical milestone checklists follow; PR10 is merged.
+
 ## PR10 — Security Hardening (current)
 
 - [x] Recover merged PR9 at `bcc7c7c`; preserve interrupted PR10 work in place.

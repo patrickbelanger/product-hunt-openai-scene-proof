@@ -89,7 +89,7 @@ test('PR9 progress, evidence, keyboard range and deletion across desktop tablet 
     await page.keyboard.press('Home');
     await expect.poll(activeVisible).toBe(true);
     const before = await scrollTop();
-    await page.getByRole('button', { name: 'Refresh findings' }).click();
+    await page.getByRole('button', { name: 'Reload saved findings' }).click();
     expect(await scrollTop()).toBe(before);
     await timeline.focus();
     await page.keyboard.press('Home'); await page.keyboard.press('ArrowRight');

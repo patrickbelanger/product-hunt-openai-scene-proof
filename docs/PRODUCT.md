@@ -1,16 +1,16 @@
 # Product
 
-## Current milestone — PR9
+## Current milestone — post-PR10 continuity start fix
 
-PR8 is merged. PR9 delivers creator-facing UX polish and ordinary-project deletion;
-PR10 Security Hardening is next. Historical handoff sections below preserve their
-original evidence rather than reopening PR8 architecture.
+PR9 and PR10 are merged. The release-blocker fix exposes the existing continuity
+analysis operation in the UI, preserving paid-run admission and provider behavior.
+Historical handoff sections below retain their original evidence.
 
 Film Intelligence is the hero/default workspace tab. Continuity Findings is the
 separate frame-level review workspace with the Reference Bible, optional shot
 import and evidence inspector. Import supports precise frame inspection or focused
 visual comparison; it is not required for whole-film discovery. Saved findings
-come from continuity analysis (currently started through the API), not automatic
+come from explicitly choosing Run continuity analysis after importing a shot, not automatic
 promotion of Film Intelligence concerns. Creators inspect evidence and explicitly
 resolve, dismiss or request re-evaluation using the existing actions.
 

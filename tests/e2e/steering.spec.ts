@@ -58,7 +58,7 @@ for (const remains of [false, true]) test(`intent → ${remains ? 'issue remains
   await expect(page.getByText(`Creator: ${explanation}`)).toBeVisible();
   await expect(page.getByText(finding.explanation, { exact: true })).toBeVisible();
   await expect(page.getByRole('region', { name: 'Finding evidence' }).getByRole('img').first()).toHaveJSProperty('naturalWidth', 640);
-  await page.getByRole('button', { name: 'Refresh findings' }).click();
+  await page.getByRole('button', { name: 'Reload saved findings' }).click();
   await page.getByRole('button', { name: 'Refresh history' }).click();
   expect(writes).toHaveLength(1);
   const persisted: Finding[] = await (await request.get(`/api/v1/projects/${project.id}/findings`)).json();

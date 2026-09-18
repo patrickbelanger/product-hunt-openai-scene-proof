@@ -28,11 +28,83 @@ it('keeps contextual roadmap help collapsed and clearly separate from current ca
   expect(screen.queryByRole('button', { name: /Fix Assist|Source Monitor|Analyze Selection/ })).not.toBeInTheDocument();
 });
 beforeEach(() => {
+  vi.mocked(createAnalysis).mockReset().mockResolvedValue(run);
   vi.mocked(listFindingActions).mockResolvedValue([]);
   vi.mocked(listShots).mockResolvedValue(shots);
   vi.mocked(listFindings).mockResolvedValue([finding]);
   vi.mocked(getAnalysis).mockResolvedValue(run);
   Element.prototype.scrollIntoView = vi.fn();
+});
+
+it('disables analysis until at least one successfully imported shot is available', async () => {
+  vi.mocked(listShots).mockResolvedValue([]);
+  const first = open();
+  expect(screen.getByRole('button', { name: 'Run continuity analysis' })).toBeDisabled();
+  expect(await screen.findByText(/Import at least one shot successfully/)).toBeVisible();
+  fireEvent.click(screen.getByRole('button', { name: 'Run continuity analysis' }));
+  expect(createAnalysis).not.toHaveBeenCalled();
+  first.unmount();
+  vi.mocked(listShots).mockResolvedValue([{ ...shots[0]!, status: 'FAILED', frames: [] }]);
+  open();
+  expect(await screen.findByText(/Import at least one shot successfully/)).toBeVisible();
+  expect(screen.getByRole('button', { name: 'Run continuity analysis' })).toBeDisabled();
+});
+
+it('starts once, announces pending work and navigates to returned saved findings clearing stale selection', async () => {
+  let finish!: (value: AnalysisRun) => void;
+  vi.mocked(createAnalysis).mockImplementationOnce(() => new Promise(resolve => { finish = resolve; }));
+  open('?analysisId=old-run&finding=finding-1&findingsPage=2&tab=findings');
+  const button = screen.getByRole('button', { name: 'Run continuity analysis' });
+  await waitFor(() => expect(button).toBeEnabled());
+  fireEvent.click(button);
+  fireEvent.click(button);
+  expect(createAnalysis).toHaveBeenCalledTimes(1);
+  expect(createAnalysis).toHaveBeenCalledWith('project', expect.stringMatching(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i));
+  expect(button).toBeDisabled();
+  expect(button).toHaveAttribute('aria-busy', 'true');
+  expect(screen.getAllByRole('status').some(status => status.textContent === 'Analyzing continuity…')).toBe(true);
+  finish({ ...run, id: 'returned-run' });
+  await waitFor(() => expect(screen.getByLabelText('Current URL')).toHaveTextContent('?analysisId=returned-run&tab=findings'));
+  await waitFor(() => expect(listFindings).toHaveBeenCalledWith('project', 'returned-run', 0, expect.any(AbortSignal)));
+  expect(screen.queryByRole('heading', { name: 'Finding evidence' })).not.toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'Run continuity analysis' })).toBeEnabled();
+});
+
+it('reuses the request UUID after transport failure, never retries automatically, and generates a new UUID only after a returned terminal run', async () => {
+  vi.mocked(createAnalysis).mockRejectedValueOnce(new TypeError('Network connection lost'));
+  const user = userEvent.setup();
+  open();
+  const button = screen.getByRole('button', { name: 'Run continuity analysis' });
+  await waitFor(() => expect(button).toBeEnabled());
+  await user.click(button);
+  expect(await screen.findByRole('alert')).toHaveTextContent('Network connection lost');
+  expect(createAnalysis).toHaveBeenCalledTimes(1);
+  const originalRequestId = vi.mocked(createAnalysis).mock.calls[0]![1];
+  await user.click(screen.getByRole('button', { name: 'Retry continuity analysis' }));
+  await waitFor(() => expect(screen.getByLabelText('Current URL')).toHaveTextContent('analysisId=run-1'));
+  expect(createAnalysis).toHaveBeenNthCalledWith(2, 'project', originalRequestId);
+  expect(screen.queryByText('Network connection lost')).not.toBeInTheDocument();
+  await user.click(screen.getByRole('button', { name: 'Run continuity analysis' }));
+  expect(createAnalysis).toHaveBeenCalledTimes(3);
+  expect(vi.mocked(createAnalysis).mock.calls[2]![1]).not.toBe(originalRequestId);
+});
+
+it.each([
+  [429, 'New paid runs are disabled.'],
+  [429, 'The paid-run hourly limit has been reached.'],
+  [502, 'The provider rejected this analysis request.'],
+])('shows HTTP %s backend errors and keeps the request UUID on explicit retry: %s', async (status, detail) => {
+  vi.mocked(createAnalysis).mockRejectedValue(new ApiError(status, { type: 'about:blank', title: 'Analysis rejected', status, detail }));
+  const user = userEvent.setup();
+  open();
+  const button = screen.getByRole('button', { name: 'Run continuity analysis' });
+  await waitFor(() => expect(button).toBeEnabled());
+  await user.click(button);
+  expect(await screen.findByRole('alert')).toHaveTextContent(`HTTP ${status}: ${detail}`);
+  expect(createAnalysis).toHaveBeenCalledTimes(1);
+  await user.click(screen.getByRole('button', { name: 'Retry continuity analysis' }));
+  expect(createAnalysis).toHaveBeenCalledTimes(2);
+  expect(vi.mocked(createAnalysis).mock.calls[1]).toEqual(vi.mocked(createAnalysis).mock.calls[0]);
 });
 
 it('loads saved findings, selects real evidence and highlights only affected shots', async () => {
@@ -58,7 +130,7 @@ it('loads saved findings, selects real evidence and highlights only affected sho
   expect(screen.getByRole('img', { name: 'Frame from shot-2.png' })).toBeVisible();
   await user.click(screen.getByRole('button', { name: 'Back to finding evidence' }));
   expect(screen.getByRole('heading', { name: 'Finding evidence' })).toBeVisible();
-  await user.click(screen.getByRole('button', { name: 'Refresh findings' }));
+  await user.click(screen.getByRole('button', { name: 'Reload saved findings' }));
   await waitFor(() => expect(listFindings).toHaveBeenCalledTimes(3));
   expect(createAnalysis).not.toHaveBeenCalled();
 });
@@ -179,7 +251,7 @@ it('announces running analysis and status lookup failures without retrying analy
   const user = userEvent.setup();
   open('?analysisId=run-1');
   expect(await screen.findByText(/Analysis is running/)).toBeVisible();
-  await user.click(screen.getByRole('button', { name: 'Refresh findings' }));
+  await user.click(screen.getByRole('button', { name: 'Reload saved findings' }));
   expect(await screen.findByRole('alert')).toHaveTextContent('Analysis status unavailable');
   expect(createAnalysis).not.toHaveBeenCalled();
 });

@@ -1,5 +1,13 @@
 # Development Plan
 
+## Current slice — September 15, post-PR10
+
+PR10 is merged at `826bf99`. The authorized release-blocker correction is
+`bugfix/continuity-analysis-cta`: expose the existing continuity start operation,
+preserve request replay/security/provider semantics and verify regressions without
+live provider calls. September 18 scope/date are unchanged. Earlier roadmap and
+handoff sections below are historical. Stop after implementation and verification.
+
 ## Current roadmap — PR9 authorization
 
 PR8 AI Film Understanding / Multimodal Continuity Discovery is COMPLETE and merged

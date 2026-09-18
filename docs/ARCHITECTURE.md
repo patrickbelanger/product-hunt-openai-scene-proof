@@ -107,6 +107,14 @@ See [Astra integration](ASTRA-INTEGRATION.md) and [ADR-0004](adr/ADR-0004-astra-
 
 ## Implemented findings workspace (PR3)
 
+Post-PR10 UX fix: FindingsWorkspace explicitly calls the existing createAnalysis
+client from its primary CTA. A ref guards synchronous duplicate submission and
+retains one request UUID across request failures in the mounted project workspace.
+No automatic retry or new provider path is introduced. Returned runs update the
+analysis cache/URL and clear finding/page/frame selection; saved findings load through
+the existing query. Reload saved findings remains GET-only. Backend admission,
+replay, security bounds, Reference Bible and targeted steering remain unchanged.
+
 Workspace composes FindingsWorkspace beside the existing reference panel.
 FindingsWorkspace owns URL selection, paginated findings queries, optional linked
 analysis status and frame navigation. MediaWorkspace shares the existing shots

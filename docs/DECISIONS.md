@@ -1,5 +1,15 @@
 # Decisions
 
+## Authorized post-PR10 continuity UX correction — September 15
+
+Patrick requests the smallest release-blocker fix on `bugfix/continuity-analysis-cta`:
+explicitly start the existing synchronous continuity API from the findings panel,
+reuse a request UUID after request failure, preserve all PR10/provider semantics and
+verify with no live calls. READY shots count as successfully imported; failed imports
+do not enable the CTA. Request identity survives manual retry while this project
+workspace remains mounted; reload recovery is not added by this bounded fix.
+No architecture, paid admission, scope or September 18 deadline change; no new ADR.
+
 ## PR10 accepted safety controls — September 15
 
 Patrick approves durable deployment-wide ceilings of ten new logical paid runs per

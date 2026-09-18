@@ -96,7 +96,7 @@ for (const width of [1280, 820, 390]) {
     await dialog.getByRole('button', { name: 'Skip' }).click();
     await expect(restart).toBeFocused();
     await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
-    await page.getByRole('button', { name: 'Refresh findings' }).click();
+    await page.getByRole('button', { name: 'Reload saved findings' }).click();
     await expect(page.getByRole('heading', { name: 'No saved findings here.' })).toBeVisible();
     expect(await page.evaluate(key => localStorage.getItem(key), preferenceKey)).toBe('skipped');
     expect(unexpected).toEqual([]);

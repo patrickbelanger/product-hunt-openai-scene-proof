@@ -2,13 +2,14 @@
 
 **Keep every shot in character.** Your AI continuity supervisor for generative film.
 
-Current slice: PR10 Security Hardening, based on merged PR9; product behavior frozen.
+Current slice: Continuity Findings start-action fix, based on merged PR10.
 Choose **Try the demo film** to open **Between the Line — Continuity Study** with
 eight real video clips and five persisted visual references. Original film by Laurie
 and Patrick, explicitly authorized by Patrick. **Create a project** remains available.
 Reset demo confirms replacement of only the current copy; original analysis history
 is retained. The demo starts with no recorded findings. Initial analysis is explicitly
-started through the backend API; opening, refreshing and resetting never call OpenAI.
+started with **Run continuity analysis** in Continuity Findings after importing a shot;
+opening, reloading saved findings and resetting never call OpenAI.
 
 **Film Intelligence** accepts one primary MP4/H.264 film (120 seconds/100 MiB).
 New/reset demo copies use the derived 0–36.291667-second analysis source; the immutable
@@ -221,7 +222,12 @@ before the command so Node can use the local file. Do not print either value.
 `scripts/run-api.mjs` supplies an absolute default MEDIA_ROOT. Existing bootRun/IDE
 launches continue to use exported configuration and do not automatically read .env.
 
-To start analysis, use the typed client or HTTP; PR3 adds saved-result inspection:
+To start analysis, import a shot and choose **Run continuity analysis** in the
+Continuity Findings tab. Pending work disables repeat clicks. Request failures
+remain visible, including HTTP 429/operator restrictions and provider errors;
+**Retry continuity analysis** reuses the same UUID while the workspace remains
+mounted, with no automatic retry. A returned run selects its saved findings and
+clears the previous finding/page. The typed client and HTTP path also remain available:
 
 ```powershell
 $projectId = '<existing project UUID>'
@@ -244,7 +250,7 @@ same analysis and finding even if newer analyses are saved. All saved findings
 returns to paginated history. `?analysisId=<run UUID>` also displays that run's
 SUCCEEDED / RUNNING / FAILED state. PR2 has no latest-run/list-runs endpoint, so
 an unfiltered empty list does not prove success or reveal the latest failed run.
-Refresh findings is read-only. Copy correction reports actual clipboard success
+Reload saved findings is read-only. Copy correction reports actual clipboard success
 or failure; the full prompt remains selectable for manual copying.
 
 Limits: 8 READY shots, first/middle/last representative frames (24 total), 16 MiB
