@@ -1,5 +1,15 @@
 # Implementation Plan
 
+## September 17 — final Privacy/Terms cleanup
+
+- [x] Verify clean consolidated base and re-inspect ordinary deletion, cascades, media cleanup and demo retirement.
+- [x] Remove public TODO/draft copy; require production identity/email and preserve optional public settings.
+- [x] Clarify ordinary/demo retention, simplify operational metadata and retain accurate OpenAI disclosures.
+- [x] Complete legal/findings (37), full frontend (123), typecheck/build, production legal routes (4) and focused continuity E2E (1); prepare verified local cleanup commit on the existing branch.
+
+Continuity Findings/backend/provider behavior stays unchanged. No push, main merge,
+new branch/worktree or deployment. Earlier checklists below are historical.
+
 ## September 17 — consolidate launch recovery
 
 - [x] Inspect/report both worktrees before mutation; preserve CTA `03b90b6` and privacy `59be1d9`.

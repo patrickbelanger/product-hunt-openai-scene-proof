@@ -3,8 +3,11 @@
 ## Privacy/terms disclosure routes
 
 App renders static `/privacy` and `/terms` routes and a shared footer. Legal content
-uses plain-text public build-time settings from `apps/web/.env.example`; missing
-facts remain visible TODOs. UploadDisclosure is reused once per upload form. These
+uses plain-text public build-time settings from `apps/web/.env.example`. Vite builds
+validate operator identity and email before emitting a bundle; production legal
+rendering also fails closed on invalid settings. Optional absent details are omitted;
+no public TODOs. The shared validator rejects TODO placeholders without logging
+configured values. UploadDisclosure is reused once per upload form. These
 pages perform no API/provider request and introduce no storage, consent or lifecycle
 subsystem. Production edge/static fallback is operator-managed externally, per
 Patrick; it was not inspected or modified here. See [deployment notes](DEPLOYMENT.md).

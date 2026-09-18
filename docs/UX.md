@@ -7,8 +7,11 @@ workspace layout. `/privacy` and `/terms` use the existing narrow page style,
 semantic headings/main, a last-updated date and responsive wrapping. Each upload
 form has one small rights/AI-processing notice; its privacy link opens a new tab
 to preserve the current upload draft. No cookie banner: inspected browser storage
-is functional, and no application tracking was found. Operator TODOs remain visible
-instead of invented contact details or compliance claims. See PRIVACY-DISCLOSURE-REVIEW.
+is functional, and no application tracking was found. Public copy has no TODOs;
+production builds fail on missing operator identity/email or placeholder values.
+Development-only missing configuration is labelled as a local instance. Ordinary
+deletion, retryable media cleanup and retained demo history are distinct. No invented
+contact details or compliance claims. See PRIVACY-DISCLOSURE-REVIEW.
 
 ## PR9 UX polish and project lifecycle
 

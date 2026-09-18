@@ -5,7 +5,7 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import * as api from '@sceneproof/api-client';
 import { App } from '../App';
 import { Providers } from '../providers';
-import { repositoryUrl } from './disclosures';
+import { repositoryUrl, validateProductionDisclosures } from './disclosures';
 
 vi.mock('@sceneproof/api-client', async importOriginal => ({
   ...await importOriginal<typeof import('@sceneproof/api-client')>(),
@@ -36,6 +36,7 @@ it.each([['/privacy', 'Privacy Policy'], ['/terms', 'Terms of Use']])('renders %
   expect(screen.getByRole('heading', { name: title, level: 1 })).toBeVisible();
   expect(screen.getByText(/Last updated:/)).toHaveTextContent('September 17, 2026');
   expect(document.title).toBe(`${title} — SceneProof`);
+  expect(document.body).not.toHaveTextContent(/\bTODO\b|disclosure draft|remain to be confirmed|need operator confirmation/i);
   const footer = within(screen.getByRole('navigation', { name: 'Legal and source links' }));
   expect(footer.getByRole('link', { name: 'Privacy' })).toHaveAttribute('href', '/privacy');
   expect(footer.getByRole('link', { name: 'Terms' })).toHaveAttribute('href', '/terms');
@@ -44,11 +45,15 @@ it.each([['/privacy', 'Privacy Policy'], ['/terms', 'Terms of Use']])('renders %
   for (const operation of [api.listProjects, api.getProject, api.createAnalysis, api.understandFilm, api.createFindingAction]) expect(operation).not.toHaveBeenCalled();
 });
 
-it('keeps privacy contact unresolved until explicitly configured and discloses reset retention and shared access', () => {
+it('uses only a local-development fallback without configuration and discloses retention and shared access', () => {
   open('/privacy');
-  expect(screen.getByText(/working private contact channel has not yet been supplied/)).toBeVisible();
+  expect(screen.getByText(/Privacy contact is unavailable in this local development instance/)).toBeVisible();
   expect(screen.queryByRole('link', { name: /@/ })).not.toBeInTheDocument();
-  expect(screen.getByText(/Reset is not deletion/)).toBeVisible();
+  expect(screen.getByText(/Reset Demo is not deletion/)).toBeVisible();
+  expect(screen.getByText(/Ordinary projects are retained until you delete them/)).toHaveTextContent('database project is already deleted');
+  expect(screen.getByText(/deletion-request\/media-cleanup timestamps/)).toBeVisible();
+  expect(screen.getByText(/Ordinary project deletion is disabled for demo copies/)).toHaveTextContent('no automatic cleanup');
+  expect(screen.queryByText(/Reservations older than 24 hours|pruned during/)).not.toBeInTheDocument();
   expect(screen.getByText(/no private user accounts or per-user project access isolation/)).toBeVisible();
   expect(screen.getByText(/outside Québec or Canada/)).toBeVisible();
   expect(screen.getByText(/including entered explanation and scope/)).toBeVisible();
@@ -67,8 +72,33 @@ it('renders confirmed contact configuration as plain text and a private email li
 it('does not turn malformed contact configuration into an actionable mail link', () => {
   vi.stubEnv('VITE_PRIVACY_CONTACT_EMAIL', 'privacy@example.test?body=unexpected');
   open('/privacy');
-  expect(screen.getByText(/working private contact channel has not yet been supplied/)).toBeVisible();
+  expect(screen.getByText(/Privacy contact is unavailable in this local development instance/)).toBeVisible();
   expect(screen.queryByRole('link', { name: /@/ })).not.toBeInTheDocument();
+});
+
+it.each(['VITE_LEGAL_OPERATOR', 'VITE_PRIVACY_CONTACT_EMAIL'] as const)('rejects production without %s', key => {
+  const environment = { VITE_LEGAL_OPERATOR: 'Test operator', VITE_PRIVACY_CONTACT_EMAIL: 'privacy@example.test', [key]: ' ' };
+  expect(() => validateProductionDisclosures(environment)).toThrow(key);
+});
+
+it('rejects invalid email and unfinished optional configuration without echoing values', () => {
+  expect(() => validateProductionDisclosures({ VITE_LEGAL_OPERATOR: 'Test operator', VITE_PRIVACY_CONTACT_EMAIL: 'invalid?secret' })).toThrow('VITE_PRIVACY_CONTACT_EMAIL');
+  expect(() => validateProductionDisclosures({ VITE_LEGAL_OPERATOR: 'Test operator', VITE_PRIVACY_CONTACT_EMAIL: 'privacy@example.test', VITE_PRIVACY_RETENTION: 'TODO: confirm internal details' })).toThrow('VITE_PRIVACY_RETENTION');
+  expect(() => validateProductionDisclosures({ VITE_LEGAL_OPERATOR: 'Test operator', VITE_PRIVACY_CONTACT_EMAIL: 'privacy@example.test' })).not.toThrow();
+});
+
+it.each(['/privacy', '/terms'])('fails closed at runtime on %s if a production bundle lacks required configuration', path => {
+  vi.stubEnv('PROD', true);
+  expect(() => open(path)).toThrow('Legal disclosure configuration required: VITE_LEGAL_OPERATOR, VITE_PRIVACY_CONTACT_EMAIL');
+});
+
+it.each(['/privacy', '/terms'])('renders finished production copy on %s using supplied identity and mailbox', path => {
+  vi.stubEnv('PROD', true);
+  vi.stubEnv('VITE_LEGAL_OPERATOR', 'Test operator');
+  vi.stubEnv('VITE_PRIVACY_CONTACT_EMAIL', 'privacy@example.test');
+  open(path);
+  expect(screen.getByRole('link', { name: 'privacy@example.test' })).toBeVisible();
+  expect(document.body).not.toHaveTextContent(/\bTODO\b|local development|disclosure draft|remain to be confirmed/i);
 });
 
 it('links from the library to both legal pages and back using keyboard-accessible links', async () => {

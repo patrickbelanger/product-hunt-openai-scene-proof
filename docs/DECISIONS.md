@@ -1,5 +1,17 @@
 # Decisions
 
+## September 17 — authorized Privacy/Terms final cleanup
+
+Patrick replaces public TODO/draft presentation with finished copy and explicitly
+prefers production validation over incomplete identity/contact disclosures. Require
+`VITE_LEGAL_OPERATOR` and valid `VITE_PRIVACY_CONTACT_EMAIL`; optional contact role
+defaults to "Service operator", other absent optional details are omitted. Never
+default to the intended mailbox while it is being configured. Vite builds and
+production legal rendering share validation; test builds use explicit synthetic
+identity/email. Internal operational questions remain in PRIVACY-DISCLOSURE-REVIEW.
+Retention wording is verified against existing deletion/reset code. No backend,
+provider, Continuity Findings, infrastructure or September 18 scope change; no ADR.
+
 ## September 17 — authorized consolidation
 
 Patrick requests one final branch, `bugfix/continuity-analysis-cta`, containing both

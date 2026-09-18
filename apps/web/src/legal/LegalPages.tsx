@@ -21,7 +21,7 @@ function PrivacyContact() {
   return <dl className="legal-contact">
     <dt>Service operator</dt><dd>{settings.operator}</dd>
     <dt>Privacy contact</dt><dd>{settings.contact}</dd>
-    <dt>Private contact channel</dt><dd>{settings.email ? <a href={`mailto:${encodeURIComponent(settings.email)}`}>{settings.email}</a> : 'TODO: publish a monitored privacy email address. A working private contact channel has not yet been supplied.'}</dd>
+    <dt>Private contact channel</dt><dd>{settings.email ? <a href={`mailto:${encodeURIComponent(settings.email)}`}>{settings.email}</a> : 'Privacy contact is unavailable in this local development instance.'}</dd>
   </dl>;
 }
 
@@ -31,7 +31,6 @@ export function PrivacyPolicy() {
     <p>SceneProof is an early-stage film review tool. It helps creators inspect media, discover film context and review possible continuity issues. This notice describes the application’s data handling; it is not a certification or assurance of legal compliance.</p>
     <section aria-labelledby="privacy-contact"><h2 id="privacy-contact">Who operates the service</h2>
       <PrivacyContact />
-      <p>Any TODO below is an unresolved operator disclosure, not a promise about the service.</p>
     </section>
     <section aria-labelledby="privacy-information"><h2 id="privacy-information">Information received and created</h2>
       <p>Creating a project sends its name, optional description and continuity rules to SceneProof. Uploads send the selected video or image and its filename. References include images, titles and creator guidance. Creator actions can include explanations, narrative scope, edits and decisions about findings or proposed anchors. Content may contain people’s images, voices or other personal information.</p>
@@ -41,29 +40,29 @@ export function PrivacyPolicy() {
     <section aria-labelledby="privacy-purpose"><h2 id="privacy-purpose">Why content is processed</h2>
       <p>Processing provides project storage, media validation and frame extraction, Film Intelligence, continuity analysis, evidence inspection, creator-guided re-evaluation and saved history. Request identifiers prevent duplicate work. Operational diagnostics and resource/admission controls help operate the service and limit abuse.</p>
       <p>Uploading or editing references alone does not start an AI request. AI processing starts when an analysis or re-evaluation is explicitly requested. Browsing these legal pages does not start analysis.</p>
-      <p>{settings.legalBasis}</p>
+      {settings.legalBasis && <p>{settings.legalBasis}</p>}
     </section>
     <section aria-labelledby="privacy-providers"><h2 id="privacy-providers">AI providers and processing locations</h2>
       <p>The implemented AI provider is OpenAI. For Film Intelligence, SceneProof extracts audio from the source film and sends it for transcription when audio is present. Sampled images, timed transcript text and source/segment identifiers are then sent for film understanding. Continuity analysis sends selected frames, reference images and guidance, project text/rules and available film memory. Targeted re-evaluation also sends the original finding, relevant evidence and your explanation/scope.</p>
-      <p>These requests use OpenAI’s external API. Processing may take place outside Québec or Canada; this application does not establish Québec/Canada-only processing. Exact account settings and locations remain to be confirmed by the operator.</p>
+      <p>These requests use OpenAI’s external API. Processing may take place outside Québec or Canada; SceneProof does not guarantee processing in a particular geographic location.</p>
       <p>The image/text analysis requests ask OpenAI not to store the response as application state. That setting is not a guarantee of zero provider retention, and deleting a SceneProof project does not send a deletion request to OpenAI. See <a href="https://developers.openai.com/api/docs/guides/your-data">OpenAI’s API data controls</a> for provider policies and available account controls.</p>
-      <p>{settings.transfers}</p>
-      <p>{settings.hosting}</p>
+      {settings.transfers && <p>{settings.transfers}</p>}
+      <p>SceneProof is hosted on the operator’s virtual private server and uses operator-managed hosting and network infrastructure. This infrastructure receives requests needed to serve the application.</p>
+      {settings.hosting && <p>{settings.hosting}</p>}
     </section>
     <section aria-labelledby="privacy-retention"><h2 id="privacy-retention">Retention, deletion and demo reset</h2>
-      <p>There is no automatic expiry schedule for project content in the application. Saved content and history remain until deleted through supported operations or handled by the operator.</p>
       <ul>
-        <li><strong>Ordinary projects:</strong> Delete project requires the exact project name and is refused while protected work is active. It removes the project’s database records, then attempts to remove its server media. If media cleanup fails, the UI reports pending cleanup and deletion can be retried. A minimal deletion record with the project identifier and cleanup timestamps remains.</li>
-        <li><strong>Demo copies:</strong> Reset creates a replacement copy. It retires the old project from the library but retains the old content, media and analysis history, which remain accessible through their identifiers. Reset is not deletion. The application does not offer ordinary deletion for demo copies or automatic cleanup of retired copies; contact the operator for a privacy/deletion request.</li>
+        <li><strong>Ordinary projects:</strong> Ordinary projects are retained until you delete them. Delete project requires exact-name confirmation and is refused while protected analysis or other work is active. SceneProof removes the project and its associated database records, then removes its stored media. If media cleanup cannot complete immediately, the database project is already deleted and SceneProof reports that cleanup is pending so it can be retried safely. A minimal deletion record containing the project identifier and deletion-request/media-cleanup timestamps is retained for operational integrity.</li>
+        <li><strong>Demo copies:</strong> Reset Demo is not deletion. It creates a replacement working copy and retires the old copy from the normal library. The old database content, media and analysis history are currently retained and remain accessible through their identifiers. Ordinary project deletion is disabled for demo copies, and there is no automatic cleanup of retired demo copies. Use the privacy contact for a deletion request.</li>
         <li><strong>References and history:</strong> Archiving a reference does not erase its image or historical evidence. Editing a reference, resolving/dismissing a finding or re-evaluating it does not erase the original history.</li>
-        <li><strong>Operational records:</strong> Run identifiers and reservation timestamps for shared usage limits survive project deletion/reset. Reservations older than 24 hours are pruned during a later admitted run, not by a guaranteed expiry job. Cleanup failures or interruptions can leave residual files. Backup and log retention are not established by the application code.</li>
+        <li><strong>Operational records:</strong> Limited operational metadata used for abuse prevention, request integrity and service operation may be retained separately from project content. Cleanup failures or interruptions can leave residual files.</li>
       </ul>
-      <p>{settings.retention}</p>
+      {settings.retention && <p>{settings.retention}</p>}
     </section>
     <section aria-labelledby="privacy-browser"><h2 id="privacy-browser">Browser storage, cookies and requests</h2>
       <p>The application includes no analytics, advertising trackers or tracking scripts and does not set application cookies. Functional local storage remembers whether you completed or skipped the tour. The UI framework reads a color-scheme preference if present, while SceneProof fixes the display to dark mode. Session storage remembers demo request identity, unresolved Film Intelligence request identity/consent, and unresolved finding actions, including entered explanation and scope. These support recovery, not advertising.</p>
       <p>You can clear site storage using your browser settings. This can remove recovery information or tour preferences; it does not delete server projects or demo history. Session restoration behavior depends on your browser. The interface also holds temporary drafts and inspection selections in memory.</p>
-      <p>Network requests necessarily reach the serving infrastructure with connection/request information such as an IP address and browser headers. No intentional storage of visitor IP addresses or user-agent strings was found in the application’s database or custom logs. Application diagnostics include run/asset identifiers, error codes and sanitized exception information. Hosting, proxy and infrastructure logs may differ; their settings and retention need operator confirmation.</p>
+      <p>Network requests reach the serving infrastructure with connection and request information such as an IP address and browser headers. Application diagnostics include run and asset identifiers, error codes and sanitized exception information. Hosting and network infrastructure may also process request information for service operation and security. Contact the operator with questions about this processing.</p>
     </section>
     <section aria-labelledby="privacy-security"><h2 id="privacy-security">Access and security limits</h2>
       <p>SceneProof validates uploads, bounds resource use, keeps provider credentials server-side and applies request and storage safeguards. These measures do not guarantee security. The application has no private user accounts or per-user project access isolation: clients able to reach the API can access or modify projects, and the library is shared. Do not treat a project URL or demo identifier as a privacy control. Do not submit confidential or unauthorized personal content.</p>
@@ -96,8 +95,8 @@ export function TermsOfUse() {
       <p>To the extent permitted by applicable law, the service is provided “as is” and “as available”, without warranties. To that same extent, the operator disclaims liability for indirect or consequential loss arising from use of, or inability to use, the service. Nothing in these terms excludes liability or rights that cannot lawfully be excluded, including mandatory consumer protections. These terms do not promise that any particular limitation is enforceable in your situation.</p>
     </section>
     <section><h2>Source code and licensing</h2>
-      <p>The source is available in the <a href={repositoryUrl}>SceneProof GitHub repository</a>. Source-code permissions are governed by its <a href={`${repositoryUrl}/blob/main/LICENSE`}>LICENSE file</a>, separately from these service terms. The inspected file contains Apache License language but starts part-way through the text; the operator must clarify the complete license before relying on an open-source licensing claim. These terms do not supply missing license terms or grant rights to uploaded media.</p>
+      <p>The source is available in the <a href={repositoryUrl}>SceneProof GitHub repository</a>. Consult its <a href={`${repositoryUrl}/blob/main/LICENSE`}>LICENSE file</a> for source-code terms, separately from these service terms. These terms do not grant rights to source code or other visitors’ uploaded media.</p>
     </section>
-    <p>Updates will be shown with a revised last-updated date. This disclosure draft makes no claim of legal approval or statutory compliance.</p>
+    <p>Updates will be shown with a revised last-updated date.</p>
   </LegalPage>;
 }

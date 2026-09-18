@@ -1,5 +1,50 @@
 # SceneProof Status
 
+## Final Privacy/Terms cleanup — September 17, 2026
+
+Branch remains `bugfix/continuity-analysis-cta`, from clean consolidated `dacf0dd`.
+Public legal pages no longer contain TODO/draft/operator-review presentation.
+Re-inspected ProjectDeletionService, V10, DemoService and MediaStorage: public copy
+distinguishes ordinary DB-first deletion and retryable media cleanup/tombstones
+from demo replacement with old content/media/history retained and no automatic GC.
+Operational metadata wording is concise. Hosting facts stay limited to the VPS and
+operator-managed infrastructure; unknown facts remain internal. OpenAI disclosures,
+upload-only behavior and external-mail boundaries are preserved.
+
+Required production inputs: `VITE_LEGAL_OPERATOR` (actual authorized public identity)
+and `VITE_PRIVACY_CONTACT_EMAIL` (confirmed monitored mailbox). Patrick is configuring
+privacy@lxp-technologies.com; it is not a runtime default or verified operational here.
+Vite builds fail for missing/blank identity, malformed/missing email or TODO fields;
+production rendering shares validation. Optional absent facts are omitted. CI/local
+verification uses explicit synthetic identity/email; its bundle is not for deployment.
+Production must be rebuilt with confirmed real values. No SMTP behavior is added.
+
+Verified: focused legal/findings 37/37 (14 legal, 23 findings); final full frontend
+123/123 across 13 files after the type correction; typecheck and production build
+pass (existing 559.67 kB entry warning). Four production-bundle legal-route checks
+pass at desktop/mobile sizes with no API/external requests, and the focused
+Continuity Findings Chromium regression passes (CTA tab/POST, saved reload/evidence,
+desktop/tablet/mobile). No backend unit rerun: backend is unchanged.
+Initial TypeScript environment-type mismatch was corrected before final validation.
+A subsequent build with blank identity/email correctly fails and names both required
+variables. Verification builds use synthetic settings, not production identity.
+
+Git diff confirms no changes to projects/Continuity Findings, backend, migrations or
+API client. No live providers, new branch/worktree, push, main merge or deployment.
+The privacy worktree/branch remain untouched. Internal operational and license/access
+review notes remain in PRIVACY-DISCLOSURE-REVIEW; external Caddy is not modified.
+Ready for the authorized local cleanup commit; exact commit and clean status are
+reported in the Git handoff. Production identity/mailbox confirmation remains pending.
+
+Exact cleanup files: `.github/workflows/ci.yml`, `README.md`,
+`apps/web/src/legal/LegalPages.tsx`, `apps/web/src/legal/disclosures.ts`,
+`apps/web/src/legal/legal.test.tsx`, `apps/web/vite.config.ts`,
+`docs/ARCHITECTURE.md`, `docs/DECISIONS.md`, `docs/DEPLOYMENT.md`,
+`docs/IMPLEMENTATION-PLAN.md`, `docs/PRIVACY-DISCLOSURE-REVIEW.md`,
+`docs/PRODUCT.md`, `docs/STATUS.md`, `docs/UX.md`, `tests/e2e/legal.spec.ts`.
+
+Earlier consolidation/disclosure handoffs below are historical.
+
 ## Consolidated launch recovery — September 17, 2026
 
 Final target: `bugfix/continuity-analysis-cta`. Starting main worktree was clean at

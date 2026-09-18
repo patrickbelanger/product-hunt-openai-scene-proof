@@ -1,5 +1,33 @@
 # Privacy and terms disclosure review
 
+## Final public-copy cleanup — September 17
+
+From clean `dacf0dd` on the same CTA branch. Re-inspected ProjectDeletionService,
+V10, DemoService and MediaStorage: ordinary project deletion commits the UUID-only
+tombstone and project/cascaded-record deletion before media cleanup; retry can finish
+cleanup when the project is already absent. V10 records `requested_at` (deletion
+request time, not a separate completion timestamp) and nullable `media_cleaned_at`.
+The UUID filesystem deletion marker also remains. Demo reset retires and replaces,
+never deletes old content; ordinary deletion rejects demos and no retired-demo GC
+exists. Public copy now states these distinctions concisely, without pruning details.
+
+Public TODOs, draft labels and internal infrastructure/license-review notes are
+removed. Unknown backups, log retention, geography and provider account facts remain
+internal questions, not public promises. Known hosting is Patrick's VPS with external
+operator-managed infrastructure/Caddy. OpenAI transfer/retention distinctions remain.
+
+Builds now require `VITE_LEGAL_OPERATOR` and valid `VITE_PRIVACY_CONTACT_EMAIL`,
+and reject TODO values in all disclosure fields. Runtime production checks share
+the same validator. No default identity/mailbox is invented. Patrick's intended
+`privacy@lxp-technologies.com` must be confirmed operational and supplied through
+configuration; syntax validation cannot verify delivery. External email infrastructure
+is not an app SMTP service. Optional unset details are omitted; local development
+fallbacks cannot pass production validation. CI uses labelled synthetic test values.
+
+This supersedes the historical draft/configuration statements below. All remaining
+operational questions and the existing shared-access/license review gates remain
+internal; no provider/backend/Continuity Findings behavior is changed.
+
 Date: 2026-09-17. Draft for operator review, not legal advice or a representation
 of GDPR/Loi 25 compliance. Base: fetched `origin/main` at `826bf99` (merged PR10).
 Branch: `fix/privacy-terms-disclosures`, isolated in `.local/privacy-disclosures`.
@@ -62,20 +90,21 @@ were not inspectable from main. No non-essential tracking was found in this repo
 `apps/web/.env.example` lists blank **public build-time** Vite settings. Supply
 confirmed values in the frontend build environment or ignored
 `apps/web/.env.production.local`, then rebuild. Do not place secrets here. The
-UI renders these values as plain text and keeps explicit TODOs for missing values.
+UI renders supplied values as plain text. Production requires identity/email;
+optional missing values render no paragraph. Unresolved operational facts stay here.
 
-| Setting | Required operator input |
+| Setting | Operator input (only identity/email required by the build) |
 | --- | --- |
 | `VITE_LEGAL_OPERATOR` | Actual service operator identity/contact details; do not infer a corporation from the repository owner. |
-| `VITE_PRIVACY_CONTACT` | Responsible person's name or role, title and confirmed contact details. |
-| `VITE_PRIVACY_CONTACT_EMAIL` | Confirmed operational monitored private mailbox only. Patrick supplied an unverified candidate privately; it is intentionally not committed or displayed. No SMTP infrastructure exists in the app. |
+| `VITE_PRIVACY_CONTACT` | Optional responsible person's name or role/title; otherwise "Service operator". |
+| `VITE_PRIVACY_CONTACT_EMAIL` | Required confirmed operational monitored private mailbox. Intended: privacy@lxp-technologies.com, being configured, not yet verified here. No runtime default or app SMTP infrastructure. |
 | `VITE_PRIVACY_HOSTING` | Actual host/storage/database/infrastructure recipients, locations, request logging and relevant metadata. |
 | `VITE_PRIVACY_RETENTION` | Actual log/backup/demo/residual-file retention and deletion arrangements; no invented number of days. |
 | `VITE_PRIVACY_TRANSFERS` | Actual OpenAI account/location/retention settings and applicable transfer arrangements; no inferred residency or zero-retention assurance. |
 | `VITE_PRIVACY_LEGAL_BASIS` | Operator-reviewed applicable grounds per purpose, applicable representative details if needed. Paid-action consent is not a blanket legal conclusion. |
 
-Missing contact details and other TODOs are visible in the draft. Do not describe
-this draft as completed launch legal coverage while those facts remain unresolved.
+Missing required contact/identity details block production builds. Optional unknowns
+remain internal; removal of public TODOs is not a legal compliance certification.
 Rights requests use the configured private channel, not public GitHub issues.
 
 ## Material discrepancies / DECISION REQUIRED
@@ -99,7 +128,7 @@ Also requiring operator resolution:
   backup/log retention or provider account/transfer settings can be inferred from main.
 - `LICENSE` begins mid-sentence in the contribution/patent section, followed by
   sections 4–9 and an Apache boilerplate appendix with placeholder owner/year.
-  It appears truncated. Terms link the actual file and identify the limitation;
+  It appears truncated. Terms link the actual file without claiming a specific license;
   this task does not choose or replace a license. Clarify before asserting complete
   open-source license terms to visitors.
 - Reset retention is disclosed accurately. Retired-demo cleanup is a follow-up,

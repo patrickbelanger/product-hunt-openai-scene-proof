@@ -41,6 +41,10 @@ jobs:
       - run: bash gradlew build
       - run: npm test
       - run: npm run build
+        name: Build with legal test fixtures (not deployment configuration)
+        env:
+          VITE_LEGAL_OPERATOR: Automated test fixture
+          VITE_PRIVACY_CONTACT_EMAIL: privacy@example.test
       - run: npx playwright install --with-deps chromium
       - name: Start isolated browser test API
         run: |

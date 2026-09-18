@@ -37,10 +37,23 @@ on the actual host, plus that `/api/*` still returns API responses.
 Set only confirmed public values from `apps/web/.env.example` in the **frontend
 build environment**, then rebuild. A root Compose `.env` is not automatically
 the web workspace's Vite environment. Never put API keys or private credentials in
-`VITE_*`. Missing fields display explicit TODOs.
+`VITE_*`. Required for every Vite build, including alternate modes:
 
-The proposed privacy mailbox is not confirmed operational and is intentionally
-absent from source/defaults. Confirm delivery, monitoring and responsibility before
+- `VITE_LEGAL_OPERATOR`: the actual public operator identity Patrick authorizes.
+- `VITE_PRIVACY_CONTACT_EMAIL`: a valid, confirmed operational privacy mailbox.
+
+Missing/blank identity, missing/malformed email, or a TODO in any disclosure setting
+fails the build with variable names only. Production legal rendering also validates
+these settings. `VITE_PRIVACY_CONTACT` is optional and defaults to "Service operator";
+other optional fields appear only when supplied. No public TODO fallback exists.
+Validation checks syntax/presence, not mailbox delivery or the truth of identity.
+
+CI and local production-bundle tests explicitly use `Automated test fixture` and
+`privacy@example.test`. Those verification artifacts are not deployment builds.
+Build again with confirmed production settings before deploying.
+
+Patrick is configuring `privacy@lxp-technologies.com`. It is not a runtime default
+or a confirmed working mailbox. Confirm delivery, monitoring and responsibility before
 setting `VITE_PRIVACY_CONTACT_EMAIL`. SceneProof does not operate an SMTP server;
 mail infrastructure is external and was not inspected. A `mailto:` link only opens
 the visitor's mail client; these pages do not collect/send a contact form.

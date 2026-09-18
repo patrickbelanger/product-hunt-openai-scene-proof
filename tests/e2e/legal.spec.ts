@@ -18,6 +18,7 @@ for (const width of [1280, 390]) {
       expect(response?.status()).toBe(200);
       await expect(page.getByRole('heading', { name: title, level: 1 })).toBeVisible();
       await expect(page).toHaveTitle(`${title} — SceneProof`);
+      await expect(page.locator('main')).not.toContainText(/\bTODO\b|disclosure draft|remain to be confirmed|need operator confirmation/i);
       await page.reload();
       await expect(page.getByRole('heading', { name: title, level: 1 })).toBeVisible();
       const footer = page.getByRole('navigation', { name: 'Legal and source links' });

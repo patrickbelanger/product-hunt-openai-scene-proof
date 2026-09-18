@@ -1,8 +1,10 @@
 # SceneProof
 
-Privacy/terms launch draft: public application routes `/privacy` and `/terms`, with
+Privacy/terms: public application routes `/privacy` and `/terms`, with
 footer links and upload disclosures. Configure confirmed public contact/operational
-details before publishing a completed notice; unset values remain explicit TODOs.
+details before publishing. Builds require `VITE_LEGAL_OPERATOR` and a valid
+`VITE_PRIVACY_CONTACT_EMAIL`; missing values or TODO placeholders fail the build.
+Optional unconfigured operational details are omitted, never presented as TODOs.
 The production edge is operator-managed outside this repo and was not inspected.
 See [deployment notes](docs/DEPLOYMENT.md) and the [verified disclosure review](docs/PRIVACY-DISCLOSURE-REVIEW.md).
 The historical PR10/local-only scope statements below are retained as baseline;
