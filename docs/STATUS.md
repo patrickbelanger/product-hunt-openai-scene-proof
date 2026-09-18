@@ -1,5 +1,41 @@
 # SceneProof Status
 
+## Privacy / terms launch disclosure draft — September 17, 2026
+
+Branch: `fix/privacy-terms-disclosures`; worktree: `.local/privacy-disclosures`.
+Fetched main remains `826bf99` (PR10 merge). The previous uncommitted continuity
+CTA fix stays intact on its original branch/worktree; this patch is based on main.
+
+Implemented: public `/privacy` and `/terms` React routes, permanent Privacy / Terms /
+GitHub footer, one notice per source-film/shot/new-reference upload form, and public
+build-time disclosure settings with explicit TODOs. No backend/provider/API contract,
+retention, security, consent or tracking changes. No live provider calls.
+
+Patrick confirms public deployment via external `~/caddy-edge`: API proxy separate
+from web-container SPA fallback. Production edge/config was not inspected here; no
+Caddy/deployment config was added or changed. Local production-bundle route/reload
+checks passed at desktop/mobile sizes. Email infrastructure is external; the supplied
+candidate privacy mailbox is unconfirmed and intentionally not committed or published.
+
+Verified so far: seven focused legal/upload tests; 109 frontend tests / 13 files;
+TypeScript and Vite build pass (existing >500 kB chunk warning; 557.73 kB entry).
+Four production-bundle Chromium direct-route/reload checks pass with no API/external
+requests, cookies or storage writes. Initial new-test typing/read-timing mistakes and
+the upload notice's unnecessary router dependency were corrected; full suite rerun
+passes without weakening existing tests. Full deterministic browser regressions are
+in progress. Backend source unchanged; backend unit suite is not rerun for this patch.
+
+Launch disclosure blockers/TODOs: confirmed operator/privacy role and working contact,
+host/provider geography/settings, retention/logs/backups and applicable legal grounds/
+transfer arrangements. Main has no per-user project access isolation; public exposure
+requires operator review. LICENSE appears truncated; do not invent licensing terms.
+Demo reset retains old copies/media/history; cleanup is a follow-up, not implemented.
+This is a practical disclosure draft, not legal advice or a compliance representation.
+
+Evidence/configuration: [disclosure review](PRIVACY-DISCLOSURE-REVIEW.md) and
+[deployment notes](DEPLOYMENT.md). Complete verification, then stop for review.
+No commit, push, merge or deployment. Earlier handoffs below are historical.
+
 ## PR10 security handoff — September 15, 2026
 
 Branch: `feat/p1-security-hardening`; base/unchanged HEAD at recovery:

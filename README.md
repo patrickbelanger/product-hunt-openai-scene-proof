@@ -1,5 +1,13 @@
 # SceneProof
 
+Privacy/terms launch draft: public application routes `/privacy` and `/terms`, with
+footer links and upload disclosures. Configure confirmed public contact/operational
+details before publishing a completed notice; unset values remain explicit TODOs.
+The production edge is operator-managed outside this repo and was not inspected.
+See [deployment notes](docs/DEPLOYMENT.md) and the [verified disclosure review](docs/PRIVACY-DISCLOSURE-REVIEW.md).
+The historical PR10/local-only scope statements below are retained as baseline;
+Patrick now reports public deployment. No new access isolation is added by this patch.
+
 **Keep every shot in character.** Your AI continuity supervisor for generative film.
 
 Current slice: PR10 Security Hardening, based on merged PR9; product behavior frozen.

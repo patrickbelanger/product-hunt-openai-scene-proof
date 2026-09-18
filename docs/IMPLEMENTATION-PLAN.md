@@ -1,5 +1,16 @@
 # Implementation Plan
 
+## September 17 — privacy/terms release blocker
+
+- [x] Inspect fetched main (`826bf99`) and preserve previous uncommitted work in its original worktree.
+- [x] Verify storage, provider transfers, browser storage, deletion/reset/history and logging behavior.
+- [x] Add static legal routes, permanent footer and contextual upload notices with explicit configurable TODOs.
+- [x] Document externally managed production edge, unconfirmed privacy contact and retained demo history.
+- [ ] Complete frontend, production-bundle direct-route and relevant browser regression checks.
+
+This is disclosure-only; no provider/security/lifecycle redesign or live AI call.
+PR10 below is merged and historical.
+
 ## PR10 — Security Hardening (current)
 
 - [x] Recover merged PR9 at `bcc7c7c`; preserve interrupted PR10 work in place.

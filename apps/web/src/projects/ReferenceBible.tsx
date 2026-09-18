@@ -3,6 +3,7 @@ import { Alert, Button, FileInput, Group, Modal, Stack, Text, Textarea, TextInpu
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { archiveReference, listReferences, updateProjectRules, updateReference, uploadReference, type Project, type Reference } from '@sceneproof/api-client';
 import { ReferenceImage } from './ReferenceImage';
+import { UploadDisclosure } from '../legal/UploadDisclosure';
 
 function RulesEditor({ project }: { project: Project }) {
   const queryClient = useQueryClient();
@@ -49,6 +50,7 @@ function ReferenceEditor({ projectId, reference, close }: { projectId: string; r
   }
   return <Modal opened onClose={close} title={reference ? 'Inspect visual reference' : 'Add visual reference'} centered returnFocus={false} closeOnClickOutside={!pending} closeOnEscape={!pending} withCloseButton={!pending}>
     <form onSubmit={event => { event.preventDefault(); submit(); }}><Stack>
+      {!reference && <UploadDisclosure />}
       {reference ? <><ReferenceImage reference={reference} /><Text size="xs" c="dimmed">Image preserved. To replace it, archive this reference and add a new image. Earlier analyses keep their original evidence.</Text></>
         : <FileInput label="Reference image" description="JPEG / PNG · up to 10 MiB" accept="image/jpeg,image/png" value={file} onChange={setFile} disabled={pending} />}
       {reference?.filmProvenance && <Text size="sm">Promoted from a creator-confirmed film anchor. <a href={`?filmRun=${reference.filmProvenance.runId}`}>Inspect the original discovery and evidence</a>. Later reference edits do not rewrite that decision.</Text>}

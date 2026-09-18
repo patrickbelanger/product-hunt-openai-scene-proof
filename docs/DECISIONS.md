@@ -1,5 +1,21 @@
 # Decisions
 
+## September 17 — disclosure-only launch patch
+
+Patrick requests Privacy/Terms routes, persistent footer links and contextual upload
+disclosures without behavior changes, trackers or a compliance claim. Use explicit
+configurable TODOs for unverifiable facts. The proposed mailbox is not confirmed:
+do not commit or publish it until operational. No app SMTP service is implied.
+Patrick confirms the Caddy edge is operator-managed at `~/caddy-edge` outside this
+repo, forwarding API requests separately and other routes to a web container with
+SPA fallback. No Caddy/deployment config change is authorized or made here.
+
+DECISION REQUIRED: public shared-project exposure, missing operator disclosures and
+the apparently truncated LICENSE remain operator launch gates; full current choice,
+alternatives, recommendation and September 18 impact are recorded in
+[disclosure review](PRIVACY-DISCLOSURE-REVIEW.md). The patch proceeds independently;
+no architecture/security/retention changes or legal compliance conclusion.
+
 ## PR10 accepted safety controls — September 15
 
 Patrick approves durable deployment-wide ceilings of ten new logical paid runs per

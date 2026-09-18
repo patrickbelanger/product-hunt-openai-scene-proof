@@ -1,5 +1,15 @@
 # UX
 
+## Public disclosures
+
+The shared footer provides Privacy, Terms and GitHub links without changing the
+workspace layout. `/privacy` and `/terms` use the existing narrow page style,
+semantic headings/main, a last-updated date and responsive wrapping. Each upload
+form has one small rights/AI-processing notice; its privacy link opens a new tab
+to preserve the current upload draft. No cookie banner: inspected browser storage
+is functional, and no application tracking was found. Operator TODOs remain visible
+instead of invented contact details or compliance claims. See PRIVACY-DISCLOSURE-REVIEW.
+
 ## PR9 UX polish and project lifecycle
 
 ### Final clarity addendum — September 15
