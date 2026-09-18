@@ -1,5 +1,50 @@
 # SceneProof Status
 
+## Consolidated launch recovery — September 17, 2026
+
+Final target: `bugfix/continuity-analysis-cta`. Starting main worktree was clean at
+CTA commit `03b90b6`; privacy was uncommitted on `fix/privacy-terms-disclosures`
+at `826bf99`. All privacy work was preserved unchanged in `59be1d9`, then integrated
+into the existing target branch. Four documentation conflicts retain both subjects.
+Exact initial status, preservation, conflicts and final file inventory:
+[LAUNCH-RECOVERY](LAUNCH-RECOVERY.md). Prior handoffs below are historical.
+
+Implemented together: Continuity Findings CTA via existing createAnalysis POST,
+pending/duplicate protection, manual same-requestId retry and GET-only reload;
+explicit Analysis complete / No continuity issues were found; new-project guidance;
+Privacy Policy, Terms of Use, global Privacy/Terms/GitHub footer and all three upload
+disclosures. Legal runtime files match the original privacy checkpoint unchanged.
+Without a linked analysis, the existing API cannot identify old zero-finding runs;
+the UI explains that limitation instead of inventing a never-run state.
+
+Verified: 116 frontend tests / 13 files, including 23 findings and seven legal/upload
+tests; typecheck, production build and OpenAPI drift pass. Production bundle direct
+/privacy and /terms navigation/reload passes four desktop/mobile Chromium checks,
+with no API/external requests, cookies or storage writes. Existing >500 kB warning
+remains (559.87 kB entry). Backend/API/provider source is unchanged; no backend unit
+rerun was needed. Final isolated Chromium regression run passes 26/26 (3.3 minutes):
+continuity POST/tab placement/GET reload, Film Intelligence, legal routes, all upload
+notices, evidence/steering, demo lifecycle, security and desktop/tablet/mobile flows.
+Mobile findings capture was inspected with the CTA and footer visible and no clipping.
+No live OpenAI/Astra/provider calls.
+
+Initial unit run: 115/116, one stale old-copy assertion corrected before the passing
+full rerun. Java/Chromium sandbox access failed and was rerun with operator access.
+First executable full browser run: 25/26, one trace-cleanup ENOENT from overlapping
+Playwright output directories; functional assertions passed. A subsequent attempt
+was canceled when earlier sandbox-run cleanup stopped its reused Vite server.
+The passing final rerun uses its own server and output directory; no assertions or timeouts
+were weakened. These interrupted/failed attempts are not counted as passes.
+
+Production gates remain: confirmed operator/privacy contact and other disclosure
+settings, public shared-project exposure review, truncated LICENSE clarification,
+and actual-host SPA/API routing checks. Caddy stays external; demo reset retains
+old copies/media/history. See PRIVACY-DISCLOSURE-REVIEW and DEPLOYMENT.
+No new branch/worktree, deletion, main merge, push or deployment is authorized.
+The privacy branch/worktree remain intact. Verification is complete; the local merge
+commit contains both original parents plus the verified UX/docs reconciliation.
+The exact final merge hash and post-commit clean status are reported in the Git handoff.
+
 ## Continuity Findings release-blocker fix — September 16, 2026
 
 Branch: `bugfix/continuity-analysis-cta`, from verified merged PR10 main `826bf99`.
@@ -33,6 +78,42 @@ Findings captures were inspected; existing browser checks cover tablet/narrow ov
 
 Verification is complete; stop for review. No commit, push or merge requested.
 Earlier PR10/PR9 handoffs below are historical; PR10 is merged.
+
+## Privacy / terms launch disclosure draft — September 17, 2026
+
+Branch: `fix/privacy-terms-disclosures`; worktree: `.local/privacy-disclosures`.
+Fetched main remains `826bf99` (PR10 merge). The previous uncommitted continuity
+CTA fix stays intact on its original branch/worktree; this patch is based on main.
+
+Implemented: public `/privacy` and `/terms` React routes, permanent Privacy / Terms /
+GitHub footer, one notice per source-film/shot/new-reference upload form, and public
+build-time disclosure settings with explicit TODOs. No backend/provider/API contract,
+retention, security, consent or tracking changes. No live provider calls.
+
+Patrick confirms public deployment via external `~/caddy-edge`: API proxy separate
+from web-container SPA fallback. Production edge/config was not inspected here; no
+Caddy/deployment config was added or changed. Local production-bundle route/reload
+checks passed at desktop/mobile sizes. Email infrastructure is external; the supplied
+candidate privacy mailbox is unconfirmed and intentionally not committed or published.
+
+Verified so far: seven focused legal/upload tests; 109 frontend tests / 13 files;
+TypeScript and Vite build pass (existing >500 kB chunk warning; 557.73 kB entry).
+Four production-bundle Chromium direct-route/reload checks pass with no API/external
+requests, cookies or storage writes. Initial new-test typing/read-timing mistakes and
+the upload notice's unnecessary router dependency were corrected; full suite rerun
+passes without weakening existing tests. Full deterministic browser regressions are
+in progress. Backend source unchanged; backend unit suite is not rerun for this patch.
+
+Launch disclosure blockers/TODOs: confirmed operator/privacy role and working contact,
+host/provider geography/settings, retention/logs/backups and applicable legal grounds/
+transfer arrangements. Main has no per-user project access isolation; public exposure
+requires operator review. LICENSE appears truncated; do not invent licensing terms.
+Demo reset retains old copies/media/history; cleanup is a follow-up, not implemented.
+This is a practical disclosure draft, not legal advice or a compliance representation.
+
+Evidence/configuration: [disclosure review](PRIVACY-DISCLOSURE-REVIEW.md) and
+[deployment notes](DEPLOYMENT.md). Complete verification, then stop for review.
+No commit, push, merge or deployment. Earlier handoffs below are historical.
 
 ## PR10 security handoff — September 15, 2026
 

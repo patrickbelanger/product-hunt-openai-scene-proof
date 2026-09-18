@@ -1,5 +1,13 @@
 # SceneProof
 
+Privacy/terms launch draft: public application routes `/privacy` and `/terms`, with
+footer links and upload disclosures. Configure confirmed public contact/operational
+details before publishing a completed notice; unset values remain explicit TODOs.
+The production edge is operator-managed outside this repo and was not inspected.
+See [deployment notes](docs/DEPLOYMENT.md) and the [verified disclosure review](docs/PRIVACY-DISCLOSURE-REVIEW.md).
+The historical PR10/local-only scope statements below are retained as baseline;
+Patrick now reports public deployment. No new access isolation is added by this patch.
+
 **Keep every shot in character.** Your AI continuity supervisor for generative film.
 
 Current slice: Continuity Findings start-action fix, based on merged PR10.
@@ -339,7 +347,8 @@ Eight active images and 100 successfully persisted references per project lifeti
 archives count toward the latter. All active references are selected in creation/UUID
 order at context assembly. Input: 10 MiB, 16 MP, 8192 per side; normalized PNG at
 most 1600 per side. References and frames share 8 MiB/image, 16 MiB aggregate and
-24 MiB serialized request limits. Sequence analysis remains explicitly API-started.
+24 MiB serialized request limits. Start sequence analysis explicitly with
+Run continuity analysis in Continuity Findings (or the existing API).
 
 Endpoints under `/api/v1/projects/{projectId}`:
 - PUT `/rules` with `{ "rules": "..." }` (OpenAPI names the path variable `id`).

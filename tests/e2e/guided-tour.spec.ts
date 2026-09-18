@@ -44,7 +44,7 @@ for (const width of [1280, 820, 390]) {
     await expect(page.getByText('Take the quick tour')).toBeVisible();
     await expect(page.getByRole('dialog')).toHaveCount(0);
     await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
-    await expect(page.getByRole('heading', { name: 'No saved findings here.' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'No continuity analysis has been run yet.' })).toBeVisible();
     await page.getByLabel('Continuity rules', { exact: true }).fill('Unsaved tour draft');
     await page.getByRole('tab', { name: 'Film Intelligence', exact: true }).click();
     const start = page.getByRole('button', { name: 'Start tour' });
@@ -97,7 +97,7 @@ for (const width of [1280, 820, 390]) {
     await expect(restart).toBeFocused();
     await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
     await page.getByRole('button', { name: 'Reload saved findings' }).click();
-    await expect(page.getByRole('heading', { name: 'No saved findings here.' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'No continuity analysis has been run yet.' })).toBeVisible();
     expect(await page.evaluate(key => localStorage.getItem(key), preferenceKey)).toBe('skipped');
     expect(unexpected).toEqual([]);
     const saved = await (await request.get(`/api/v1/projects/${project.id}`)).json();

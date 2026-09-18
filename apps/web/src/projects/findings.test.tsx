@@ -147,10 +147,32 @@ it('shows honest empty and successful zero-finding states', async () => {
   vi.mocked(listFindings).mockResolvedValue([]);
   const first = open();
   expect(await screen.findByText('No saved findings here.')).toBeVisible();
-  expect(screen.getByText(/An empty list does not confirm/)).toBeVisible();
+  expect(screen.getByText(/An empty list alone cannot tell/)).toBeVisible();
   first.unmount();
   open('?analysisId=run-1');
-  expect(await screen.findByText('No findings in this analysis.')).toBeVisible();
+  expect(await screen.findByText('No continuity issues were found.')).toBeVisible();
+  expect(screen.getByText('Analysis complete.')).toBeVisible();
+  expect(screen.queryByText('No saved findings here.')).not.toBeInTheDocument();
+});
+
+it('guides a new project into its first analysis and distinguishes a successful zero-finding POST', async () => {
+  vi.mocked(listShots).mockResolvedValue([]);
+  vi.mocked(listFindings).mockResolvedValue([]);
+  const first = open();
+  expect(await screen.findByText('No continuity analysis has been run yet.')).toBeVisible();
+  expect(screen.getByRole('button', { name: 'Run continuity analysis' })).toBeDisabled();
+  first.unmount();
+  vi.mocked(listShots).mockResolvedValue(shots);
+  const user = userEvent.setup();
+  open();
+  const button = screen.getByRole('button', { name: 'Run continuity analysis' });
+  await waitFor(() => expect(button).toBeEnabled());
+  await user.click(button);
+  expect(await screen.findByText('No continuity issues were found.')).toBeVisible();
+  expect(screen.getByText('Analysis complete.')).toBeVisible();
+  await user.click(screen.getByRole('button', { name: 'Reload saved findings' }));
+  expect(createAnalysis).toHaveBeenCalledTimes(1);
+  expect(screen.queryByText('No continuity analysis has been run yet.')).not.toBeInTheDocument();
 });
 
 it('shows a durable failed analysis rather than a successful empty review', async () => {
@@ -159,7 +181,7 @@ it('shows a durable failed analysis rather than a successful empty review', asyn
   open('?analysisId=run-1');
   expect(await screen.findByRole('alert')).toHaveTextContent('Analysis failed');
   expect(screen.getByRole('alert')).toHaveTextContent('The provider was unavailable.');
-  expect(screen.queryByText('No findings in this analysis.')).not.toBeInTheDocument();
+  expect(screen.queryByText('No continuity issues were found.')).not.toBeInTheDocument();
 });
 
 it('retries a failed findings read and reports a missing deep link', async () => {

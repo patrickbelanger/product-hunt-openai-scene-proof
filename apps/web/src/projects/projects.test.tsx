@@ -43,7 +43,7 @@ describe('project critical path', () => {
     expect(findings).toHaveFocus(); expect(findings).toHaveAttribute('aria-selected', 'true');
     expect(screen.getByText(/Inspect frame-level continuity issues/)).toBeVisible();
     expect(screen.getByText(/Import a shot when you want precise/)).toBeVisible();
-    expect(await screen.findByText(/Findings are saved frame-level continuity concerns/)).toBeVisible();
+    expect(await screen.findByText(/If you have not run continuity analysis yet/)).toBeVisible();
     const rules = screen.getByLabelText('Continuity rules', { exact: true });
     await user.clear(rules); await user.type(rules, 'Unsaved creator draft');
     const timeline = screen.getByRole('region', { name: 'Keyboard timeline inspection' });
@@ -78,7 +78,7 @@ describe('project critical path', () => {
     const user = userEvent.setup(); open(`/projects/${project.id}?analysisId=missing`);
     await user.click(await screen.findByRole('button', { name: 'All saved findings' }));
     expect(screen.getByRole('tab', { name: 'Continuity Findings' })).toHaveAttribute('aria-selected', 'true');
-    expect(await screen.findByText('No saved findings here.')).toBeVisible();
+    expect(await screen.findByText('No continuity analysis has been run yet.')).toBeVisible();
   });
 
   it('creates a project with rules and opens the saved workspace', async () => {
@@ -92,7 +92,7 @@ describe('project critical path', () => {
     expect(await screen.findByRole('heading', { name: project.name })).toBeInTheDocument();
     expect(createProject).toHaveBeenCalledWith(expect.objectContaining({ name: project.name, rules: project.rules }), expect.anything());
     expect(screen.getByText(project.rules)).toBeInTheDocument();
-    expect(await screen.findByText('No saved findings here.')).toBeInTheDocument();
+    expect(await screen.findByText('No continuity analysis has been run yet.')).toBeInTheDocument();
   });
 
   it('preserves entered details after save failure and allows retry', async () => {

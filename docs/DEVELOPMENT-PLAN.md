@@ -1,6 +1,14 @@
 # Development Plan
 
-## Current slice — September 15, post-PR10
+## Current slice — September 17, consolidated launch recovery
+
+Consolidate the preserved continuity CTA and privacy/terms disclosures into the
+existing `bugfix/continuity-analysis-cta`. Keep the privacy branch/worktree intact;
+create no branch/worktree, push nothing and do not merge main. Complete combined
+deterministic verification and local commits. Disclosure operator TODOs and public
+exposure review remain launch gates; September 18 scope/date are unchanged.
+
+## Previous slice — September 15, post-PR10
 
 PR10 is merged at `826bf99`. The authorized release-blocker correction is
 `bugfix/continuity-analysis-cta`: expose the existing continuity start operation,

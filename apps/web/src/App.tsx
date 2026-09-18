@@ -3,6 +3,8 @@ import { Link, Route, Routes } from 'react-router-dom';
 import { ProjectLibrary } from './projects/ProjectLibrary';
 import { NewProject } from './projects/NewProject';
 import { Workspace } from './projects/Workspace';
+import { PrivacyPolicy, TermsOfUse } from './legal/LegalPages';
+import { repositoryUrl } from './legal/disclosures';
 
 export function App() {
   return <>
@@ -19,9 +21,16 @@ export function App() {
     </header>
     <Routes>
       <Route path="/" element={<ProjectLibrary />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/terms" element={<TermsOfUse />} />
       <Route path="/projects/new" element={<NewProject />} />
       <Route path="/projects/:projectId" element={<Workspace />} />
       <Route path="*" element={<main id="main" className="page narrow"><h1>That page is out of frame.</h1><Button component={Link} to="/">Back to projects</Button></main>} />
     </Routes>
+    <footer className="site-footer"><nav aria-label="Legal and source links">
+      <Link to="/privacy">Privacy</Link>
+      <Link to="/terms">Terms</Link>
+      <a href={repositoryUrl}>GitHub</a>
+    </nav></footer>
   </>;
 }

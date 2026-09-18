@@ -1,5 +1,15 @@
 # UX
 
+## Public disclosures
+
+The shared footer provides Privacy, Terms and GitHub links without changing the
+workspace layout. `/privacy` and `/terms` use the existing narrow page style,
+semantic headings/main, a last-updated date and responsive wrapping. Each upload
+form has one small rights/AI-processing notice; its privacy link opens a new tab
+to preserve the current upload draft. No cookie banner: inspected browser storage
+is functional, and no application tracking was found. Operator TODOs remain visible
+instead of invented contact details or compliance claims. See PRIVACY-DISCLOSURE-REVIEW.
+
 ## PR9 UX polish and project lifecycle
 
 ### Final clarity addendum — September 15
@@ -51,7 +61,7 @@ Film Intelligence is the default primary workspace tab: understand visual/narrat
 context, then confirm what should stay consistent. Continuity Findings groups the
 Reference Bible, shot import, frame inspector/timeline and saved continuity review.
 Its purpose and empty state distinguish saved findings from discovery proposals;
-continuity analysis is currently requested through the API, not an invented UI action.
+Run continuity analysis starts the existing API operation from this tab.
 Import a shot is for precise frame-level inspection/focused visual comparison, not a
 prerequisite for Film Intelligence. Both tab panels stay mounted: polling, drafts,
 evidence selection and local marks survive tab changes. Arrow keys on the tab list
@@ -133,6 +143,12 @@ Analyzing continuity… and prevents duplicate clicks. Request errors display th
 message/status; explicit retry reuses the UUID, never automatically retries. A returned
 run selects analysisId and clears finding/page/frame selection before saved findings
 load. Reload saved findings is secondary and only reads persisted results.
+Successful linked runs announce Analysis complete; a successful empty result says
+No continuity issues were found. A new project without shots says no continuity
+analysis has been run yet and shows the CTA with the import prerequisite. For an
+unfiltered empty history with shots, the existing API cannot enumerate runs: explain
+how to start a first analysis or reopen a saved analysis link without inferring
+that an older zero-finding analysis never happened.
 Project names and rules wrap, including long unbroken content.
 
 Loading is announced through status roles; errors offer retry/navigation. Forms have

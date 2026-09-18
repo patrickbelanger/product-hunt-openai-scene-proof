@@ -10,6 +10,16 @@ button, a, input, textarea { -webkit-tap-highlight-color: transparent; }
 .header-caption, .eyebrow, .panel-label { letter-spacing: 1.8px; font-size: 10px; font-weight: 600; }
 .page { max-width: 1320px; margin: 0 auto; padding: 46px 48px; }
 .narrow { max-width: 720px; }
+.site-footer { padding: 22px; border-top: 1px solid var(--scene-border); color: #a9b4af; font-size: 13px; }
+.site-footer nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 24px; }
+.site-footer a { display: inline-flex; align-items: center; min-height: 44px; }
+.legal-page { line-height: 1.75; overflow-wrap: anywhere; }
+.legal-page h1 { line-height: 1.2; }
+.legal-page h2 { font-size: 21px; line-height: 1.4; margin-top: 32px; }
+.legal-page a, .upload-disclosure a { text-decoration: underline; text-underline-offset: 3px; }
+.legal-date { color: #a9b4af; font-size: 14px; }
+.legal-contact dt { font-weight: 600; margin-top: 12px; }
+.legal-contact dd { margin-left: 0; }
 .hero { display: grid; grid-template-columns: 1.3fr 1fr; gap: 80px; padding: 38px 0 76px; align-items: center; }
 .hero h1 { font-size: clamp(38px, 4.4vw, 66px); letter-spacing: -2.8px; line-height: 1.13; margin-top: 20px; }
 .hero h1 span { color: #93a29b; }

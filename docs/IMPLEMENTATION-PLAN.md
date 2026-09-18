@@ -1,5 +1,16 @@
 # Implementation Plan
 
+## September 17 — consolidate launch recovery
+
+- [x] Inspect/report both worktrees before mutation; preserve CTA `03b90b6` and privacy `59be1d9`.
+- [x] Integrate into the existing CTA branch; reconcile both subjects in all documentation conflicts.
+- [x] Verify CTA tab placement, existing POST/client and GET-only reload; clarify successful zero findings.
+- [x] Preserve legal routes/footer/upload notices unchanged; verify all frontend tests/build and direct legal routes.
+- [x] Complete final isolated Chromium regression run (26/26) and prepare verified local merge commit; preserve privacy worktree/branch.
+
+No main merge/push, new branch/worktree or live provider calls. STATUS and
+LAUNCH-RECOVERY carry current evidence; older milestone checklists are historical.
+
 ## Post-PR10 release blocker — Continuity Findings start action
 
 - [x] Inspect clean merged PR10 main (`826bf99`) and create `bugfix/continuity-analysis-cta`.
@@ -10,6 +21,17 @@
 - [x] Chromium: 21/22 in full run, both Film Intelligence tests pass after isolated rerun; initial selector/SQL failures remain recorded in STATUS. No assertions weakened or provider calls made.
 
 Historical milestone checklists follow; PR10 is merged.
+
+## September 17 — privacy/terms release blocker
+
+- [x] Inspect fetched main (`826bf99`) and preserve previous uncommitted work in its original worktree.
+- [x] Verify storage, provider transfers, browser storage, deletion/reset/history and logging behavior.
+- [x] Add static legal routes, permanent footer and contextual upload notices with explicit configurable TODOs.
+- [x] Document externally managed production edge, unconfirmed privacy contact and retained demo history.
+- [x] Complete combined frontend (116), production-bundle direct routes (4), Chromium regressions (26), typecheck/build and OpenAPI checks; see current STATUS.
+
+This is disclosure-only; no provider/security/lifecycle redesign or live AI call.
+PR10 below is merged and historical.
 
 ## PR10 — Security Hardening (current)
 

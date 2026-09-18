@@ -20,7 +20,10 @@ test('project → persisted findings → evidence comparison → real clipboard,
     shots.push(await imported.json());
   }
   await page.reload();
+  await expect(page.getByRole('tab', { name: 'Film Intelligence', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('button', { name: 'Run continuity analysis', exact: true })).toBeHidden();
   await page.getByRole('tab', { name: 'Continuity Findings', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Run continuity analysis', exact: true })).toBeVisible();
   const analysisResponse = page.waitForResponse(response => response.request().method() === 'POST' && response.url().endsWith(`/projects/${project.id}/analyses`));
   await page.getByRole('button', { name: 'Run continuity analysis', exact: true }).click();
   const analyzed = await analysisResponse;
@@ -29,6 +32,7 @@ test('project → persisted findings → evidence comparison → real clipboard,
   expect(run.status).toBe('SUCCEEDED');
   expect(run.usage).toBeNull();
   await expect(page).toHaveURL(new RegExp(`analysisId=${run.id}`));
+  await expect(page.getByText('Analysis complete.', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: /The square changes color/ })).toBeVisible();
   const results = await request.get(`/api/v1/projects/${project.id}/findings?analysisId=${run.id}`);
   const findings: Finding[] = await results.json();

@@ -117,5 +117,5 @@ test('reference editing failures remain isolated and modal restores keyboard foc
   await page.keyboard.press('Escape');
   await expect(dialog).not.toBeVisible();
   await expect(add).toBeFocused();
-  await expect(page.getByRole('heading', { name: 'No saved findings here.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'No continuity analysis has been run yet.' })).toBeVisible();
 });

@@ -1,5 +1,15 @@
 # Decisions
 
+## September 17 — authorized consolidation
+
+Patrick requests one final branch, `bugfix/continuity-analysis-cta`, containing both
+the CTA and privacy/terms work. Preserve each original patch in branch history,
+retain `.local/privacy-disclosures` and its branch, reconcile both documentation
+subjects, verify without live providers, then commit locally. No main merge/push
+or new branch/worktree. This supersedes prior stop-before-commit handoff text.
+Completion/empty wording is clarified without adding a run-list API or changing
+provider, idempotency or admission semantics; no new architectural decision/ADR.
+
 ## Authorized post-PR10 continuity UX correction — September 15
 
 Patrick requests the smallest release-blocker fix on `bugfix/continuity-analysis-cta`:
@@ -9,6 +19,22 @@ verify with no live calls. READY shots count as successfully imported; failed im
 do not enable the CTA. Request identity survives manual retry while this project
 workspace remains mounted; reload recovery is not added by this bounded fix.
 No architecture, paid admission, scope or September 18 deadline change; no new ADR.
+
+## September 17 — disclosure-only launch patch
+
+Patrick requests Privacy/Terms routes, persistent footer links and contextual upload
+disclosures without behavior changes, trackers or a compliance claim. Use explicit
+configurable TODOs for unverifiable facts. The proposed mailbox is not confirmed:
+do not commit or publish it until operational. No app SMTP service is implied.
+Patrick confirms the Caddy edge is operator-managed at `~/caddy-edge` outside this
+repo, forwarding API requests separately and other routes to a web container with
+SPA fallback. No Caddy/deployment config change is authorized or made here.
+
+DECISION REQUIRED: public shared-project exposure, missing operator disclosures and
+the apparently truncated LICENSE remain operator launch gates; full current choice,
+alternatives, recommendation and September 18 impact are recorded in
+[disclosure review](PRIVACY-DISCLOSURE-REVIEW.md). The patch proceeds independently;
+no architecture/security/retention changes or legal compliance conclusion.
 
 ## PR10 accepted safety controls — September 15
 

@@ -23,7 +23,7 @@ test('PR9 progress, evidence, keyboard range and deletion across desktop tablet 
   const backgroundPoll = page.waitForRequest(value => value.method() === 'GET' && value.url().endsWith(`/projects/${project.id}/film`));
   await filmTab.focus(); await page.keyboard.press('ArrowRight');
   await expect(findingsTab).toBeFocused();
-  await expect(page.getByText(/Findings are saved frame-level continuity concerns/)).toBeVisible();
+  await expect(page.getByText(/If you have not run continuity analysis yet/)).toBeVisible();
   await backgroundPoll;
   await page.keyboard.press('ArrowLeft'); await expect(filmTab).toBeFocused();
   for (const width of [1280, 820, 390]) {

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { UploadDisclosure } from '../legal/UploadDisclosure';
 import { Alert, Button, FileInput, Group, Image, Stack, Text, Title } from '@mantine/core';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getFilmIntelligence, listShots, uploadShot, type Finding } from '@sceneproof/api-client';
@@ -42,6 +43,7 @@ export function MediaWorkspace({ projectId, demo = false, active = true, finding
     <Stack p="md">
       <details className="import-panel" open={!finding && !demo}><summary>Import a shot</summary><Stack mt="md">
       <Text size="sm">Import a shot when you want precise frame-level continuity inspection or focused visual comparison. Shot import is not required for Film Intelligence.</Text>
+      <UploadDisclosure />
       <Text size="xs" c="dimmed">JPEG/PNG up to 10 MiB and 16 MP, or MP4/H.264 up to 100 MiB, 120 seconds, 3840 × 2160 and 60 fps. One file per import.</Text>
       <Group align="end"><FileInput className="media-file" label="Shot file" placeholder="Choose an image or video" accept="image/jpeg,image/png,video/mp4" value={file} onChange={setFile} disabled={upload.isPending} clearable /><Button disabled={!file} loading={upload.isPending} onClick={() => file && upload.mutate(file)}>Import shot</Button></Group>
       {upload.isPending && <Text role="status" size="sm">Uploading and processing your shot…</Text>}

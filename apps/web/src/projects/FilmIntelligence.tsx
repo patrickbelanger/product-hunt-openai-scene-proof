@@ -1,6 +1,7 @@
 import { Alert, Badge, Button, FileInput, Group, Modal, Paper, Select, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { UploadDisclosure } from '../legal/UploadDisclosure';
 import { useSearchParams } from 'react-router-dom';
 import { FilmProgress, isActive, stageLabels } from './FilmProgress';
 import { SourceProvenance } from './SourceProvenance';
@@ -89,6 +90,7 @@ export function FilmIntelligence({ projectId }: { projectId: string }) {
     {intelligence.isPending && <Text size="sm" role="status">Loading saved film state…</Text>}
     {intelligence.isError && <Alert color="red" role="alert" mt="sm" title="Film state unavailable">{intelligence.error.message} The last known state may be outdated. Refresh to reconnect.</Alert>}
     {intelligence.data && <Stack mt="md" gap="md">
+      {!intelligence.data.source && <UploadDisclosure />}
       {!intelligence.data.source ? <div><Text size="sm">Primary source: MP4/H.264, up to 120 seconds and 100 MiB. Uploading makes no AI call.</Text><Group align="end" mt="xs"><FileInput label="Primary source film" accept="video/mp4" value={file} onChange={setFile} disabled={upload.isPending} /><Button disabled={!file || upload.isPending} loading={upload.isPending} onClick={() => upload.mutate()}>Upload source film</Button></Group>{upload.error && <Alert color="red" role="alert" mt="xs">{upload.error.message}</Alert>}</div> : <Group justify="space-between"><SourceProvenance source={intelligence.data.source} /><Button disabled={isActive(latest) || !!unresolved || understand.isPending || intelligence.isError} onClick={() => { understand.reset(); setConsent(true); }}>{latest ? 'New understanding attempt' : 'Understand film'}</Button></Group>}
       {unresolved && <Alert color="yellow" title="Recover the submitted request"><Text size="sm">A submitted request is not yet confirmed. Recovery reuses its original identity and cannot start a second paid attempt.</Text><Button mt="xs" variant="light" loading={understand.isPending} onClick={() => understand.mutate(unresolved)}>Recover same film request</Button></Alert>}
       {understand.error && <Alert role="alert" color="red">{understand.error.message}</Alert>}

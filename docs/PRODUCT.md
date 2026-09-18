@@ -1,6 +1,17 @@
 # Product
 
-## Current milestone — post-PR10 continuity start fix
+## Public disclosure patch — September 17
+
+`/privacy` and `/terms` describe the inspected application behavior, with permanent
+Privacy / Terms / GitHub links. Source-film, shot and new-reference upload forms
+explain rights/permission and explicit AI processing. Uploading alone makes no AI
+call. No banner/tracker/consent platform is added. Unconfirmed operator/contact,
+hosting, retention and transfer details remain configurable TODOs. Demo reset keeps
+retired copies; ordinary deletion and all PR10 controls remain unchanged.
+Patrick confirms external public deployment; [review](PRIVACY-DISCLOSURE-REVIEW.md)
+records the shared-workspace privacy limitation and unresolved launch disclosures.
+
+## Current milestone — consolidated post-PR10 continuity and disclosure fixes
 
 PR9 and PR10 are merged. The release-blocker fix exposes the existing continuity
 analysis operation in the UI, preserving paid-run admission and provider behavior.
